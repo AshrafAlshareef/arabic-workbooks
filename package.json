@@ -2,6 +2,10 @@
   "name": "arabic-workbook-root",
   "version": "1.0.0",
   "private": true,
+  "authors": [
+    { "name": "Ashraf Amjad Alshareef" },
+    { "name": "Sara Talat Tamimi" }
+  ],
   "dependencies": {
     "docx": "^9.7.1",
     "pdf-lib": "^1.17.1",

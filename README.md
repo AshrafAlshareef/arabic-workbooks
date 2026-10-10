@@ -249,6 +249,17 @@ created-books/
 
 ---
 
+## المؤلفون والهدف
+
+هذه السلسلة **مجانية بالكامل** — **صدقة جارية** ومبادرة لنشر المعرفة وتطوير المحتوى العربي الهادف. يمكن استخدام الكتب ومشاركتها وتعديلها بحرية (انظر الرخص في الأسفل).
+
+من عمل على المحتوى والكود:
+
+- **أشرف أمجد الشريف** (Ashraf Amjad Alshareef)
+- **سارة طلعت تميمي** (Sara Talat Tamimi)
+
+---
+
 ## English
 
 Seven Arabic workbooks for young beginners. Each book is generated from JSON data by a
@@ -305,6 +316,15 @@ The rule: **content lives in `assets/*.json`, layout/labels live in `create-work
   `image_2_cover_style/images/` into one full-bleed A5/A4 page and produces
   `images-to-book.docx` / `.pdf`.
 - Reusable covers and photos are collected in `covers-and-photos/` (CC BY 4.0).
+
+### Authors & Mission
+
+These books are **completely free** — *Sadaqah Jariyah* (ongoing charity) and an initiative to spread knowledge and develop purposeful Arabic content. You may use, share, and adapt them freely (see the licenses).
+
+Authored (content and code) by:
+
+- **Ashraf Amjad Alshareef**
+- **Sara Talat Tamimi**
 
 ### License
 
