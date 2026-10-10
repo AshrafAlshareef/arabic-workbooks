@@ -376,3 +376,71 @@ gen.EXERCISE_TYPES.map((t) => t.id); // ["contextual"]
 
 **1.0.0** — استخراج قسم «أشكال الحروف في الكلمة» في مشروع مستقل من كتاب تحليل
 الكلمات القديم (8 صفحات). آخر تحديث: **2026-09-27**
+
+---
+
+## English
+
+A generator for an **"Arabic letter shapes inside a word" workbook**. Built from scratch as
+a right-to-left **DOCX** (font *Traditional Arabic*), then converted to **PDF** with Word.
+
+> Part of the **word-books family**; the printed exercise is chosen by `order` in
+> `assets/exercise-types.json` (`["contextual"]` here).
+
+### Output
+
+| File | Description |
+|------|-------------|
+| `Arabic_Letter_Shapes_Workbook.docx` | final book, written inside the project folder |
+| `Arabic_Letter_Shapes_Workbook.pdf` | PDF version (via the root `build-all.bat`) |
+
+### Page count
+
+| Section | Count |
+|---------|-------|
+| Cover page | 1 |
+| Section title page | 1 |
+| Exercise pages (5+5+5+5+5+3) | 6 |
+| **Total** | **8 pages** |
+
+### Content
+
+Each exercise is one full-width row: **image** ← **boxes** ← **writing line**. The boxes
+hold each letter **in its contextual form** (the word name is *not* printed — the child
+reads it from the shapes), and the child writes the whole word on the line.
+
+### Contextual forms (the heart of this book)
+
+A letter alone in a box always renders its isolated form, so real in-word shapes require
+**pre-shaped characters** (`U+FB50..U+FEFF` presentation forms) for every letter except
+`ة`, which uses a **tatweel + letter** (`U+0640` + letter). ZWJ/ZWNJ cannot produce the
+medial/final forms. The four `ة` presentation forms are deliberately avoided (absent from
+the font's cmap). Every letter is classified as dual-joining or right-joining to decide
+its shape.
+
+### Requirements & run
+
+- Node.js 16+
+- System font: **Traditional Arabic** (must contain presentation forms)
+
+```bash
+npm install      # optional: the root node_modules is shared
+npm run build    # or: node create-workbook.js
+```
+
+### Customize
+
+- Words and images: `assets/words.json` → `words`
+- Exercise titles/headers and `order`: `assets/exercise-types.json`
+- Letter forms table: `FORMS` / `DUAL` / `RIGHT_JOINING` in `create-workbook.js`
+
+### Verify contextual forms from code
+
+```js
+const gen = require("./create-workbook.js");
+gen.contextualGlyphs("سمك"); // ["سـ", "ـمـ", "ـك"]
+```
+
+### License
+
+Code: MIT.

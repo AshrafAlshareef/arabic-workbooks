@@ -321,3 +321,59 @@ start Arabic_Word_Analysis_Workbook.docx
 **1.2.0** — فصل كتاب تحليل الكلمات عن كتابي أشكال الحروف وتجميع الكلمات؛ الكتاب
 الآن قسم واحد (`split`) من 8 صفحات، واسم ملف الـDOCX يُشتق من اسم المجلد.
 آخر تحديث: **2026-09-27**
+
+---
+
+## English
+
+A generator for a **"split words into letters" practice workbook**. Built from scratch as
+a right-to-left **DOCX** (font *Traditional Arabic*), then converted to **PDF** with Word.
+
+> Part of the **word-books family**. The original book bundled three exercises; each is now
+> an independent project: `Arabic_Word_Analysis_Workbook` (split),
+> `Arabic_Letter_Shapes_Workbook` (contextual letter shapes), and
+> `Arabic_Word_Composition_Workbook` (compose a word). All three share the same
+> `create-workbook.js`; the printed exercise is chosen by `order` in
+> `assets/exercise-types.json`.
+
+### Output
+
+| File | Description |
+|------|-------------|
+| `Arabic_Word_Analysis_Workbook.docx` | final book, written inside the project folder |
+| `Arabic_Word_Analysis_Workbook.pdf` | PDF version (via the root `build-all.bat`) |
+
+### Page count
+
+| Section | Count |
+|---------|-------|
+| Cover page | 1 |
+| Section title page | 1 |
+| Exercise pages (5+5+5+5+5+3) | 6 |
+| **Total** | **8 pages** |
+
+### Content
+
+Each exercise is one full-width row: **image** ← **word** ← **empty boxes** (one box per
+letter, read right-to-left). The child writes each letter in its box. Five exercises are
+stacked per page. 28 words — the same list and images as `Arabic_Alphabet_Workbook`.
+
+### Requirements & run
+
+- Node.js 16+
+- System font: **Traditional Arabic**
+
+```bash
+npm install      # optional: the root node_modules is shared
+npm run build    # or: node create-workbook.js
+```
+
+### Customize
+
+- Words and images: `assets/words.json` → `words`
+- Exercise titles/headers and `order`: `assets/exercise-types.json`
+- Column layout, colors, sizes: constants in `create-workbook.js`
+
+### License
+
+Code: MIT.

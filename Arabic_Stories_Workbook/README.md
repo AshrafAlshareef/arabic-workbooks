@@ -305,3 +305,63 @@ start Arabic_Stories_Workbook.docx
 ## الإصدار
 
 **1.0.0** — أول إصدار: 28 قصة، 30 صفحة A5. آخر تحديث: **2026-09-27**
+
+---
+
+## English
+
+An **illustrated short-story book** for young beginners: 28 one-page stories (title, image,
+three short sentences), built as a right-to-left **DOCX** (A5) and converted to **PDF** with
+Word. The stories use the same 28 words, in the same order, as the rest of the project.
+
+> This project is **standalone** and is not wired into the root scripts
+> (`build-all.bat` / `docx-to-pdf.ps1` / `merge-pdfs.js`).
+
+### Output
+
+| File | Description |
+|------|-------------|
+| `Arabic_Stories_Workbook.docx` | final book, written inside the project folder |
+| `Arabic_Stories_Workbook.pdf` | PDF version (via the root `build-all.bat`) |
+
+### Page count
+
+| Page | Count |
+|------|-------|
+| Cover page | 1 |
+| Book title page | 1 |
+| Story pages (28) | 28 |
+| **Total** | **30 pages** |
+
+### Data source
+
+Content is extracted from `source.docx` by `extract-from-source.js` into `assets/`:
+`stories.json`, `texts/*.txt` (title + three sentences), `images/*.jpg` (28 images), and
+`coverpage.png`. `create-workbook.js` reads only that folder and never touches `source.docx`.
+
+The cover is `assets/coverpage.png`; the shipped file is a **placeholder** (solid `1B4965`,
+no text). Replace it and rebuild to use a real cover — the extractor never overwrites an
+existing cover.
+
+### Requirements & run
+
+- Node.js 16+
+- System font: **Traditional Arabic**
+
+```bash
+npm install
+npm run build     # or: node create-workbook.js
+npm run extract   # regenerate assets/ from source.docx (not needed per build)
+```
+
+`jszip` and `jimp` are needed only by the extractor; building needs `docx` alone.
+
+### Customize
+
+- Story sentences: edit `assets/texts/*.txt` and `stories.json`, then `npm run build`
+- Story titles / book name: edit `STORIES` / `BOOK` in `extract-from-source.js`, then
+  `npm run extract && npm run build`
+
+### License
+
+Code: MIT.

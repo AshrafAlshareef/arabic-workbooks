@@ -322,3 +322,58 @@ start Arabic_Word_Composition_Workbook.docx
 
 **1.0.0** — استخراج قسم «تجميع الحروف لتكوين كلمة» في مشروع مستقل من كتاب تحليل
 الكلمات القديم (8 صفحات). آخر تحديث: **2026-09-27**
+
+---
+
+## English
+
+A generator for a **"compose a word from its letters" workbook**. Built from scratch as a
+right-to-left **DOCX** (font *Traditional Arabic*), then converted to **PDF** with Word.
+
+> Part of the **word-books family**; the printed exercise is chosen by `order` in
+> `assets/exercise-types.json` (`["compose"]` here).
+
+### Output
+
+| File | Description |
+|------|-------------|
+| `Arabic_Word_Composition_Workbook.docx` | final book, written inside the project folder |
+| `Arabic_Word_Composition_Workbook.pdf` | PDF version (via the root `build-all.bat`) |
+
+### Page count
+
+| Section | Count |
+|---------|-------|
+| Cover page | 1 |
+| Section title page | 1 |
+| Exercise pages (5+5+5+5+5+3) | 6 |
+| **Total** | **8 pages** |
+
+### Content
+
+Each exercise is one full-width row: **image** ← **boxes** ← **writing line**. The boxes
+hold the letters **in plain (non-contextual) form, in word order** (the word name is *not*
+printed), and the child reads/re-arranges them and writes the whole word on the line.
+
+The only difference from `Arabic_Letter_Shapes_Workbook` is the box content:
+`lettersInBoxes: true` without `contextualForms` (plain letters here).
+
+### Requirements & run
+
+- Node.js 16+
+- System font: **Traditional Arabic**
+
+```bash
+npm install      # optional: the root node_modules is shared
+npm run build    # or: node create-workbook.js
+```
+
+### Customize
+
+- Words and images: `assets/words.json` → `words`
+- Exercise titles/headers and `order`: `assets/exercise-types.json`
+- Column layout, colors, sizes: constants in `create-workbook.js`
+
+### License
+
+Code: MIT.

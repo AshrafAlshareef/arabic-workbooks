@@ -8,3 +8,15 @@
 - كل صورة تصبح صفحة واحدة بترتيب المسار النسبي
 
 تفاصيل الأداة: [`../README.md`](../README.md)
+
+---
+
+## English
+
+Drop your images here, then run `..\images-to-book.bat`.
+
+- Accepted formats: `.png`, `.jpg`, `.jpeg`
+- Subfolders are included automatically
+- Each image becomes one page, ordered by its relative path
+
+Tool details: [`../README.md`](../README.md)

@@ -263,3 +263,59 @@ open Arabic_Harakat_Workbook.docx
 ## الإصدار
 
 **1.0.0** — آخر تحديث: **2026-09-27**
+
+---
+
+## English
+
+A generator for an **Arabic vowel-marks (harakat) and long-vowels workbook**. Built from
+scratch as a right-to-left **DOCX** (font *Traditional Arabic*), then converted to **PDF**
+with Microsoft Word.
+
+This project is the *letters* half of the original harakat book; the syllable-analysis
+exercises moved to [`Arabic_Syllable_Analysis_Workbook`](../Arabic_Syllable_Analysis_Workbook).
+
+### Output
+
+| File | Description |
+|------|-------------|
+| `Arabic_Harakat_Workbook.docx` | final book, written inside the project folder |
+| `Arabic_Harakat_Workbook.pdf` | PDF version (via the root `build-all.bat`) |
+
+### Page count
+
+| Section | Count |
+|---------|-------|
+| Cover page | 1 |
+| Harakat page (two per letter × 28) | 56 |
+| **Total** | **57 pages** |
+
+### Structure
+
+- **Cover:** full-bleed A5 `cover-arabic.png` (skipped with a warning if absent).
+- **Display page (per letter):** title, the letter (72pt), subtitle `الحركات وحروف المد`, then the harakat table.
+- **Practice page (per letter):** two bordered tables read right-to-left — the harakat table (fatha, damma, kasra, sukun) and the long-vowels table (alef, waw, ya). The first cell of each row is shaded `F5F5F5` (connected font); the second uses the dotted font.
+- The built section is chosen by `sections` in `assets/letters.json` (`["letters"]` here).
+- Special case: hamza (`أ`) + kasra is written as `إ`, and its display table is transposed 2×4. Rules live in `baseLetterOverrides` in `assets/harakat.json`.
+- `create-workbook.js` is **byte-identical** to the one in `Arabic_Syllable_Analysis_Workbook`; only `assets/letters.json` (`sections` + `book`) differs.
+
+### Requirements & run
+
+- Node.js 16+
+- System fonts: **Traditional Arabic** (connected) and **KFGQPC Alphabet Dotted** (dotted practice)
+
+```bash
+npm install      # optional: the root node_modules is shared
+npm run build    # or: node create-workbook.js
+```
+
+### Customize
+
+- Built sections: `assets/letters.json` → `sections`
+- Letters: `assets/letters.json` → `letters`
+- Harakat and labels: `assets/harakat.json`
+- Cover image: replace `assets/cover-arabic.png`
+
+### License
+
+Code: MIT. Font *KFGQPC Alphabet Dotted* © King Fahd Glorious Quran Printing Complex.

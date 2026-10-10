@@ -223,3 +223,57 @@ open Arabic_Syllable_Analysis_Workbook.docx
 ## الإصدار
 
 **1.0.0** — آخر تحديث: **2026-09-29**
+
+---
+
+## English
+
+A generator for a **syllable-analysis practice workbook**. Built from scratch as a
+right-to-left **DOCX** (font *Traditional Arabic*), then converted to **PDF** with Word.
+
+This project is the *syllable* half of the original harakat book; the letter and
+long-vowel pages stayed in [`Arabic_Harakat_Workbook`](../Arabic_Harakat_Workbook).
+
+### Output
+
+| File | Description |
+|------|-------------|
+| `Arabic_Syllable_Analysis_Workbook.docx` | final book, written inside the project folder |
+| `Arabic_Syllable_Analysis_Workbook.pdf` | PDF version (via the root `build-all.bat`) |
+
+### Page count
+
+| Section | Count |
+|---------|-------|
+| Cover page | 1 |
+| Section title page | 1 |
+| Syllable exercises (27 letters ÷ 4 per page) | 7 |
+| **Total** | **9 pages** |
+
+### Structure
+
+- **Cover:** full-bleed A5 (skipped with a warning if absent).
+- **Exercises:** **4 exercises per page** (one letter each). Each shows two extended syllables above six empty boxes (2 × 3). The long vowels (ا، و، ي) and the hamza (أ) are excluded, leaving **27 letters**.
+- The built section is chosen by `sections` in `assets/letters.json` (`["syllable"]` here).
+- `create-workbook.js` is **byte-identical** to the one in `Arabic_Harakat_Workbook`; only `assets/letters.json` differs.
+
+### Requirements & run
+
+- Node.js 16+
+- System font: **Traditional Arabic**
+
+```bash
+npm install      # optional: the root node_modules is shared
+npm run build    # or: node create-workbook.js
+```
+
+### Customize
+
+- Built sections: `assets/letters.json` → `sections`
+- Excluded letters: `syllableExcludedLetters`
+- Harakat and labels: `assets/harakat.json`
+- Cover image: replace `assets/cover-arabic.png`
+
+### License
+
+Code: MIT.

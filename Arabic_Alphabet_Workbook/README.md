@@ -244,3 +244,53 @@ open Arabic_Alphabet_Workbook.docx
 ## الإصدار
 
 **1.0.0** — آخر تحديث: **2026-09-27**
+
+---
+
+## English
+
+A programmatic generator for an **Arabic alphabet workbook** for young beginners. The
+book is built from scratch as a right-to-left **DOCX** (script font *Traditional Arabic*),
+then converted to **PDF** with Microsoft Word.
+
+### Output
+
+| File | Description |
+|------|-------------|
+| `Arabic_Alphabet_Workbook.docx` | the final book (regenerated on every build, written inside the project folder) |
+| `Arabic_Alphabet_Workbook.pdf` | PDF version (produced by the root build tool) |
+
+### Page count
+
+| Section | Count |
+|---------|-------|
+| Cover page | 1 |
+| Letter page (one per letter × 28) | 28 |
+| Shape-table page (one per letter × 28) | 28 |
+| **Total** | **57 pages** |
+
+### Structure
+
+- **Cover:** `cover-arabic.png` full-bleed A5 (no margins, no footer). A missing image skips the cover with a warning.
+- **Letter page:** title `حرف {name}` (36pt), the letter (72pt), a 250×250 cartoon image, and the word starting with the letter (first letter red `E74C3C`, rest blue `2C3E50`, 48pt).
+- **Shape table:** four RTL columns (isolated / end / middle / beginning) and 10 rows — header, connected forms, two dotted practice rows (*KFGQPC Alphabet Dotted*), and six empty practice rows. No page-number footer (`SHOW_PAGE_NUMBERS = false`).
+
+### Requirements & run
+
+- Node.js 16+
+- System fonts: **Traditional Arabic** (connected) and **KFGQPC Alphabet Dotted** (dotted practice)
+
+```bash
+npm install      # optional: the root node_modules is shared
+npm run build    # or: node create-workbook.js
+```
+
+### Customize
+
+- Letters / words / images / titles / table: `assets/letters.json`
+- Letter forms: `assets/letter-shapes.json`
+- Layout, colors, image sizes: constants in `create-workbook.js`
+
+### License
+
+Code: MIT. Font *KFGQPC Alphabet Dotted* © King Fahd Glorious Quran Printing Complex.

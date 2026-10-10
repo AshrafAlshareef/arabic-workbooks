@@ -116,3 +116,49 @@ image_2_cover_style/
   هنا **طبيعي** لا أبجدي.
 - إن غيّرت `MAX_BLEED_CROP` في `images-to-book.js` فأنت تغيّر نقطة التحوّل بين
   الوضعين لكل الصور معاً.
+
+---
+
+## English
+
+A standalone helper that turns every image in `images/` into one **full-bleed A5 (or A4)
+page** — the same cover style used by the workbooks (image edge to edge, no margins,
+frame, footer, or page numbers) — and writes `images-to-book.docx` / `.pdf`.
+
+> Standalone from `build-all.bat`: it is not one of the seven books, but it does use the
+> root `convert-one.ps1` and the shared root `node_modules`.
+
+### Usage
+
+Drop your images in `images/` and run:
+
+```bat
+images-to-book.bat
+```
+
+| Command | Result |
+|---------|--------|
+| `images-to-book.bat` | A5, produces DOCX and PDF |
+| `images-to-book.bat --size a4` | A4 instead of A5 |
+| `images-to-book.bat --no-pdf` | DOCX only, no Word needed |
+
+Input and output folders are **fixed** (`images/` next to the script). Accepted formats:
+`.png`, `.jpg`, `.jpeg`; subfolders are included; the order is natural (so `1-` before `2-`
+before `10-`); broken files are skipped and other file types ignored.
+
+### Page fitting
+
+Each image is auto-fitted: if the crop ratio is ≤ **8%** it is **full-bleed**; otherwise it
+is **contained** (scaled to fit and centered). The threshold is on *how much is cropped*,
+not on how close the aspect ratios are — so `1024×1536` cover images stay full-bleed while
+wide `1536×1024` images are contained.
+
+### Requirements
+
+- Node.js 16+
+- Microsoft Word (only to produce the PDF; use `--no-pdf` otherwise)
+- `docx` in the shared root `node_modules`
+
+### License
+
+Code: MIT.
