@@ -1,0 +1,32 @@
+{
+  "name": "arabic-harakat-workbook",
+  "version": "1.0.0",
+  "description": "كتاب تمارين الحركات وحروف المد - Arabic Harakat Learning Workbook",
+  "main": "create-workbook.js",
+  "scripts": {
+    "build": "node create-workbook.js",
+    "start": "node create-workbook.js"
+  },
+  "keywords": [
+    "arabic",
+    "harakat",
+    "diacritics",
+    "vowels",
+    "workbook",
+    "education",
+    "learning",
+    "children",
+    "العربية",
+    "حركات",
+    "تمارين",
+    "تعليم"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "docx": "^9.7.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

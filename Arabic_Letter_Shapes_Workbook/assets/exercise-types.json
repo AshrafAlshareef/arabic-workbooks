@@ -1,0 +1,14 @@
+{
+  "order": [
+    "contextual"
+  ],
+  "types": {
+    "contextual": {
+      "title": "أشكال الحروف في الكلمة",
+      "pageHeader": "هيا بنا نتعرف على أشكال الحروف",
+      "subtitle": "تأمّل شكل كل حرف ثم اكتب الكلمة كاملة على الخط",
+      "lettersInBoxes": true,
+      "contextualForms": true
+    }
+  }
+}

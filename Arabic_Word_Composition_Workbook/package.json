@@ -1,0 +1,33 @@
+{
+  "name": "arabic-word-composition-workbook",
+  "version": "1.0.0",
+  "description": "كتاب تجميع الحروف لتكوين كلمة - Arabic Word Composition Workbook",
+  "main": "create-workbook.js",
+  "scripts": {
+    "build": "node create-workbook.js",
+    "start": "node create-workbook.js"
+  },
+  "keywords": [
+    "arabic",
+    "word",
+    "composition",
+    "workbook",
+    "education",
+    "children",
+    "العربية",
+    "الكلمات",
+    "الأحرف",
+    "تجميع",
+    "تمارين",
+    "تعليم"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "docx": "^9.7.1",
+    "svg2img": "^1.0.0-beta.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

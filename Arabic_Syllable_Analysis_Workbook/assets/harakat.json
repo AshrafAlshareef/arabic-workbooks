@@ -1,0 +1,55 @@
+{
+  "harakat": [
+    {
+      "name": "الفتحة",
+      "symbol": "َ",
+      "longVowel": "الألف",
+      "longSymbol": "ا",
+      "description": "فتحة مع الألف"
+    },
+    {
+      "name": "الضمة",
+      "symbol": "ُ",
+      "longVowel": "الواو",
+      "longSymbol": "و",
+      "description": "ضمة مع الواو"
+    },
+    {
+      "name": "الكسرة",
+      "symbol": "ِ",
+      "longVowel": "الياء",
+      "longSymbol": "ي",
+      "description": "كسرة مع الياء"
+    },
+    {
+      "name": "السكون",
+      "symbol": "ْ",
+      "longVowel": null,
+      "longSymbol": null,
+      "description": "سكون"
+    }
+  ],
+  "baseLetterOverrides": [
+    { "letter": "أ", "haraka": "ِ", "base": "إ" }
+  ],
+  "displayOrder": {
+    "hamzaTableSymbols": ["َ", "ُ", "ِ", "ْ"],
+    "harakaSymbols": ["ْ", "ِ", "ُ", "َ"],
+    "longVowelDottedSymbols": ["ي", "و", "ا"],
+    "syllableVowels": ["ا", "و", "ي"]
+  },
+  "texts": {
+    "letterTitle": "حرف {name}",
+    "letterSubtitle": "الحركات وحروف المد",
+    "practiceTitle": "تدريب على حرف {name}",
+    "syllableSectionTitle": "تدريبات تحليل المقاطع الصوتية",
+    "syllableSectionSubtitle": "جميع الحروف",
+    "hamzaLetter": "\u0621",
+    "tableHeaders": {
+      "letterWithLongVowel": "الحرف بحرف المد",
+      "longVowel": "حرف المد",
+      "letterWithHaraka": "الحرف بالحركة",
+      "haraka": "الحركة"
+    }
+  }
+}

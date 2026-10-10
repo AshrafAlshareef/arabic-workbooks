@@ -1,0 +1,35 @@
+{
+  "name": "arabic-stories-workbook",
+  "version": "1.0.0",
+  "description": "كتاب القصص المصورة - Arabic Illustrated Stories Workbook",
+  "main": "create-workbook.js",
+  "scripts": {
+    "build": "node create-workbook.js",
+    "extract": "node extract-from-source.js",
+    "start": "node create-workbook.js"
+  },
+  "keywords": [
+    "arabic",
+    "stories",
+    "workbook",
+    "education",
+    "reading",
+    "children",
+    "العربية",
+    "القصص",
+    "قراءة",
+    "قصص",
+    "تمارين",
+    "تعليم"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "docx": "^9.7.1",
+    "jszip": "^3.10.2",
+    "jimp": "^0.16.13"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

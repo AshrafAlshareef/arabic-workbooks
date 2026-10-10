@@ -1,0 +1,50 @@
+{
+  "book": {
+    "creator": "Arabic Harakat Workbook",
+    "title": "كتاب تمارين الحركات وحروف المد",
+    "description": "كتاب تعليمي للتمارين على الحركات العربية وحروف المد"
+  },
+  "sections": [
+    "letters"
+  ],
+  "cover": {
+    "file": "cover-arabic.png",
+    "candidates": [
+      "assets/images/cover-arabic.png",
+      "assets/cover-arabic.png"
+    ]
+  },
+  "syllableExcludedLetters": [
+    "أ"
+  ],
+  "letters": [
+    { "letter": "أ", "name": "الألف" },
+    { "letter": "ب", "name": "الباء" },
+    { "letter": "ج", "name": "الجيم" },
+    { "letter": "د", "name": "الدال" },
+    { "letter": "هـ", "name": "الهاء" },
+    { "letter": "و", "name": "الواو" },
+    { "letter": "ز", "name": "الزاي" },
+    { "letter": "ح", "name": "الحاء" },
+    { "letter": "ط", "name": "الطاء" },
+    { "letter": "ي", "name": "الياء" },
+    { "letter": "ك", "name": "الكاف" },
+    { "letter": "ل", "name": "اللام" },
+    { "letter": "م", "name": "الميم" },
+    { "letter": "ن", "name": "النون" },
+    { "letter": "س", "name": "السين" },
+    { "letter": "ع", "name": "العين" },
+    { "letter": "ف", "name": "الفاء" },
+    { "letter": "ص", "name": "الصاد" },
+    { "letter": "ق", "name": "القاف" },
+    { "letter": "ر", "name": "الراء" },
+    { "letter": "ش", "name": "الشين" },
+    { "letter": "ت", "name": "التاء" },
+    { "letter": "ث", "name": "الثاء" },
+    { "letter": "خ", "name": "الخاء" },
+    { "letter": "ذ", "name": "الذال" },
+    { "letter": "ض", "name": "الضاد" },
+    { "letter": "ظ", "name": "الظاء" },
+    { "letter": "غ", "name": "الغين" }
+  ]
+}

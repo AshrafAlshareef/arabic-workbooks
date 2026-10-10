@@ -1,0 +1,10 @@
+{
+  "name": "image-2-cover-style",
+  "version": "1.0.0",
+  "private": true,
+  "description": "يحوّل صور مجلد images إلى كتاب DOCX ثم PDF بأسلوب صفحات الأغلفة (full-bleed)",
+  "scripts": {
+    "build": "node images-to-book.js",
+    "start": "node images-to-book.js"
+  }
+}

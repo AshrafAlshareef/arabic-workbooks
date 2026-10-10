@@ -1,0 +1,31 @@
+{
+  "name": "arabic-alphabet-workbook",
+  "version": "1.0.0",
+  "description": "كتاب تمارين الحروف العربية - Arabic Alphabet Learning Workbook",
+  "main": "create-workbook.js",
+  "scripts": {
+    "build": "node create-workbook.js",
+    "start": "node create-workbook.js"
+  },
+  "keywords": [
+    "arabic",
+    "alphabet",
+    "workbook",
+    "education",
+    "learning",
+    "children",
+    "العربية",
+    "الحروف",
+    "تمارين",
+    "تعليم"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "docx": "^9.7.1",
+    "svg2img": "^1.0.0-beta.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

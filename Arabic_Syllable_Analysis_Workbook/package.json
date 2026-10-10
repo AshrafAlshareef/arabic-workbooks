@@ -1,0 +1,33 @@
+{
+  "name": "arabic-syllable-analysis-workbook",
+  "version": "1.0.0",
+  "description": "كتاب تدريبات تحليل المقاطع الصوتية - Arabic Syllable Analysis Workbook",
+  "main": "create-workbook.js",
+  "scripts": {
+    "build": "node create-workbook.js",
+    "start": "node create-workbook.js"
+  },
+  "keywords": [
+    "arabic",
+    "syllable",
+    "phonics",
+    "pronunciation",
+    "workbook",
+    "education",
+    "learning",
+    "children",
+    "العربية",
+    "مقاطع",
+    "نطق",
+    "تمارين",
+    "تعليم"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "docx": "^9.7.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

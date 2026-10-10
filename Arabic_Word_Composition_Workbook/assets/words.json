@@ -1,0 +1,130 @@
+{
+  "book": {
+    "creator": "Arabic Word Composition Workbook",
+    "title": "كتاب تجميع الحروف لتكوين كلمة",
+    "description": "كتاب تعليمي لتدريب الصغار على تجميع الحروف لتكوين كلمة وكتابتها كاملة"
+  },
+  "imageDirs": [
+    "assets/images"
+  ],
+  "cover": {
+    "file": "cover-arabic.png",
+    "candidates": [
+      "assets/images/cover-arabic.png"
+    ]
+  },
+  "words": [
+    {
+      "word": "أسد",
+      "image": "lion.svg"
+    },
+    {
+      "word": "باب",
+      "image": "door.svg"
+    },
+    {
+      "word": "جمل",
+      "image": "camel.svg"
+    },
+    {
+      "word": "دب",
+      "image": "bear.svg"
+    },
+    {
+      "word": "هلال",
+      "image": "crescent.svg"
+    },
+    {
+      "word": "وردة",
+      "image": "flower.svg"
+    },
+    {
+      "word": "زرافة",
+      "image": "giraffe.svg"
+    },
+    {
+      "word": "حصان",
+      "image": "horse.svg"
+    },
+    {
+      "word": "طائر",
+      "image": "bird.svg"
+    },
+    {
+      "word": "يد",
+      "image": "hand.svg"
+    },
+    {
+      "word": "كتاب",
+      "image": "book.svg"
+    },
+    {
+      "word": "ليمون",
+      "image": "lemon.svg"
+    },
+    {
+      "word": "ماء",
+      "image": "water.svg"
+    },
+    {
+      "word": "نجم",
+      "image": "star.svg"
+    },
+    {
+      "word": "سمك",
+      "image": "fish.svg"
+    },
+    {
+      "word": "عين",
+      "image": "eye.svg"
+    },
+    {
+      "word": "فيل",
+      "image": "elephant.svg"
+    },
+    {
+      "word": "صندوق",
+      "image": "box.svg"
+    },
+    {
+      "word": "قلب",
+      "image": "heart.svg"
+    },
+    {
+      "word": "رجل",
+      "image": "man.svg"
+    },
+    {
+      "word": "شمس",
+      "image": "sun.svg"
+    },
+    {
+      "word": "تفاح",
+      "image": "apple.svg"
+    },
+    {
+      "word": "ثعلب",
+      "image": "fox.svg"
+    },
+    {
+      "word": "خبز",
+      "image": "bread.svg"
+    },
+    {
+      "word": "ذئب",
+      "image": "wolf.svg"
+    },
+    {
+      "word": "ضفدع",
+      "image": "frog.svg"
+    },
+    {
+      "word": "ظرف",
+      "image": "envelope.svg"
+    },
+    {
+      "word": "غزال",
+      "image": "gazelle.svg"
+    }
+  ]
+}

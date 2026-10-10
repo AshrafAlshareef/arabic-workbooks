@@ -1,0 +1,34 @@
+{
+  "name": "arabic-letter-shapes-workbook",
+  "version": "1.0.0",
+  "description": "كتاب أشكال الحروف في الكلمة - Arabic Letter Shapes Workbook",
+  "main": "create-workbook.js",
+  "scripts": {
+    "build": "node create-workbook.js",
+    "start": "node create-workbook.js"
+  },
+  "keywords": [
+    "arabic",
+    "letter",
+    "shapes",
+    "contextual",
+    "workbook",
+    "education",
+    "children",
+    "العربية",
+    "الحروف",
+    "الأشكال",
+    "السياقية",
+    "تمارين",
+    "تعليم"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "docx": "^9.7.1",
+    "svg2img": "^1.0.0-beta.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

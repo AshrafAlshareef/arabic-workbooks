@@ -1,0 +1,38 @@
+# Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+The **educational content and images** in this repository — the workbook text,
+the generated books (DOCX/PDF), and the AI-generated artwork in the `assets/`
+folders — are licensed under the **Creative Commons Attribution 4.0
+International License**.
+
+You are free to:
+
+- **Share** — copy and redistribute the material in any medium or format.
+- **Adapt** — remix, transform, and build upon the material for any purpose,
+  even commercially.
+
+Under the following terms:
+
+- **Attribution** — You must give appropriate credit, provide a link to the
+  license, and indicate if changes were made.
+
+Copyright (c) 2026 Arabic Workbooks contributors.
+
+Full license text: <https://creativecommons.org/licenses/by/4.0/legalcode>
+
+Human-readable summary: <https://creativecommons.org/licenses/by/4.0/>
+
+---
+
+## Scope
+
+| Material | License |
+|----------|---------|
+| Source code (all `*.js`, `*.ps1`, `*.bat` scripts) | MIT — see [`LICENSE`](LICENSE) |
+| Workbook text, generated books, and AI-generated images | CC BY 4.0 — this file |
+| Fonts | **Not distributed.** *Traditional Arabic* (system font) and *KFGQPC Alphabet Dotted* (King Fahd Complex) must be installed separately by the user. |
+
+Suggested attribution:
+
+> "Arabic Workbooks" by Arabic Workbooks contributors —
+> https://github.com/&lt;your-account&gt;/&lt;your-repo&gt; — licensed under CC BY 4.0.

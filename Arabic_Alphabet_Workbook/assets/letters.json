@@ -1,0 +1,63 @@
+{
+  "book": {
+    "creator": "Arabic Learning Workbook",
+    "title": "كتاب تمارين الحروف العربية",
+    "description": "كتاب تعليمي للتمارين على الحروف العربية"
+  },
+  "imageDirs": [
+    "assets/images"
+  ],
+  "cover": {
+    "file": "cover-arabic.png",
+    "candidates": [
+      "../covers-and-photos/cover-arabic.png",
+      "assets/images/cover-arabic.png"
+    ]
+  },
+  "pages": {
+    "letterTitle": "حرف {name}",
+    "shapesTitle": "أشكال حرف {name}"
+  },
+  "table": {
+    "columns": [
+      { "shape": "isolated", "header": "نهاية منفصل" },
+      { "shape": "end", "header": "نهاية متصل" },
+      { "shape": "middle", "header": "وسط" },
+      { "shape": "beginning", "header": "بداية" }
+    ],
+    "dottedRows": 2,
+    "emptyRows": 6,
+    "dottedRowHeight": 800,
+    "emptyRowHeight": 800
+  },
+  "letters": [
+    { "letter": "أ", "name": "الألف", "word": "أسد", "image": "lion.svg" },
+    { "letter": "ب", "name": "الباء", "word": "باب", "image": "door.svg" },
+    { "letter": "ج", "name": "الجيم", "word": "جمل", "image": "camel.svg" },
+    { "letter": "د", "name": "الدال", "word": "دب", "image": "bear.svg" },
+    { "letter": "ه", "name": "الهاء", "word": "هلال", "image": "crescent.svg", "mainForm": "هـ" },
+    { "letter": "و", "name": "الواو", "word": "وردة", "image": "flower.svg" },
+    { "letter": "ز", "name": "الزاي", "word": "زرافة", "image": "giraffe.svg" },
+    { "letter": "ح", "name": "الحاء", "word": "حصان", "image": "horse.svg" },
+    { "letter": "ط", "name": "الطاء", "word": "طائر", "image": "bird.svg" },
+    { "letter": "ي", "name": "الياء", "word": "يد", "image": "hand.svg" },
+    { "letter": "ك", "name": "الكاف", "word": "كتاب", "image": "book.svg" },
+    { "letter": "ل", "name": "اللام", "word": "ليمون", "image": "lemon.svg" },
+    { "letter": "م", "name": "الميم", "word": "ماء", "image": "water.svg" },
+    { "letter": "ن", "name": "النون", "word": "نجم", "image": "star.svg" },
+    { "letter": "س", "name": "السين", "word": "سمك", "image": "fish.svg" },
+    { "letter": "ع", "name": "العين", "word": "عين", "image": "eye.svg" },
+    { "letter": "ف", "name": "الفاء", "word": "فيل", "image": "elephant.svg" },
+    { "letter": "ص", "name": "الصاد", "word": "صندوق", "image": "box.svg" },
+    { "letter": "ق", "name": "القاف", "word": "قلب", "image": "heart.svg" },
+    { "letter": "ر", "name": "الراء", "word": "رجل", "image": "man.svg" },
+    { "letter": "ش", "name": "الشين", "word": "شمس", "image": "sun.svg" },
+    { "letter": "ت", "name": "التاء", "word": "تفاح", "image": "apple.svg" },
+    { "letter": "ث", "name": "الثاء", "word": "ثعلب", "image": "fox.svg" },
+    { "letter": "خ", "name": "الخاء", "word": "خبز", "image": "bread.svg" },
+    { "letter": "ذ", "name": "الذال", "word": "ذئب", "image": "wolf.svg" },
+    { "letter": "ض", "name": "الضاد", "word": "ضفدع", "image": "frog.svg" },
+    { "letter": "ظ", "name": "الظاء", "word": "ظرف", "image": "envelope.svg" },
+    { "letter": "غ", "name": "الغين", "word": "غزال", "image": "gazelle.svg" }
+  ]
+}

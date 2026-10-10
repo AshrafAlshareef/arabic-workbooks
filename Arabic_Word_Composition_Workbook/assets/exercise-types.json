@@ -1,0 +1,13 @@
+{
+  "order": [
+    "compose"
+  ],
+  "types": {
+    "compose": {
+      "title": "تجميع الحروف لتكوين كلمة",
+      "pageHeader": "هيا بنا نركب الكلمات",
+      "subtitle": "رتّب الحروف ثم اكتب الكلمة كاملة على الخط",
+      "lettersInBoxes": true
+    }
+  }
+}

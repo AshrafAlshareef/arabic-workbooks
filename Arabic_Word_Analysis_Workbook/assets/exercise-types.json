@@ -1,0 +1,13 @@
+{
+  "order": [
+    "split"
+  ],
+  "types": {
+    "split": {
+      "title": "تحليل الكلمات إلى أحرف",
+      "pageHeader": "هيا بنا نحلل الكلمات إلى حروف",
+      "subtitle": "اكتب حروف كل كلمة في مربعاتها",
+      "lettersInBoxes": false
+    }
+  }
+}

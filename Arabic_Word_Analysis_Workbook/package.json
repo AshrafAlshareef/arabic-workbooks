@@ -1,0 +1,33 @@
+{
+  "name": "arabic-word-analysis-workbook",
+  "version": "1.2.0",
+  "description": "كتاب تحليل الكلمات إلى أحرف - Arabic Word Analysis Workbook",
+  "main": "create-workbook.js",
+  "scripts": {
+    "build": "node create-workbook.js",
+    "start": "node create-workbook.js"
+  },
+  "keywords": [
+    "arabic",
+    "word",
+    "analysis",
+    "workbook",
+    "education",
+    "children",
+    "العربية",
+    "الكلمات",
+    "الأحرف",
+    "تحليل",
+    "تمارين",
+    "تعليم"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "docx": "^9.7.1",
+    "svg2img": "^1.0.0-beta.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
