@@ -1,3 +1,5 @@
+<div dir="rtl" align="right">
+
 # images-to-book — كتاب الصور بأسلوب الأغلفة
 
 أداة مستقلة تحوّل كل صورة في مجلد `images/` إلى **صفحة كاملة واحدة** بمقاس **A5**،
@@ -31,6 +33,16 @@ images-to-book.bat
 
 > **قبل PDF:** أغلق Microsoft Word، وإلا فشل التحويل برسالة
 > `The process cannot access the file...`. وإن أردت DOCX فقط، استخدم `--no-pdf`.
+
+### مثال سريع
+
+```bat
+copy "C:\My Covers\*.png" images\
+images-to-book.bat --size a4
+```
+
+ينشئ هذا كتاباً بمقاس A4 يحتوي كل صورة في `images/`، صفحة لكل صورة، ثم يحوّله إلى
+PDF. استخدم `--no-pdf` إن لم يكن Word مثبَّتاً.
 
 ## ما الذي يدخل الكتاب
 
@@ -116,6 +128,8 @@ image_2_cover_style/
   هنا **طبيعي** لا أبجدي.
 - إن غيّرت `MAX_BLEED_CROP` في `images-to-book.js` فأنت تغيّر نقطة التحوّل بين
   الوضعين لكل الصور معاً.
+
+</div>
 
 ---
 

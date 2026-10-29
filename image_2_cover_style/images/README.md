@@ -1,3 +1,5 @@
+<div dir="rtl" align="right">
+
 # مجلد الإدخال
 
 ضع صورك هنا، ثم شغّل `..\images-to-book.bat` (أو `images-to-book.bat` من داخل هذا
@@ -7,7 +9,21 @@
 - المجلدات الفرعية تُضمَّن تلقائياً
 - كل صورة تصبح صفحة واحدة بترتيب المسار النسبي
 
+### مثال
+
+```
+images/
+├── 1-cover.png
+├── 2-page.jpg
+└── chapter-1/3-photo.png
+```
+
+سيدخل الكتاب الصور الثلاث بهذا الترتيب: `1-cover.png` ثم `2-page.jpg` ثم
+`chapter-1/3-photo.png`.
+
 تفاصيل الأداة: [`../README.md`](../README.md)
+
+</div>
 
 ---
 

@@ -1,3 +1,5 @@
+<div dir="rtl" align="right">
+
 # كتاب تدريبات تحليل المقاطع الصوتية
 
 مولّد برمجي لكتاب تدريبات تحليل المقاطع الصوتية، مُعدّ للطلاب المبتدئين.
@@ -220,9 +222,23 @@ open Arabic_Syllable_Analysis_Workbook.docx
 
 الكود: MIT
 
+## مثال سريع للتخصيص
+
+لإضافة حرف إلى استثناءات تدريبات المقاطع، أضف رمزه إلى `syllableExcludedLetters` في
+`assets/letters.json`:
+
+```json
+"syllableExcludedLetters": ["أ"]
+```
+
+كل حرف غير مذكور في هذه القائمة يظهر في التدريبات. وعدد التمارين في الصفحة يحدده
+الثابت `exercisesPerPage` في `createWorkbook`.
+
 ## الإصدار
 
 **1.0.0** — آخر تحديث: **2026-09-29**
+
+</div>
 
 ---
 
