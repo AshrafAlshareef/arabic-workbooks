@@ -2,6 +2,15 @@
 const fs = require("fs");
 const path = require("path");
 
+const { parseBookArgs, USAGE } = require("../build-options.js");
+const { sortByLetter } = require("../letter-order.js");
+
+const CLI = parseBookArgs(process.argv.slice(2));
+if (CLI.help) {
+  console.log(USAGE);
+  process.exit(0);
+}
+
 const {
   Document,
   Packer,
@@ -52,7 +61,8 @@ const ASSETS = path.join(ROOT, "assets");
 const LETTERS_FILE = path.join(ASSETS, "letters.json");
 const HARAKAT_FILE = path.join(ASSETS, "harakat.json");
 // A named folder writes to its own name instead of overwriting another book.
-const OUTPUT = path.join(ROOT, `${path.basename(ROOT)}.docx`);
+const OUT_DIR = CLI.out || ROOT;
+const OUTPUT = path.join(OUT_DIR, `${path.basename(ROOT)}.docx`);
 
 // The two page groups this generator can print. `sections` in letters.json picks
 // which ones a project actually builds, so the letter tables and the syllable
@@ -265,11 +275,17 @@ function loadContent() {
     requireText(headers[key], `texts.tableHeaders.${key}`);
   }
 
+  // The page order is the array order, so --order only has to re-sort this copy.
+  const letters = sortByLetter(lettersFile.letters, CLI.order, {
+    key: (entry) => entry.letter,
+    label: "letters.json letters",
+  });
+
   return {
     book: lettersFile.book,
     sections,
     cover: lettersFile.cover,
-    letters: lettersFile.letters,
+    letters,
     syllableExcludedLetters: lettersFile.syllableExcludedLetters,
     harakat: harakatFile.harakat,
     baseLetterOverrides: harakatFile.baseLetterOverrides,
@@ -1685,10 +1701,12 @@ async function createWorkbook() {
   console.log("جاري حفظ الملف...");
 
   const buffer = await Packer.toBuffer(doc);
+  fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
   fs.writeFileSync(OUTPUT, buffer);
 
   console.log("تم إنشاء الملف بنجاح!");
-  console.log(`الملف: ${path.basename(OUTPUT)}`);
+  console.log(`الملف: ${OUTPUT}`);
+  console.log(`الترتيب: ${CLI.order}`);
   if (coverContent) {
     console.log("صفحة الغلاف: 1 صفحة");
   }

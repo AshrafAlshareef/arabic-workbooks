@@ -10,11 +10,21 @@
  *   assets/images/*.jpg    one 3:2 picture per story
  *   assets/coverpage.png   full-bleed cover
  *
- * Usage: node create-workbook.js
+ * Usage: node create-workbook.js [--order=abjadi|alphabetical] [--out=<dir>]
  */
 
 const fs = require("fs");
 const path = require("path");
+
+const { parseBookArgs, USAGE } = require("../build-options.js");
+const { sortByLetter } = require("../letter-order.js");
+
+const CLI = parseBookArgs(process.argv.slice(2));
+if (CLI.help) {
+  console.log(USAGE);
+  process.exit(0);
+}
+
 const {
   AlignmentType,
   BorderStyle,
@@ -51,7 +61,8 @@ const CONTENT_WIDTH = A5_WIDTH - MARGIN_SIDE * 2; // 6955 twips (~122.6 mm)
 const ROOT = __dirname;
 const ASSETS = path.join(ROOT, "assets");
 const MANIFEST = path.join(ASSETS, "stories.json");
-const OUTPUT = path.join(ROOT, "Arabic_Stories_Workbook.docx");
+const OUT_DIR = CLI.out || ROOT;
+const OUTPUT = path.join(OUT_DIR, "Arabic_Stories_Workbook.docx");
 
 const FONT = "Traditional Arabic";
 
@@ -169,6 +180,14 @@ function loadManifest() {
 
   const manifest = JSON.parse(fs.readFileSync(MANIFEST, "utf-8").replace(/^\uFEFF/, ""));
   assert(manifest.stories.length > 0, "assets/stories.json lists no stories");
+
+  // The page order is the array order. `letter` names the letter a story is
+  // built around; a manifest that only carries the word falls back to it.
+  manifest.stories = sortByLetter(manifest.stories, CLI.order, {
+    key: (story) => story.letter || story.word,
+    label: "stories.json stories",
+  });
+
   return manifest;
 }
 
@@ -463,12 +482,14 @@ async function createWorkbook() {
   console.log("جاري حفظ الملف...");
 
   const buffer = await Packer.toBuffer(doc);
+  fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
   fs.writeFileSync(OUTPUT, buffer);
 
   const imageBytes = stories.reduce((total, story) => total + story.imageBytes, 0);
 
   console.log("تم إنشاء الملف بنجاح!");
-  console.log("الملف: Arabic_Stories_Workbook.docx");
+  console.log(`الملف: ${OUTPUT}`);
+  console.log(`الترتيب: ${CLI.order}`);
   console.log(`عدد الصفحات: ${stories.length + 2} صفحة`);
   console.log(`عدد القصص: ${stories.length}`);
   console.log(`حجم الصور: ${formatBytes(imageBytes)}`);

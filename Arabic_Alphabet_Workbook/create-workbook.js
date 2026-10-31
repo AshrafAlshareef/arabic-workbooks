@@ -10,13 +10,22 @@
  *   assets/letter-shapes.json  the four positional shapes of every letter
  *   assets/images              the picture for each letter
  *
- * Usage: node create-workbook.js
+ * Usage: node create-workbook.js [--order=abjadi|alphabetical] [--out=<dir>]
  */
 
 const docx = require("docx");
 const fs = require("fs");
 const path = require("path");
 const svg2img = require("svg2img");
+
+const { parseBookArgs, USAGE } = require("../build-options.js");
+const { sortByLetter } = require("../letter-order.js");
+
+const CLI = parseBookArgs(process.argv.slice(2));
+if (CLI.help) {
+  console.log(USAGE);
+  process.exit(0);
+}
 
 const {
   Document,
@@ -46,7 +55,8 @@ const ROOT = __dirname;
 const ASSETS = path.join(ROOT, "assets");
 const LETTERS_FILE = path.join(ASSETS, "letters.json");
 const SHAPES_FILE = path.join(ASSETS, "letter-shapes.json");
-const OUTPUT = path.join(ROOT, "Arabic_Alphabet_Workbook.docx");
+const OUT_DIR = CLI.out || ROOT;
+const OUTPUT = path.join(OUT_DIR, "Arabic_Alphabet_Workbook.docx");
 
 // Set to false to hide the page number footer
 const SHOW_PAGE_NUMBERS = false;
@@ -239,7 +249,13 @@ function loadContent() {
     }
   }
 
-  return { manifest, letters: manifest.letters, columns, images, shapesByLetter };
+  // The page order is the array order, so --order only has to re-sort this copy.
+  const letters = sortByLetter(manifest.letters, CLI.order, {
+    key: (entry) => entry.letter,
+    label: "letters.json letters",
+  });
+
+  return { manifest, letters, columns, images, shapesByLetter };
 }
 
 function svgToBuffer(svgContent, width, height) {
@@ -645,10 +661,12 @@ async function createWorkbook() {
   console.log("جاري حفظ الملف...");
 
   const buffer = await Packer.toBuffer(doc);
+  fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
   fs.writeFileSync(OUTPUT, buffer);
 
   console.log("تم إنشاء الملف بنجاح!");
-  console.log(`الملف: ${path.basename(OUTPUT)}`);
+  console.log(`الملف: ${OUTPUT}`);
+  console.log(`الترتيب: ${CLI.order}`);
   console.log(`عدد الصفحات: ${content.letters.length * 2 + (coverContent ? 1 : 0)} صفحة`);
   console.log("حجم الصفحة: A5");
 }

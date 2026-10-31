@@ -3,6 +3,15 @@ const fs = require("fs");
 const path = require("path");
 const svg2img = require("svg2img");
 
+const { parseBookArgs, USAGE } = require("../build-options.js");
+const { sortByLetter } = require("../letter-order.js");
+
+const CLI = parseBookArgs(process.argv.slice(2));
+if (CLI.help) {
+  console.log(USAGE);
+  process.exit(0);
+}
+
 const {
   Document,
   Packer,
@@ -116,7 +125,8 @@ const WORDS_FILE = path.join(ASSETS, "words.json");
 const EXERCISES_FILE = path.join(ASSETS, "exercise-types.json");
 // Named after the project folder, so a copy of this project in a differently
 // named folder writes to its own name instead of overwriting another book.
-const OUTPUT = path.join(ROOT, `${path.basename(ROOT)}.docx`);
+const OUT_DIR = CLI.out || ROOT;
+const OUTPUT = path.join(OUT_DIR, `${path.basename(ROOT)}.docx`);
 
 // All exercises are stacked in one vertical column, one full-width row each.
 // Every row is a single table of three side-by-side cells, listed
@@ -320,11 +330,17 @@ function loadContent() {
     }
   }
 
+  // The page order is the array order, so --order only has to re-sort this copy.
+  const words = sortByLetter(wordsFile.words, CLI.order, {
+    key: (entry) => entry.word,
+    label: "words.json words",
+  });
+
   return {
     book: wordsFile.book,
     imageDirs: wordsFile.imageDirs,
     cover: wordsFile.cover,
-    words: wordsFile.words,
+    words,
     exerciseTypes,
   };
 }
@@ -1086,10 +1102,12 @@ async function createWorkbook() {
   console.log("جاري حفظ الملف...");
 
   const buffer = await Packer.toBuffer(doc);
+  fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
   fs.writeFileSync(OUTPUT, buffer);
 
   console.log("تم إنشاء الملف بنجاح!");
-  console.log(`الملف: ${path.basename(OUTPUT)}`);
+  console.log(`الملف: ${OUTPUT}`);
+  console.log(`الترتيب: ${CLI.order}`);
   for (const type of typeList) {
     console.log(
       `عدد صفحات «${type.title}»: ${pageCountByType[type.id]} صفحة تمارين + 1 عنوان`
