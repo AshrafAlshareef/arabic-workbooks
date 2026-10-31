@@ -8,16 +8,21 @@ rem  Builds a book out of every image in the images\ folder next to this
 rem  script, using the same full-bleed cover page as the four workbook
 rem  projects: one A5 page per image, then a PDF via Microsoft Word.
 rem
-rem  There is no folder argument on purpose. Drop the images into images\ and
-rem  run this script.
+rem  By default the images come from images\ next to this script and the output
+rem  lands there too. Drop the images in and run the script; --images and --out
+rem  only exist so the desktop GUI can point the tool somewhere else.
 rem
 rem  Usage:
 rem      images-to-book.bat                 A5, DOCX + PDF
 rem      images-to-book.bat --size a4       A4 instead of A5
 rem      images-to-book.bat --no-pdf        DOCX only, no Word needed
+rem      images-to-book.bat --images <dir> --out <dir>   other folders
 rem ==========================================================================
 
 set "ROOT=%~dp0"
+rem images-to-book.bat changes into its own folder below, so remember where the
+rem user ran it from: relative --images / --out paths mean folders next to them.
+set "IMAGES_TO_BOOK_CWD=%CD%"
 
 echo.
 echo ==========================================================
@@ -59,7 +64,7 @@ if not "%RC%"=="0" goto :fail
 
 echo ==========================================================
 echo   DONE
-echo   %ROOT%images-to-book.docx
+echo   (the output path is printed above)
 echo ==========================================================
 echo.
 if not defined IMAGES_TO_BOOK_NO_PAUSE pause

@@ -4,11 +4,12 @@
     script: one full-bleed A5 page per image, then the same Word conversion the
     four workbook projects use.
 
-    There is no folder argument on purpose. IMAGES_DIR is fixed, so dropping a
-    file into images/ and running images-to-book.bat is the whole workflow.
-
     Usage:
-        node images-to-book.js [--size a5|a4] [--no-pdf]
+        node images-to-book.js [--size a5|a4] [--no-pdf] [--images <dir>] [--out <dir>]
+
+    Defaults keep the original workflow: images/ next to this script, output
+    written next to this script. --images and --out let the GUI point the tool
+    at another folder without touching the defaults.
 
     Writes:
         images-to-book.docx
@@ -34,9 +35,20 @@ const {
 // Paths
 // ---------------------------------------------------------------------------
 const ROOT = __dirname;
-const IMAGES_DIR = path.join(ROOT, "images");
-const OUTPUT_DOCX = path.join(ROOT, "images-to-book.docx");
-const OUTPUT_PDF = path.join(ROOT, "images-to-book.pdf");
+let IMAGES_DIR = path.join(ROOT, "images");
+let OUTPUT_DOCX = path.join(ROOT, "images-to-book.docx");
+let OUTPUT_PDF = path.join(ROOT, "images-to-book.pdf");
+
+// A relative --images / --out is relative to the folder the user ran the tool
+// from, not to this folder: images-to-book.bat changes into its own directory
+// before starting node, so it passes the caller's folder in this variable.
+const USER_CWD = process.env.IMAGES_TO_BOOK_CWD || process.cwd();
+
+/** Path as shown in logs: relative when inside the repo, absolute otherwise. */
+function displayPath(target) {
+  const relative = path.relative(ROOT, target);
+  return relative.startsWith("..") || path.isAbsolute(relative) ? target : relative;
+}
 
 // The converter is the one the repo already ships, so this tool never grows a
 // second copy of the Word COM logic.
@@ -74,21 +86,40 @@ const MAX_BLEED_CROP = 0.08;
 // Arguments
 // ---------------------------------------------------------------------------
 function parseArgs(argv) {
-  const options = { size: "a5", pdf: true };
+  const options = { size: "a5", pdf: true, images: null, out: null };
 
   for (let i = 0; i < argv.length; i += 1) {
-    const arg = argv[i];
-    if (arg === "--no-pdf") {
+    const arg = String(argv[i]);
+    const equals = arg.indexOf("=");
+    const flag = equals === -1 ? arg : arg.slice(0, equals);
+    const inlineValue = equals === -1 ? null : arg.slice(equals + 1);
+
+    const takeValue = () => {
+      if (inlineValue !== null) return inlineValue;
+      i += 1;
+      if (i >= argv.length) throw new Error(`${flag} needs a value.`);
+      return String(argv[i]);
+    };
+
+    if (flag === "--no-pdf") {
       options.pdf = false;
-    } else if (arg === "--size") {
-      const value = String(argv[i + 1] || "").toLowerCase();
+    } else if (flag === "--size") {
+      const value = takeValue().toLowerCase();
       if (!SIZES[value]) {
         throw new Error(
           `--size must be one of: ${Object.keys(SIZES).join(", ")} (got "${value}")`
         );
       }
       options.size = value;
-      i += 1;
+    } else if (flag === "--images") {
+      options.images = takeValue();
+    } else if (flag === "--out") {
+      options.out = takeValue();
+    } else if (flag === "--help" || flag === "-h") {
+      console.log(
+        "Usage: node images-to-book.js [--size a5|a4] [--no-pdf] [--images <dir>] [--out <dir>]"
+      );
+      process.exit(0);
     } else {
       throw new Error(`Unknown option: ${arg}`);
     }
@@ -354,19 +385,17 @@ async function buildBook(options) {
   page.label = options.size.toUpperCase();
 
   if (!fs.existsSync(IMAGES_DIR)) {
-    throw new Error(
-      `no images folder next to this script: ${path.relative(ROOT, IMAGES_DIR)}`
-    );
+    throw new Error(`no images folder: ${displayPath(IMAGES_DIR)}`);
   }
 
   const files = collectImages(IMAGES_DIR);
   if (files.length === 0) {
     throw new Error(
-      `no .png/.jpg/.jpeg images in ${path.relative(ROOT, IMAGES_DIR)} (subfolders are included)`
+      `no .png/.jpg/.jpeg images in ${displayPath(IMAGES_DIR)} (subfolders are included)`
     );
   }
 
-  console.log(`\nمجلد الصور: ${path.relative(ROOT, IMAGES_DIR)}`);
+  console.log(`\nمجلد الصور: ${displayPath(IMAGES_DIR)}`);
   console.log(`  عدد الصور: ${files.length}`);
   console.log(
     `  الصفحة: ${page.label} (${Math.round(page.widthPx)} x ${Math.round(page.heightPx)} بكسل)\n`
@@ -424,6 +453,7 @@ async function buildBook(options) {
 
   console.log("\nجاري حفظ الملف...");
   const bytes = await Packer.toBuffer(doc);
+  fs.mkdirSync(path.dirname(OUTPUT_DOCX), { recursive: true });
   fs.writeFileSync(OUTPUT_DOCX, bytes);
   console.log(`تم إنشاء الملف بنجاح: ${path.basename(OUTPUT_DOCX)} (${formatBytes(bytes.length)})`);
   console.log(`عدد الصفحات: ${added} صفحة`);
@@ -441,8 +471,17 @@ if (require.main === module) {
     options = parseArgs(process.argv.slice(2));
   } catch (err) {
     console.error(`[FAIL] ${err.message}`);
-    console.error("الاستخدام: images-to-book.bat [--size a5|a4] [--no-pdf]");
+    console.error(
+      "الاستخدام: images-to-book.bat [--size a5|a4] [--no-pdf] [--images <dir>] [--out <dir>]"
+    );
     process.exit(1);
+  }
+
+  if (options.images) IMAGES_DIR = path.resolve(USER_CWD, options.images);
+  if (options.out) {
+    const outDir = path.resolve(USER_CWD, options.out);
+    OUTPUT_DOCX = path.join(outDir, "images-to-book.docx");
+    OUTPUT_PDF = path.join(outDir, "images-to-book.pdf");
   }
 
   buildBook(options).catch((err) => {

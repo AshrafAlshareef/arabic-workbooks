@@ -1,0 +1,46 @@
+{
+  "books": [
+    {
+      "dir": "Arabic_Alphabet_Workbook",
+      "name": "Arabic Alphabet Workbook",
+      "title": "كتاب الحروف العربية",
+      "pages": 57
+    },
+    {
+      "dir": "Arabic_Harakat_Workbook",
+      "name": "Arabic Harakat Workbook",
+      "title": "كتاب الحركات",
+      "pages": 57
+    },
+    {
+      "dir": "Arabic_Syllable_Analysis_Workbook",
+      "name": "Arabic Syllable Analysis Workbook",
+      "title": "كتاب تحليل المقاطع الصوتية",
+      "pages": 9
+    },
+    {
+      "dir": "Arabic_Word_Analysis_Workbook",
+      "name": "Arabic Word Analysis Workbook",
+      "title": "كتاب تحليل الكلمات إلى أحرف",
+      "pages": 8
+    },
+    {
+      "dir": "Arabic_Letter_Shapes_Workbook",
+      "name": "Arabic Letter Shapes Workbook",
+      "title": "كتاب أشكال الحروف في الكلمة",
+      "pages": 8
+    },
+    {
+      "dir": "Arabic_Word_Composition_Workbook",
+      "name": "Arabic Word Composition Workbook",
+      "title": "كتاب تجميع الحروف لتكوين كلمة",
+      "pages": 8
+    },
+    {
+      "dir": "Arabic_Stories_Workbook",
+      "name": "Arabic Stories Workbook",
+      "title": "كتاب القصص",
+      "pages": 30
+    }
+  ]
+}

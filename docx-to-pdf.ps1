@@ -6,24 +6,55 @@
     Each conversion is spawned as its own hidden powershell.exe process with a
     hard timeout, so a Word deadlock can never block the whole build.
 
-    Exit codes:  0 = all ok   2 = some books failed
+    Parameters:
+        -Books       convert only these project folders (default: all seven)
+        -OutputRoot  folder holding <Book>\<Book>.docx (default: this folder)
+
+    Exit codes:  0 = all ok   2 = some books failed   1 = bad parameters
 #>
+
+param(
+    [string[]] $Books = @(),
+    [string] $OutputRoot = $PSScriptRoot
+)
 
 $ErrorActionPreference = 'Stop'
 
-$root      = $PSScriptRoot
-$converter = Join-Path $root 'convert-one.ps1'
+$root       = $PSScriptRoot
+$converter  = Join-Path $root 'convert-one.ps1'
 $timeoutSec = 300
+$outputRoot = if ($OutputRoot) { [System.IO.Path]::GetFullPath($OutputRoot) } else { $root }
 
-$books = @(
-    [pscustomobject]@{ Name = 'Arabic_Alphabet_Workbook';      Docx = 'Arabic_Alphabet_Workbook.docx' }
-    [pscustomobject]@{ Name = 'Arabic_Harakat_Workbook';      Docx = 'Arabic_Harakat_Workbook.docx' }
-    [pscustomobject]@{ Name = 'Arabic_Syllable_Analysis_Workbook'; Docx = 'Arabic_Syllable_Analysis_Workbook.docx' }
-    [pscustomobject]@{ Name = 'Arabic_Word_Analysis_Workbook'; Docx = 'Arabic_Word_Analysis_Workbook.docx' }
-    [pscustomobject]@{ Name = 'Arabic_Letter_Shapes_Workbook'; Docx = 'Arabic_Letter_Shapes_Workbook.docx' }
-    [pscustomobject]@{ Name = 'Arabic_Word_Composition_Workbook'; Docx = 'Arabic_Word_Composition_Workbook.docx' }
-    [pscustomobject]@{ Name = 'Arabic_Stories_Workbook';      Docx = 'Arabic_Stories_Workbook.docx' }
+# `-Books A,B` arrives as one string through -File, so split it here; an array
+# from a PowerShell caller passes through unchanged.
+$Books = @(
+    $Books |
+        ForEach-Object { [string]$_ -split ',' } |
+        ForEach-Object { $_.Trim() } |
+        Where-Object { $_ -ne '' }
 )
+
+$allBooks = @(
+    ([System.IO.File]::ReadAllText((Join-Path $root 'books.json'), [System.Text.Encoding]::UTF8) | ConvertFrom-Json).books |
+        ForEach-Object { [pscustomobject]@{ Name = $_.dir; Docx = ($_.dir + '.docx') } }
+)
+
+if ($Books.Count -gt 0) {
+    $unknown = @($Books | Where-Object { $_ -notin $allBooks.Name })
+    if ($unknown.Count -gt 0) {
+        Write-Host ("  [ERROR] Unknown book(s): {0}" -f ($unknown -join ', ')) -ForegroundColor Red
+        Write-Host ("          Known books: {0}" -f ($allBooks.Name -join ', ')) -ForegroundColor Red
+        exit 1
+    }
+    # NOTE: do not name this $books - PowerShell is case-insensitive, so it
+    # would be the same [string[]]-constrained parameter variable and every
+    # book object would be coerced into a string.
+    $selectedBooks = @($allBooks | Where-Object { $_.Name -in $Books })
+}
+else {
+    $selectedBooks = $allBooks
+}
+
 
 function Stop-HeadlessWord {
     # Only kill invisible Word instances left behind by a previous failed run.
@@ -43,7 +74,7 @@ function Stop-HeadlessWord {
 }
 
 function Remove-StaleLock {
-    $locks = Get-ChildItem -LiteralPath $root -Recurse -Filter '~$*.docx' -Force -ErrorAction SilentlyContinue
+    $locks = Get-ChildItem -LiteralPath $outputRoot -Recurse -Filter '~$*.docx' -Force -ErrorAction SilentlyContinue
     foreach ($l in $locks) {
         Remove-Item -LiteralPath $l.FullName -Force -ErrorAction SilentlyContinue
     }
@@ -64,8 +95,8 @@ try {
     $ok = 0
     $failed = @()
 
-    foreach ($book in $books) {
-        $dir  = Join-Path $root $book.Name
+    foreach ($book in $selectedBooks) {
+        $dir  = Join-Path $outputRoot $book.Name
         $docx = Join-Path $dir  $book.Docx
         $pdf  = Join-Path $dir  ([System.IO.Path]::GetFileNameWithoutExtension($book.Docx) + '.pdf')
 
@@ -144,11 +175,11 @@ try {
 
     Write-Host ''
     if ($failed.Count -eq 0) {
-        Write-Host ("  Converted {0}/{1} workbooks." -f $ok, $books.Count)
+        Write-Host ("  Converted {0}/{1} workbooks." -f $ok, $selectedBooks.Count)
         exit 0
     }
 
-    Write-Host ("  Converted {0}/{1} workbooks. Failed: {2}" -f $ok, $books.Count, ($failed -join ', ')) -ForegroundColor Yellow
+    Write-Host ("  Converted {0}/{1} workbooks. Failed: {2}" -f $ok, $selectedBooks.Count, ($failed -join ', ')) -ForegroundColor Yellow
     Write-Host '  The merge step will not run: every book needs a fresh PDF.' -ForegroundColor Yellow
     exit 2
 }
