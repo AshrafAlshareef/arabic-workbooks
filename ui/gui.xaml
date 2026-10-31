@@ -1,0 +1,252 @@
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    x:Name="MainWindow"
+    Title="مولّد كتب اللغة العربية"
+    Height="840" Width="1040"
+    MinHeight="700" MinWidth="900"
+    WindowStartupLocation="CenterScreen"
+    FlowDirection="RightToLeft"
+    FontFamily="Segoe UI" FontSize="14"
+    TextOptions.TextFormattingMode="Display"
+    Background="#F4F6F8">
+
+    <Window.Resources>
+        <!-- All Arabic text lives here: the .ps1 stays pure ASCII. -->
+        <sys:String x:Key="Str.Open">فتح</sys:String>
+        <sys:String x:Key="Str.Pages">صفحة</sys:String>
+        <sys:String x:Key="Str.PdfYes">PDF موجود</sys:String>
+        <sys:String x:Key="Str.PdfNo">PDF غير موجود بعد</sys:String>
+        <sys:String x:Key="Str.PickFolder">اختر مجلدًا</sys:String>
+        <sys:String x:Key="Str.Title">مولّد كتب اللغة العربية</sys:String>
+        <sys:String x:Key="Str.NoBooks">اختر كتابًا واحدًا على الأقل.</sys:String>
+        <sys:String x:Key="Str.NoOutDir">حدّد مجلد المخرجات أولًا.</sys:String>
+        <sys:String x:Key="Str.NoImages">مجلد الصور غير موجود. اختر مجلدًا يحتوي صورًا.</sys:String>
+        <sys:String x:Key="Str.BadMerged">اسم الملف المدمج غير صالح. لا تستخدم الرموز \ / : * ? &quot; &lt; &gt; |</sys:String>
+        <sys:String x:Key="Str.NoNode">لم يتم العثور على Node.js. ثبّته ثم أعد المحاولة.</sys:String>
+        <sys:String x:Key="Str.BuildError">تعذّر تشغيل البناء: </sys:String>
+        <sys:String x:Key="Str.Ready">جاهز</sys:String>
+        <sys:String x:Key="Str.Running">جارٍ التنفيذ…</sys:String>
+        <sys:String x:Key="Str.Stopped">أُوقف التنفيذ</sys:String>
+        <sys:String x:Key="Str.Done">تم بنجاح</sys:String>
+        <sys:String x:Key="Str.Failed">فشل — راجع السجل</sys:String>
+        <sys:String x:Key="Str.Stage">المرحلة</sys:String>
+        <sys:String x:Key="Str.Book">جارٍ بناء</sys:String>
+        <sys:String x:Key="Str.Preview.Abjadi">أ ب ج د ه و ز ح ط ي ك ل م ن س ع ف ص ق ر ش ت ث خ ذ ض ظ غ</sys:String>
+        <sys:String x:Key="Str.Preview.Alphabetical">أ ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي</sys:String>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="0,0,0,10" />
+            <Setter Property="Padding" Value="8,4,8,8" />
+            <Setter Property="BorderBrush" Value="#D3DAE3" />
+            <Setter Property="Background" Value="White" />
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="5,4" />
+            <Setter Property="BorderBrush" Value="#C6CFDA" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="14,5" />
+            <Setter Property="BorderBrush" Value="#C6CFDA" />
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="مولّد كتب اللغة العربية"
+                   FontSize="24" FontWeight="Bold" Foreground="#1B4965"
+                   Margin="0,0,0,10" />
+
+        <TabControl Grid.Row="1" x:Name="MainTabs" Background="#F4F6F8" BorderBrush="#D3DAE3">
+
+            <!-- ============================ Workbooks ==================== -->
+            <TabItem Header="كتب التمارين">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <GroupBox Grid.Row="0" Header="الكتب">
+                        <StackPanel>
+                            <WrapPanel x:Name="BooksPanel" Orientation="Horizontal" />
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                <Button x:Name="SelectAllButton" Content="تحديد الكل" Margin="0,0,8,0" />
+                                <Button x:Name="SelectNoneButton" Content="إلغاء التحديد" />
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Grid.Row="1" Header="ترتيب الحروف">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton x:Name="OrderAbjadi" Content="أبجدي" Tag="abjadi"
+                                             GroupName="LetterOrder" IsChecked="True" Margin="0,0,24,0" />
+                                <RadioButton x:Name="OrderAlphabetical" Content="أبجدي حديث (المعجم)"
+                                             Tag="alphabetical" GroupName="LetterOrder" />
+                            </StackPanel>
+                            <TextBlock x:Name="OrderPreview" Margin="0,8,0,0"
+                                       FontFamily="Traditional Arabic" FontSize="20"
+                                       Foreground="#1B4965" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Grid.Row="2" Header="المخرجات">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="مجلد المخرجات:"
+                                       VerticalAlignment="Center" Margin="0,0,10,8" />
+                            <TextBox Grid.Row="0" Grid.Column="1" x:Name="OutDirBox" Margin="0,0,8,8" />
+                            <Button Grid.Row="0" Grid.Column="2" x:Name="BrowseOutButton"
+                                    Content="تصفح…" Margin="0,0,0,8" />
+
+                            <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                      x:Name="MergeCheck" IsChecked="True" Margin="0,0,0,8"
+                                      Content="ادمج المختارات في ملف PDF واحد" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="اسم الملف المدمج:"
+                                       VerticalAlignment="Center" Margin="0,0,10,0" />
+                            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                                     x:Name="MergedNameBox" Text="Arabic_Workbooks_Complete.pdf" />
+                        </Grid>
+                    </GroupBox>
+
+                    <StackPanel Grid.Row="3" Orientation="Horizontal">
+                        <Button x:Name="BuildButton" Content="ابدأ البناء" FontWeight="Bold"
+                                Padding="22,7" Background="#2E86AB" Foreground="White"
+                                BorderBrush="#2E86AB" Margin="0,0,8,0" />
+                        <Button x:Name="StopButton" Content="إيقاف" Padding="18,7"
+                                IsEnabled="False" Margin="0,0,8,0" />
+                        <Button x:Name="OpenOutButton" Content="فتح مجلد المخرجات" Padding="16,7" />
+                        <TextBlock x:Name="StatusText" VerticalAlignment="Center" Margin="18,0,0,0"
+                                   FontWeight="Bold" Foreground="#1B4965" />
+                    </StackPanel>
+
+                    <ProgressBar Grid.Row="4" x:Name="BuildProgress" Height="8" Margin="0,10,0,0"
+                                 Minimum="0" Maximum="100" Value="0" />
+
+                    <GroupBox Grid.Row="5" Header="سجل البناء" Margin="0,10,0,0">
+                        <TextBox x:Name="LogBox" IsReadOnly="True" AcceptsReturn="True"
+                                 TextWrapping="NoWrap" FontFamily="Consolas" FontSize="12"
+                                 Background="#1E1E1E" Foreground="#E8E8E8" BorderThickness="0"
+                                 VerticalScrollBarVisibility="Auto"
+                                 HorizontalScrollBarVisibility="Auto"
+                                 FlowDirection="LeftToRight" TextAlignment="Left" />
+                    </GroupBox>
+
+                    <GroupBox Grid.Row="6" Header="الملفات الناتجة" Margin="0,10,0,0">
+                        <ScrollViewer MaxHeight="110" VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Disabled">
+                            <WrapPanel x:Name="ResultsPanel" Orientation="Horizontal" />
+                        </ScrollViewer>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- ============================ Images book =================== -->
+            <TabItem Header="كتاب الصور">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <GroupBox Grid.Row="0" Header="صور الكتاب">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="مجلد الصور:"
+                                       VerticalAlignment="Center" Margin="0,0,10,8" />
+                            <TextBox Grid.Row="0" Grid.Column="1" x:Name="ImagesDirBox" Margin="0,0,8,8" />
+                            <Button Grid.Row="0" Grid.Column="2" x:Name="BrowseImagesButton"
+                                    Content="تصفح…" Margin="0,0,0,8" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="مجلد المخرجات:"
+                                       VerticalAlignment="Center" Margin="0,0,10,8" />
+                            <TextBox Grid.Row="1" Grid.Column="1" x:Name="ImagesOutBox" Margin="0,0,8,8" />
+                            <Button Grid.Row="1" Grid.Column="2" x:Name="BrowseImagesOutButton"
+                                    Content="تصفح…" Margin="0,0,0,8" />
+
+                            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                                        Orientation="Horizontal">
+                                <TextBlock Text="حجم الصفحة:" VerticalAlignment="Center"
+                                           Margin="0,0,8,0" />
+                                <ComboBox x:Name="SizeBox" Width="90" Margin="0,0,24,0" />
+                                <CheckBox x:Name="ImagesDocxOnly" Content="إنشاء DOCX فقط (بدون PDF)"
+                                          VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
+                        <Button x:Name="ImagesBuildButton" Content="ابدأ البناء" FontWeight="Bold"
+                                Padding="22,7" Background="#2E86AB" Foreground="White"
+                                BorderBrush="#2E86AB" Margin="0,0,8,0" />
+                        <Button x:Name="ImagesStopButton" Content="إيقاف" Padding="18,7"
+                                IsEnabled="False" Margin="0,0,8,0" />
+                        <Button x:Name="ImagesOpenOutButton" Content="فتح مجلد المخرجات"
+                                Padding="16,7" />
+                        <TextBlock x:Name="ImagesStatusText" VerticalAlignment="Center"
+                                   Margin="18,0,0,0" FontWeight="Bold" Foreground="#1B4965" />
+                    </StackPanel>
+
+                    <ProgressBar Grid.Row="2" x:Name="ImagesProgress" Height="8" Margin="0,8,0,0"
+                                 Minimum="0" Maximum="100" Value="0" IsIndeterminate="False" />
+
+                    <GroupBox Grid.Row="3" Header="سجل البناء" Margin="0,10,0,0">
+                        <TextBox x:Name="ImagesLogBox" IsReadOnly="True" AcceptsReturn="True"
+                                 TextWrapping="NoWrap" FontFamily="Consolas" FontSize="12"
+                                 Background="#1E1E1E" Foreground="#E8E8E8" BorderThickness="0"
+                                 VerticalScrollBarVisibility="Auto"
+                                 HorizontalScrollBarVisibility="Auto"
+                                 FlowDirection="LeftToRight" TextAlignment="Left" />
+                    </GroupBox>
+
+                    <GroupBox Grid.Row="4" Header="الملفات الناتجة" Margin="0,10,0,0">
+                        <ScrollViewer MaxHeight="110" VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Disabled">
+                            <WrapPanel x:Name="ImagesResultsPanel" Orientation="Horizontal" />
+                        </ScrollViewer>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

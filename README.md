@@ -66,6 +66,49 @@ PDF، ويدمجها في `Arabic_Workbooks_Complete.pdf`. لا حاجة إلى 
 
 > إن أردت كتاباً واحداً فقط، ادخل مجلده وشغّل `node create-workbook.js`.
 
+## الواجهة الرسومية (بدون سيرفر)
+
+انقر نقراً مزدوجاً على **`start-gui.bat`** لتفتح نافذة عربية من اليمين إلى اليسار،
+تعمل محلياً بلا سيرفر وبلا تثبيت (PowerShell + WPF). تحتاج Node.js فقط، مثله مثل
+`build-all.bat`.
+
+**تبويب «كتب التمارين»:**
+
+- اختر الكتب (أو «تحديد الكل»).
+- اختر ترتيب الحروف: **أبجدي** (الترتيب التقليدي، الافتراضي) أو **أبجدي حديث
+  (المعجم)** (أ ب ت ث …). يظهر تحت الخيارين الترتيب الكامل للحروف قبل البناء.
+- حدّد مجلد المخرجات (الافتراضي: جذر المشروع) بزر «تصفح…».
+- «ادمج المختارات في ملف PDF واحد» واسم الملف المدمج (الافتراضي
+  `Arabic_Workbooks_Complete.pdf`).
+- «ابدأ البناء» يعرض المرحلة والسجل الحيّ، ثم زر «فتح» لكل ملف ناتج.
+
+**تبويب «كتاب الصور»:** نفس أداة `image_2_cover_style` بواجهة: مجلد الصور، مقاس
+A5/A4، «DOCX فقط»، ومجلد المخرجات.
+
+> «إيقاف» يقتل شجرة العملية كاملة، فلا يبقى Node أو Word يعمل في الخلفية.
+> الترتيب يُطبَّق **في الذاكرة فقط**؛ ملفات `assets/*.json` لا تُعدَّل أبداً.
+> `build-all.bat` لم يتغيّر ويعمل كما كان تماماً.
+
+### خيارات سطر الأوامر الجديدة
+
+```bat
+node build.js --books=Arabic_Alphabet_Workbook,Arabic_Stories_Workbook ^
+              --order=alphabetical --out=D:\out --merge --merged-name=كتابي.pdf
+```
+
+| الأمر | الوظيفة |
+|-------|---------|
+| `--books=a,b` | الكتب المطلوبة (الافتراضي: السبعة) |
+| `--order=abjadi\|alphabetical` | ترتيب الحروف (الافتراضي: `abjadi`) |
+| `--out=<dir>` | مجلد المخرجات: `<out>\<Book>\<Book>.docx\|pdf` |
+| `--merge` | دمج المختارات في PDF واحد داخل `<out>` |
+| `--merged-name=<file>` | اسم الملف المدمج |
+| `--no-pdf` | DOCX فقط، بلا Word |
+
+كل `create-workbook.js` يقبل `--order` و`--out` أيضاً، و`merge-pdfs.js` يقبل
+`--books` و`--root` و`--out`، و`images-to-book.js` يقبل `--images` و`--out`.
+قائمة الكتب وأسماؤها العربية في `books.json` (مصدر واحد لكل الأدوات).
+
 ## المتطلبات
 
 | المتطلب | الإصدار | لماذا |
@@ -136,9 +179,11 @@ image_2_cover_style\images-to-book.bat
 | `images-to-book.bat` | A5، ويُنتج DOCX و PDF |
 | `images-to-book.bat --size a4` | مقاس A4 بدل A5 |
 | `images-to-book.bat --no-pdf` | DOCX فقط، بلا حاجة إلى Word |
+| `images-to-book.bat --images <dir> --out <dir>` | مجلد صور ومجلد مخرجات آخرين |
 
-> مجلد الإدخال والإخراج **ثابتان**: لا يوجد وسيط للمجلدات، فضع الصور في
-> `image_2_cover_style\images\` وشغّل. الأداة تستعمل `convert-one.ps1` من الجذر
+> الافتراضي أن مجلد الإدخال والإخراج **ثابتان**: ضع الصور في
+> `image_2_cover_style\images\` وشغّل. ويمكن تغييرهما بـ `--images` و`--out`
+> (هكذا تستعملهما الواجهة الرسومية). الأداة تستعمل `convert-one.ps1` من الجذر
 > لتحويل PDF، وتختار لكل صورة بين القصّ الكامل (full-bleed) والاحتواء الكامل حسب
 > نسبة القصّ. التفاصيل في `image_2_cover_style\README.md`.
 
@@ -166,10 +211,12 @@ image_2_cover_style\images-to-book.bat
 | `Arabic_Stories_Workbook\Arabic_Stories_Workbook.docx` / `.pdf` | المرحلة 1 و2 |
 | `Arabic_Workbooks_Complete.pdf` | المرحلة 3 (177 صفحة) |
 
-- كل **DOCX** يُكتب **داخل مجلد مشروعه** (`__dirname`)، فلا يختلف مساره مهما كان
-  المجلد الذي شغّلت منه الأمر. واسم الملف **مشتق من اسم مجلد المشروع**، فيحمل كل
-  كتاب نسخةً باسم مجلده حتى لو نُسخ المشروع إلى مجلد باسم آخر.
-- ملفات **PDF** تُكتب بجوار كل DOCX داخل مجلد المشروع نفسه.
+- كل **DOCX** يُكتب **داخل مجلد مشروعه** (`__dirname`) افتراضياً، فلا يختلف مساره
+  مهما كان المجلد الذي شغّلت منه الأمر. واسم الملف **مشتق من اسم مجلد المشروع**،
+  فيحمل كل كتاب نسخةً باسم مجلده حتى لو نُسخ المشروع إلى مجلد باسم آخر.
+- `--out=<dir>` (أو حقل «مجلد المخرجات» في الواجهة) ينقل الناتج إلى
+  `<dir>\<Book>\<Book>.docx|pdf` بدل مجلد المشروع.
+- ملفات **PDF** تُكتب بجوار كل DOCX داخل المجلد نفسه.
 - الدمج **لا يستخدم أي نسخة مؤرشفة**: إن نقص ملف PDF لأي كتاب تتوقف العملية
   بخطأ، فلا يمكن أن يختلط الكتاب الجديد بصفحات قديمة.
 
@@ -177,16 +224,23 @@ image_2_cover_style\images-to-book.bat
 
 ```
 created-books/
-├── build-all.bat                  # نقطة الدخول الوحيدة: docx -> pdf -> دمج
-├── docx-to-pdf.ps1                # يحوّل الكتب السبعة، كل كتاب في عملية منفصلة
+├── start-gui.bat                  # الواجهة الرسومية العربية (بدون سيرفر)
+├── build-all.bat                  # نقطة الدخول الكاملة: docx -> pdf -> دمج
+├── build.js                       # منسّق البناء: كتب مختارة، ترتيب، مجلد، دمج
+├── books.json                     # قائمة الكتب (المصدر الواحد لكل الأدوات)
+├── letter-order.js                # جدولا الترتيب: أبجدي / أبجدي حديث (المعجم)
+├── build-options.js               # خيارات --order و --out المشتركة بين الكتب
+├── docx-to-pdf.ps1                # يحوّل الكتب المختارة، كل كتاب في عملية منفصلة
 ├── convert-one.ps1                # يحوّل ملف DOCX واحد إلى PDF عبر Word COM
-├── merge-pdfs.js                  # يدمج ملفات PDF السبعة (pdf-lib)
+├── merge-pdfs.js                  # يدمج ملفات PDF (pdf-lib)
 ├── package.json                   # الاعتماديات المشتركة (node_modules الجذر)
 ├── README.md                      # هذا الملف
 ├── LICENSE                        # رخصة الكود (MIT)
 ├── LICENSE-CONTENT                # رخصة المحتوى والصور (CC BY 4.0)
 ├── Arabic_Workbooks_Complete.pdf  # ناتج الدمج
 ├── node_modules/                  # اعتماديات مشتركة (مُولَّدة، غير مُتتبَّعة)
+│
+├── ui/                            # نافذة WPF: gui.xaml + workbooks-gui.ps1
 │
 ├── Arabic_Alphabet_Workbook/      # كتاب الحروف           (57 صفحة)
 ├── Arabic_Harakat_Workbook/       # كتاب الحركات          (57 صفحة)
@@ -266,7 +320,9 @@ created-books/
 | هل الخطوط مضمَّنة في المستودع؟ | لا؛ ثبّت *Traditional Arabic* و*KFGQPC Alphabet Dotted* على نظامك. |
 | هل يمكنني استخدام الكتب تجارياً؟ | نعم: المحتوى تحت CC BY 4.0 والكود تحت MIT، مع ذكر المصدر. |
 | لماذا لا يوجد `node_modules` داخل مجلدات الكتب؟ | لأن الاعتماديات مشتركة في جذر المشروع، وNode يجدها تلقائياً. |
-| كيف أضيف كتاباً جديداً إلى الدمج؟ | أضف مساره إلى مصفوفة `BOOKS` في `merge-pdfs.js`، وأضف مشروعه إلى `build-all.bat`. |
+| كيف أضيف كتاباً جديداً إلى الدمج؟ | أضف عنصراً إلى `books.json` (المجلد والعنوان وعدد الصفحات)، وأضف مشروعه إلى `build-all.bat`. كل الأدوات (الواجهة، `build.js`، `merge-pdfs.js`، `docx-to-pdf.ps1`) تقرأ القائمة نفسها. |
+| هل أحتاج إلى سيرفر أو تثبيت للواجهة؟ | لا. انقر `start-gui.bat` فقط؛ الواجهة PowerShell + WPF تعمل محلياً. |
+| هل يغيّر اختيار الترتيب ملفات البيانات؟ | لا. الترتيب يُطبَّق في الذاكرة عند البناء فقط. |
 | لماذا يظهر إنذار `EBADENGINE` عند التثبيت؟ | سببه حزمة `nanoid` وتطلب Node أحدث؛ لا يؤثر على البناء. |
 
 ## استكشاف الأخطاء
@@ -338,6 +394,33 @@ Three stages, stopping at the first error:
 2. convert each to `.pdf` with Word,
 3. merge the seven PDFs into `Arabic_Workbooks_Complete.pdf`.
 
+### Desktop GUI (no server)
+
+Double-click **`start-gui.bat`** for a right-to-left Arabic window (PowerShell +
+WPF). Nothing to install, no server, no browser:
+
+- pick any subset of the seven books,
+- choose the letter order: **abjadi** (traditional, default) or **alphabetical**
+  (modern dictionary order) — the full 28-letter sequence is previewed,
+- choose the output folder (native folder picker, default = repo root),
+- merge the selection into one PDF with an editable file name,
+- watch the stages in a live log, then open any produced file with one button.
+
+The **images book** tab drives `image_2_cover_style` (images folder, A5/A4,
+DOCX-only, output folder). The order is applied **in memory only** — committed
+`assets/*.json` files are never rewritten — and `build-all.bat` is unchanged.
+
+The GUI runs `node build.js`, which is also usable by hand:
+
+```bat
+node build.js --books=Arabic_Alphabet_Workbook,Arabic_Stories_Workbook ^
+              --order=alphabetical --out=D:\out --merge --merged-name=book.pdf
+```
+
+`--books`, `--order`, `--out`, `--merge`, `--merged-name`, `--no-pdf`; every
+`create-workbook.js` also accepts `--order` / `--out`. The book list and its
+Arabic titles live in `books.json`, the single source used by every tool.
+
 ### Dependencies
 
 The shared dependencies (`docx`, `pdf-lib`, `svg2img`) live in the **single root
@@ -358,7 +441,7 @@ The rule: **content lives in `assets/*.json`, layout/labels live in `create-work
 - Re-run `build-all.bat`. Each book is self-contained in its own folder.
 - `image_2_cover_style/` is a standalone helper that turns every image in
   `image_2_cover_style/images/` into one full-bleed A5/A4 page and produces
-  `images-to-book.docx` / `.pdf`.
+  `images-to-book.docx` / `.pdf` (`--images` / `--out` point it elsewhere).
 - Reusable covers and photos are collected in `covers-and-photos/` (CC BY 4.0).
 
 ### Authors & Mission

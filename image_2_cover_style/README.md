@@ -19,9 +19,10 @@
 images-to-book.bat
 ```
 
-لا يوجد أي وسيط للمجلدات: مجلد الإدخال **ثابت** هو `images/` المجاور للسكربت،
-ومجلد الإخراج **ثابت** هو المجلد نفسه. لذلك كل ما عليك فعله هو نسخ الصور وتشغيل
-الملف.
+لا تحتاج إلى أي وسيط للمجلدات: مجلد الإدخال الافتراضي هو `images/` المجاور
+للسكربت، ومجلد الإخراج الافتراضي هو المجلد نفسه. لذلك كل ما عليك فعله هو نسخ
+الصور وتشغيل الملف. وإن احتجت مجلداً آخر استعمل `--images` و`--out` (هكذا
+تستعملهما الواجهة الرسومية `start-gui.bat`).
 
 ### الخيارات
 
@@ -30,6 +31,7 @@ images-to-book.bat
 | `images-to-book.bat` | A5، ويُنتج DOCX و PDF |
 | `images-to-book.bat --size a4` | مقاس A4 بدل A5 |
 | `images-to-book.bat --no-pdf` | DOCX فقط، بلا حاجة إلى Word |
+| `images-to-book.bat --images <dir> --out <dir>` | مجلد صور ومجلد مخرجات آخرين |
 
 > **قبل PDF:** أغلق Microsoft Word، وإلا فشل التحويل برسالة
 > `The process cannot access the file...`. وإن أردت DOCX فقط، استخدم `--no-pdf`.
@@ -107,7 +109,7 @@ image_2_cover_style/
 ├── 📄 images-to-book.js       # جمع الصور + قراءة الأبعاد + بناء DOCX
 ├── 📄 package.json            # بلا تبعيات؛ docx يُحَلّ من node_modules المشترك
 ├── 📄 README.md               # هذا الملف
-├── 📂 images/                 # مجلد الإدخال الثابت
+├── 📂 images/                 # مجلد الإدخال الافتراضي
 ├── 📂 images-to-book.docx     # الناتج (يُنشأ عند التشغيل)
 └── 📂 images-to-book.pdf      # الناتج (يتطلب Word)
 ```
@@ -155,10 +157,12 @@ images-to-book.bat
 | `images-to-book.bat` | A5, produces DOCX and PDF |
 | `images-to-book.bat --size a4` | A4 instead of A5 |
 | `images-to-book.bat --no-pdf` | DOCX only, no Word needed |
+| `images-to-book.bat --images <dir> --out <dir>` | other input / output folders |
 
-Input and output folders are **fixed** (`images/` next to the script). Accepted formats:
-`.png`, `.jpg`, `.jpeg`; subfolders are included; the order is natural (so `1-` before `2-`
-before `10-`); broken files are skipped and other file types ignored.
+By default the input is `images/` next to the script and the output lands there too;
+`--images` and `--out` exist so the desktop GUI can point the tool elsewhere. Accepted
+formats: `.png`, `.jpg`, `.jpeg`; subfolders are included; the order is natural (so `1-`
+before `2-` before `10-`); broken files are skipped and other file types ignored.
 
 ### Page fitting
 

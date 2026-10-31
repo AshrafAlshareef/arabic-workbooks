@@ -23,6 +23,9 @@ Arabic_Stories_Workbook/assets/coverpage_placeholder.png
 # ---- Word temporary lock files ---------------------------------------------
 ~$*.docx
 
+# ---- Local issue tracker (not published) -----------------------------------
+/.issues/
+
 # ---- OS / editor junk ------------------------------------------------------
 .DS_Store
 Thumbs.db
