@@ -117,6 +117,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" Grid.Column="0" Text="مجلد المخرجات:"
@@ -126,12 +127,16 @@
                                     Content="تصفح…" Margin="0,0,0,8" />
 
                             <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                      x:Name="PageNumbersCheck" IsChecked="True" Margin="0,0,0,8"
+                                      Content="ترقيم الصفحات" />
+
+                            <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
                                       x:Name="MergeCheck" IsChecked="True" Margin="0,0,0,8"
                                       Content="ادمج المختارات في ملف PDF واحد" />
 
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="اسم الملف المدمج:"
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="اسم الملف المدمج:"
                                        VerticalAlignment="Center" Margin="0,0,10,0" />
-                            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                            <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
                                      x:Name="MergedNameBox" Text="Arabic_Workbooks_Complete.pdf" />
                         </Grid>
                     </GroupBox>

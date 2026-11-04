@@ -45,8 +45,8 @@ const {
   convertInchesToTwip,
 } = require("docx");
 
-// Set to false to hide the page number footer (Arabic_Alphabet_Workbook style).
-const SHOW_PAGE_NUMBERS = false;
+// Page numbers are on by default; --no-page-numbers hides the footer.
+const SHOW_PAGE_NUMBERS = CLI.pageNumbers;
 
 // A5 dimensions in twips (14.8cm x 21cm)
 const A5_WIDTH = convertInchesToTwip(5.83);
@@ -55,6 +55,10 @@ const A5_HEIGHT = convertInchesToTwip(8.27);
 const MARGIN_TOP = convertInchesToTwip(0.35);
 const MARGIN_BOTTOM = convertInchesToTwip(0.35);
 const MARGIN_SIDE = convertInchesToTwip(0.5);
+// Distance from the page edge to the page-number footer. It has to stay inside
+// the bottom margin so the footer never pushes the body text up.
+const PAGE_NUMBER_BOTTOM = convertInchesToTwip(0.5);
+const FOOTER_DISTANCE = convertInchesToTwip(0.33);
 
 const CONTENT_WIDTH = A5_WIDTH - MARGIN_SIDE * 2; // 6955 twips (~122.6 mm)
 
@@ -243,7 +247,7 @@ function createPageFooter() {
           new TextRun({
             children: [PageNumber.CURRENT],
             font: FONT,
-            size: 20,
+            size: 18,
             color: COLOR_BORDER,
           }),
         ],
@@ -252,7 +256,7 @@ function createPageFooter() {
   });
 }
 
-function a5SectionProperties(margins) {
+function a5SectionProperties(margins, startPage = null) {
   // NB: docx 9.7.x has no section-level `direction` option, so section RTL is
   // set per paragraph with `bidirectional: true` (which emits <w:bidi/>).
   return {
@@ -262,7 +266,15 @@ function a5SectionProperties(margins) {
         height: A5_HEIGHT,
         orientation: PageOrientation.PORTRAIT,
       },
-      margin: margins,
+      margin: {
+        ...margins,
+        // Reserve room for the footer so the number sits between the page frame
+        // and the body text instead of pushing the content up.
+        ...(SHOW_PAGE_NUMBERS && margins.bottom > 0
+          ? { bottom: PAGE_NUMBER_BOTTOM, footer: FOOTER_DISTANCE }
+          : {}),
+      },
+      ...(startPage ? { pageNumbers: { start: startPage } } : {}),
     },
   };
 }
@@ -463,7 +475,7 @@ async function createWorkbook() {
   });
 
   doc.addSection({
-    properties: a5SectionProperties(PAGE_MARGINS),
+    properties: a5SectionProperties(PAGE_MARGINS, SHOW_PAGE_NUMBERS ? 1 : null),
     ...(SHOW_PAGE_NUMBERS ? { footers: { default: createPageFooter() } } : {}),
     children: createTitlePage(manifest.book),
   });

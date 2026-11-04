@@ -78,6 +78,8 @@ PDF، ويدمجها في `Arabic_Workbooks_Complete.pdf`. لا حاجة إلى 
 - اختر ترتيب الحروف: **أبجدي** (الترتيب التقليدي، الافتراضي) أو **أبجدي حديث
   (المعجم)** (أ ب ت ث …). يظهر تحت الخيارين الترتيب الكامل للحروف قبل البناء.
 - حدّد مجلد المخرجات (الافتراضي: جذر المشروع) بزر «تصفح…».
+- «ترقيم الصفحات» (مفعّل افتراضياً): أرقام الصفحات في تذييل كل صفحة، ويبدأ
+  الترقيم من 1 على أول صفحة محتوى (الغلاف بلا رقم).
 - «ادمج المختارات في ملف PDF واحد» واسم الملف المدمج (الافتراضي
   `Arabic_Workbooks_Complete.pdf`).
 - «ابدأ البناء» يعرض المرحلة والسجل الحيّ، ثم زر «فتح» لكل ملف ناتج.
@@ -104,9 +106,11 @@ node scripts\build.js --books=Arabic_Alphabet_Workbook,Arabic_Stories_Workbook ^
 | `--merge` | دمج المختارات في PDF واحد داخل `<out>` |
 | `--merged-name=<file>` | اسم الملف المدمج |
 | `--no-pdf` | DOCX فقط، بلا Word |
+| `--no-page-numbers` | إخفاء أرقام الصفحات (الافتراضي: ظاهرة) |
 
-كل `create-workbook.js` يقبل `--order` و`--out` أيضاً، و`scripts\merge-pdfs.js`
-يقبل `--books` و`--root` و`--out`، و`images-to-book.js` يقبل `--images` و`--out`.
+كل `create-workbook.js` يقبل `--order` و`--out` و`--no-page-numbers` أيضاً،
+و`scripts\merge-pdfs.js` يقبل `--books` و`--root` و`--out`، و`images-to-book.js`
+يقبل `--images` و`--out`.
 قائمة الكتب وأسماؤها العربية في `books.json` (مصدر واحد لكل الأدوات).
 
 ## المتطلبات
@@ -405,6 +409,8 @@ WPF). Nothing to install, no server, no browser:
 - choose the letter order: **abjadi** (traditional, default) or **alphabetical**
   (modern dictionary order) — the full 28-letter sequence is previewed,
 - choose the output folder (native folder picker, default = repo root),
+- page numbers (**on by default**): a small number in the footer of every content
+  page, starting at 1 on the first page after the cover,
 - merge the selection into one PDF with an editable file name,
 - watch the stages in a live log, then open any produced file with one button.
 
@@ -420,9 +426,10 @@ node scripts\build.js --books=Arabic_Alphabet_Workbook,Arabic_Stories_Workbook ^
                       --order=alphabetical --out=D:\out --merge --merged-name=book.pdf
 ```
 
-`--books`, `--order`, `--out`, `--merge`, `--merged-name`, `--no-pdf`; every
-`create-workbook.js` also accepts `--order` / `--out`. The book list and its
-Arabic titles live in `books.json`, the single source used by every tool.
+`--books`, `--order`, `--out`, `--merge`, `--merged-name`, `--no-pdf`,
+`--no-page-numbers`; every `create-workbook.js` also accepts `--order` / `--out`
+and `--no-page-numbers`. The book list and its Arabic titles live in
+`books.json`, the single source used by every tool.
 
 ### Dependencies
 

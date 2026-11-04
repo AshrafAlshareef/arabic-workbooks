@@ -44,6 +44,10 @@ const A5_HEIGHT = convertInchesToTwip(8.27); // 21 cm
 const MARGIN_TOP = convertInchesToTwip(0.35);
 const MARGIN_BOTTOM = convertInchesToTwip(0.35);
 const MARGIN_SIDE = convertInchesToTwip(0.5);
+// Distance from the page edge to the page-number footer. It has to stay inside
+// the bottom margin so the footer never pushes the body text up.
+const PAGE_NUMBER_BOTTOM = convertInchesToTwip(0.5);
+const FOOTER_DISTANCE = convertInchesToTwip(0.33);
 
 const CONTENT_WIDTH = A5_WIDTH - MARGIN_SIDE * 2; // 6955 twips (~122.6 mm)
 const CONTENT_HEIGHT = A5_HEIGHT - MARGIN_TOP - MARGIN_BOTTOM; // 10901 twips (~192.2 mm)
@@ -53,8 +57,8 @@ const CONTENT_HEIGHT = A5_HEIGHT - MARGIN_TOP - MARGIN_BOTTOM; // 10901 twips (~
 // ---------------------------------------------------------------------------
 const FONT = "Traditional Arabic";
 
-// Set to false to hide the page number footer
-const SHOW_PAGE_NUMBERS = false;
+// Page numbers are on by default; --no-page-numbers hides the footer.
+const SHOW_PAGE_NUMBERS = CLI.pageNumbers;
 
 const COLOR_TITLE = "2E86AB";
 const COLOR_MAIN = "1B4965";
@@ -997,7 +1001,7 @@ function createPageFooter() {
           new TextRun({
             children: [PageNumber.CURRENT],
             font: FONT,
-            size: 20,
+            size: 18,
             color: COLOR_BORDER,
           }),
         ],
@@ -1006,7 +1010,13 @@ function createPageFooter() {
   });
 }
 
-function pageProperties(marginTop, marginBottom, marginSide = MARGIN_SIDE, framed = true) {
+function pageProperties(
+  marginTop,
+  marginBottom,
+  marginSide = MARGIN_SIDE,
+  framed = true,
+  startPage = null
+) {
   return {
     page: {
       size: {
@@ -1017,10 +1027,14 @@ function pageProperties(marginTop, marginBottom, marginSide = MARGIN_SIDE, frame
       margin: {
         top: marginTop,
         right: marginSide,
-        bottom: marginBottom,
+        // Reserve room for the footer so the number sits between the page frame
+        // and the body text instead of pushing the content up.
+        bottom: SHOW_PAGE_NUMBERS && marginBottom > 0 ? PAGE_NUMBER_BOTTOM : marginBottom,
         left: marginSide,
+        ...(SHOW_PAGE_NUMBERS && marginBottom > 0 ? { footer: FOOTER_DISTANCE } : {}),
       },
       ...(framed ? { borders: PAGE_FRAME } : {}),
+      ...(startPage ? { pageNumbers: { start: startPage } } : {}),
     },
     direction: "RTL",
   };
@@ -1071,15 +1085,23 @@ async function createWorkbook() {
   const typeList = content.exerciseTypes;
   const pageCountByType = {};
   const footers = SHOW_PAGE_NUMBERS ? { footers: { default: createPageFooter() } } : {};
+  let firstContentPage = true;
 
   for (const type of typeList) {
     console.log(`جاري إنشاء قسم: ${type.title}`);
 
     doc.addSection({
-      properties: pageProperties(MARGIN_TOP, MARGIN_BOTTOM),
+      properties: pageProperties(
+        MARGIN_TOP,
+        MARGIN_BOTTOM,
+        MARGIN_SIDE,
+        true,
+        SHOW_PAGE_NUMBERS && firstContentPage ? 1 : null
+      ),
       ...footers,
       children: createSectionTitlePage(type),
     });
+    firstContentPage = false;
 
     let pages = 0;
     for (let i = 0; i < words.length; i += EXERCISES_PER_PAGE) {

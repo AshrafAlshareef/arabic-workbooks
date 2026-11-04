@@ -58,8 +58,8 @@ const SHAPES_FILE = path.join(ASSETS, "letter-shapes.json");
 const OUT_DIR = CLI.out || ROOT;
 const OUTPUT = path.join(OUT_DIR, "Arabic_Alphabet_Workbook.docx");
 
-// Set to false to hide the page number footer
-const SHOW_PAGE_NUMBERS = false;
+// Page numbers are on by default; --no-page-numbers hides the footer.
+const SHOW_PAGE_NUMBERS = CLI.pageNumbers;
 
 const FONT = "Traditional Arabic";
 const FONT_DOTTED = "KFGQPC Alphabet Dotted";
@@ -90,6 +90,9 @@ const A5_WIDTH = convertInchesToTwip(5.83);  // 14.8cm
 const A5_HEIGHT = convertInchesToTwip(8.27);  // 21cm
 
 const CONTENT_MARGIN = convertInchesToTwip(0.5);
+// Distance from the page edge to the page-number footer. It has to stay inside
+// the bottom margin so the footer never pushes the body text up.
+const FOOTER_DISTANCE = convertInchesToTwip(0.33);
 
 // Read width/height from a PNG buffer (IHDR at bytes 16-23)
 function getPngDimensions(buffer) {
@@ -517,7 +520,7 @@ function createPageFooter() {
           new TextRun({
             children: [PageNumber.CURRENT],
             font: FONT,
-            size: 20,
+            size: 18,
             color: "34495E",
           }),
         ],
@@ -622,6 +625,7 @@ async function createWorkbook() {
   }
 
   // Create pages for each letter
+  let firstContentPage = true;
   for (const letterData of content.letters) {
     console.log(`جاري إنشاء صفحة حرف ${letterData.name}...`);
 
@@ -635,7 +639,7 @@ async function createWorkbook() {
 
     // A fresh properties object per section: the docx library owns what it is
     // handed, so a shared one could be normalised twice.
-    const contentProperties = () => ({
+    const contentProperties = (startPage = null) => ({
       page: {
         size: {
           width: A5_WIDTH,
@@ -647,14 +651,21 @@ async function createWorkbook() {
           right: CONTENT_MARGIN,
           bottom: CONTENT_MARGIN,
           left: CONTENT_MARGIN,
+          ...(SHOW_PAGE_NUMBERS ? { footer: FOOTER_DISTANCE } : {}),
         },
         borders: PAGE_FRAME,
+        ...(startPage ? { pageNumbers: { start: startPage } } : {}),
       },
       direction: "RTL",
     });
     const footers = SHOW_PAGE_NUMBERS ? { footers: { default: createPageFooter() } } : {};
 
-    doc.addSection({ properties: contentProperties(), ...footers, children: letterPageContent });
+    doc.addSection({
+      properties: contentProperties(SHOW_PAGE_NUMBERS && firstContentPage ? 1 : null),
+      ...footers,
+      children: letterPageContent,
+    });
+    firstContentPage = false;
     doc.addSection({ properties: contentProperties(), ...footers, children: tablePageContent });
   }
 

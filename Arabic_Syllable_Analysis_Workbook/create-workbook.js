@@ -32,6 +32,8 @@ const {
   PageBorderDisplay,
   PageBorderOffsetFrom,
   PageBorderZOrder,
+  PageNumber,
+  Footer,
 } = docx;
 
 // A5 dimensions in twips (14.8cm x 21cm)
@@ -41,6 +43,13 @@ const A5_HEIGHT = convertInchesToTwip(8.27);
 const MARGIN_TOP = convertInchesToTwip(0.3);
 const MARGIN_BOTTOM = convertInchesToTwip(0.3);
 const MARGIN_SIDE = convertInchesToTwip(0.5);
+
+// Page numbers are on by default; --no-page-numbers hides the footer.
+const SHOW_PAGE_NUMBERS = CLI.pageNumbers;
+// Distance from the page edge to the page-number footer. It has to stay inside
+// the bottom margin so the footer never pushes the body text up.
+const PAGE_NUMBER_BOTTOM = convertInchesToTwip(0.5);
+const FOOTER_DISTANCE = convertInchesToTwip(0.33);
 
 // Simple single-line frame around every page. The offset is measured from the
 // paper edge, so the frame sits outside the text area.
@@ -1493,7 +1502,13 @@ function createSyllableExercise(letterData) {
 }
 
 /** Every section in this book is A5 + RTL; only margins and the frame vary. */
-function pageProperties(marginTop, marginBottom, marginSide = MARGIN_SIDE, framed = true) {
+function pageProperties(
+  marginTop,
+  marginBottom,
+  marginSide = MARGIN_SIDE,
+  framed = true,
+  startPage = null
+) {
   return {
     page: {
       size: {
@@ -1504,13 +1519,40 @@ function pageProperties(marginTop, marginBottom, marginSide = MARGIN_SIDE, frame
       margin: {
         top: marginTop,
         right: marginSide,
-        bottom: marginBottom,
+        // Reserve room for the footer so the number sits between the page frame
+        // and the body text instead of pushing the content up.
+        bottom: SHOW_PAGE_NUMBERS && marginBottom > 0 ? PAGE_NUMBER_BOTTOM : marginBottom,
         left: marginSide,
+        ...(SHOW_PAGE_NUMBERS && marginBottom > 0 ? { footer: FOOTER_DISTANCE } : {}),
       },
       ...(framed ? { borders: PAGE_FRAME } : {}),
+      ...(startPage ? { pageNumbers: { start: startPage } } : {}),
     },
     direction: "RTL",
   };
+}
+
+// Create footer with page number
+function createPageFooter() {
+  if (!SHOW_PAGE_NUMBERS) {
+    return null;
+  }
+  return new Footer({
+    children: [
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        direction: "RTL",
+        children: [
+          new TextRun({
+            children: [PageNumber.CURRENT],
+            font: "Traditional Arabic",
+            size: 18,
+            color: "34495E",
+          }),
+        ],
+      }),
+    ],
+  });
 }
 
 /**
@@ -1577,6 +1619,22 @@ async function createWorkbook() {
     sections: [],
   });
 
+  const footers = SHOW_PAGE_NUMBERS ? { footers: { default: createPageFooter() } } : {};
+  let firstContentPage = true;
+  // The cover counts as page 1 for Word, so the first content section restarts
+  // the numbering at 1. Calling this also advances the flag.
+  const contentPageProperties = () => {
+    const properties = pageProperties(
+      MARGIN_TOP,
+      MARGIN_BOTTOM,
+      MARGIN_SIDE,
+      true,
+      SHOW_PAGE_NUMBERS && firstContentPage ? 1 : null
+    );
+    firstContentPage = false;
+    return properties;
+  };
+
   // Cover
   const coverContent = createCoverPage();
   if (coverContent) {
@@ -1605,13 +1663,15 @@ async function createWorkbook() {
 
       // Add section for display page
       doc.addSection({
-        properties: pageProperties(MARGIN_TOP, MARGIN_BOTTOM),
+        properties: contentPageProperties(),
+        ...footers,
         children: displayPageContent,
       });
 
       // Add section for practice page
       doc.addSection({
-        properties: pageProperties(MARGIN_TOP, MARGIN_BOTTOM),
+        properties: contentPageProperties(),
+        ...footers,
         children: practicePageContent,
       });
     }
@@ -1629,7 +1689,8 @@ async function createWorkbook() {
 
     // Title page for syllable exercises
     doc.addSection({
-      properties: pageProperties(MARGIN_TOP, MARGIN_BOTTOM),
+      properties: contentPageProperties(),
+      ...footers,
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
@@ -1690,7 +1751,8 @@ async function createWorkbook() {
 
       // Add section for this page of exercises
       doc.addSection({
-        properties: pageProperties(MARGIN_TOP, MARGIN_BOTTOM),
+        properties: contentPageProperties(),
+        ...footers,
         children: pageContent,
       });
 

@@ -60,6 +60,7 @@ try {
     $script:OutDirBox           = Get-Ui 'OutDirBox'
     $script:BrowseOutButton     = Get-Ui 'BrowseOutButton'
     $script:MergeCheck          = Get-Ui 'MergeCheck'
+    $script:PageNumbersCheck    = Get-Ui 'PageNumbersCheck'
     $script:MergedNameBox       = Get-Ui 'MergedNameBox'
     $script:BuildButton         = Get-Ui 'BuildButton'
     $script:StopButton          = Get-Ui 'StopButton'
@@ -494,6 +495,12 @@ try {
             ('--order=' + (Get-OrderName)),
             ('--out=' + $outDir)
         )
+
+        if ($script:PageNumbersCheck.IsChecked) {
+            $nodeArgs += '--page-numbers'
+        } else {
+            $nodeArgs += '--no-page-numbers'
+        }
 
         if ($script:MergeCheck.IsChecked) {
             $merged = $script:MergedNameBox.Text.Trim()

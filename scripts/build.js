@@ -10,7 +10,7 @@
     Usage:
         node scripts/build.js [--books=folder1,folder2] [--order=abjadi|alphabetical]
                               [--out=<dir>] [--merge] [--merged-name=<file.pdf>]
-                              [--no-pdf]
+                              [--no-pdf] [--no-page-numbers]
 
         --books        project folders to build (default: all seven)
         --order        letter order, abjadi (default) or alphabetical
@@ -19,6 +19,7 @@
         --merge        merge the selected books into one PDF
         --merged-name  merged file name (default: Arabic_Workbooks_Complete.pdf)
         --no-pdf       DOCX only: skip the Word conversion and the merge
+        --no-page-numbers  hide the page numbers in the footer (default: shown)
 
     Progress markers (consumed by the desktop GUI):
         ##STAGE <n>/<total> <name>
@@ -48,6 +49,7 @@ const USAGE = [
   "  --merge              merge the selected books into one PDF",
   "  --merged-name=<f>    merged file name (default: " + DEFAULT_MERGED + ")",
   "  --no-pdf             DOCX only, no Word conversion and no merge",
+  "  --no-page-numbers    hide the page numbers in the footer (default: shown)",
   "  --help               show this message",
 ].join("\n");
 
@@ -63,6 +65,7 @@ function parseArgs(argv) {
     merge: false,
     mergedName: DEFAULT_MERGED,
     pdf: true,
+    pageNumbers: true,
   };
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -97,6 +100,10 @@ function parseArgs(argv) {
       options.mergedName = name.toLowerCase().endsWith(".pdf") ? name : `${name}.pdf`;
     } else if (flag === "--no-pdf") {
       options.pdf = false;
+    } else if (flag === "--no-page-numbers") {
+      options.pageNumbers = false;
+    } else if (flag === "--page-numbers") {
+      options.pageNumbers = true;
     } else if (flag === "--help" || flag === "-h") {
       console.log(USAGE);
       process.exit(0);
@@ -165,7 +172,7 @@ function main() {
   const stages = options.pdf ? 3 : 1;
 
   emit(
-    `##CONFIG order=${options.order} out=${outRoot} books=${selected.length} merge=${options.merge}`
+    `##CONFIG order=${options.order} out=${outRoot} books=${selected.length} merge=${options.merge} pageNumbers=${options.pageNumbers}`
   );
 
   ensureDependencies();
@@ -177,7 +184,11 @@ function main() {
     emit(`##BOOK ${book.dir} building`);
     const status = runNode(
       "create-workbook.js",
-      [`--order=${options.order}`, `--out=${bookOut}`],
+      [
+        `--order=${options.order}`,
+        `--out=${bookOut}`,
+        options.pageNumbers ? "--page-numbers" : "--no-page-numbers",
+      ],
       path.join(ROOT, book.dir)
     );
     if (status !== 0) {

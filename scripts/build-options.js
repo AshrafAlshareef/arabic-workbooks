@@ -4,9 +4,10 @@
     points:
 
         node create-workbook.js [--order=abjadi|alphabetical] [--out=<dir>]
+                                [--no-page-numbers]
 
     Defaults reproduce the original behaviour exactly: Abjadi order, DOCX
-    written inside the project folder.
+    written inside the project folder, page numbers shown.
 */
 
 const path = require("path");
@@ -17,6 +18,7 @@ const USAGE = [
   "",
   "  --order=<name>   letter order: " + ORDER_NAMES.join(" | ") + " (default: abjadi)",
   "  --out=<dir>      write the .docx into <dir> instead of the project folder",
+  "  --no-page-numbers  hide the page numbers in the footer (default: shown)",
   "  --help           show this message",
 ].join("\n");
 
@@ -25,7 +27,7 @@ const USAGE = [
  * rejected instead of ignored, so a typo cannot silently build the wrong book.
  */
 function parseBookArgs(argv) {
-  const options = { order: "abjadi", out: null, help: false };
+  const options = { order: "abjadi", out: null, pageNumbers: true, help: false };
 
   for (let i = 0; i < argv.length; i += 1) {
     const arg = String(argv[i]);
@@ -46,6 +48,10 @@ function parseBookArgs(argv) {
       const value = takeValue();
       if (value.trim() === "") throw new Error("--out needs a directory.");
       options.out = path.resolve(value);
+    } else if (flag === "--no-page-numbers") {
+      options.pageNumbers = false;
+    } else if (flag === "--page-numbers") {
+      options.pageNumbers = true;
     } else if (flag === "--help" || flag === "-h") {
       options.help = true;
     } else {
