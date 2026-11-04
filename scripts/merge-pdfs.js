@@ -153,6 +153,122 @@ function sourceFor(root, book) {
 
   merged.setProducer(`pdf-lib | ${used.map((u) => u.name).join(" + ")}`);
 
+  // Renumber footer page numbers consecutively across the entire merged document.
+  // Covers remain unnumbered (no footer page number), just like in individual books.
+  try {
+    const { PDFName, PDFArray, PDFRawStream, PDFString } = require("pdf-lib");
+    const zlib = require("zlib");
+
+    const pageCount = merged.getPageCount();
+    let pageNum = 0;
+    for (let i = 0; i < pageCount; i += 1) {
+      const page = merged.getPage(i);
+      const contentsRef = page.node.get(PDFName.of("Contents"));
+      if (!contentsRef) continue;
+      const refs = contentsRef instanceof PDFArray ? contentsRef.asArray() : [contentsRef];
+      if (!refs.length) continue;
+
+      // Try to find and replace footer page numbers (digits near bottom of page)
+      // We'll look through content streams for page numbers in footer area
+      for (let r = 0; r < refs.length; r += 1) {
+        const ref = refs[r];
+        const stream = merged.context.lookup(ref);
+        if (!(stream instanceof PDFRawStream)) continue;
+
+        let raw = Buffer.from(stream.contents);
+        let isCompressed = raw.length > 0 && raw[0] === 0x78;
+        let content;
+        if (isCompressed) {
+          try {
+            content = zlib.inflateSync(raw).toString("latin1");
+          } catch (e) {
+            continue;
+          }
+        } else {
+          content = raw.toString("latin1");
+        }
+
+        // Check if this page has a footer page number (digit in bottom area)
+        // Parse to find y positions
+        const lines = content.split(/\r?\n/);
+        let tm = [1, 0, 0, 1, 0, 0];
+        let tlm = tm.slice();
+        const ops = [];
+        for (const line of lines) {
+          const t = line;
+          let m = t.match(/([-.\d]+) ([-.\d]+) ([-.\d]+) ([-.\d]+) ([-.\d]+) ([-.\d]+)\s+Tm\b/);
+          if (m) {
+            tm = [parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3]), parseFloat(m[4]), parseFloat(m[5]), parseFloat(m[6])];
+            tlm = tm.slice();
+            continue;
+          }
+          m = t.match(/([-.\d]+) ([-.\d]+)\s+Td\b/);
+          if (m) {
+            const tx = parseFloat(m[1]), ty = parseFloat(m[2]);
+            tlm = [tlm[0], tlm[1], tlm[2], tlm[3], tlm[4] + tx * tlm[0] + ty * tlm[2], tlm[5] + tx * tlm[1] + ty * tlm[3]];
+            tm = tlm.slice();
+            continue;
+          }
+          if (/\bT\*\b/.test(t)) {
+            tm = tlm.slice();
+            continue;
+          }
+          m = t.match(/\(([^()]*)\)\s*Tj\b/);
+          if (m) {
+            ops.push({ y: tm[5], x: tm[4], type: "Tj", text: m[1], match: m[0], fullLine: t });
+            continue;
+          }
+          m = t.match(/\[([^\]]*)\]\s*TJ\b/);
+          if (m) {
+            const inner = m[1];
+            const texts = [];
+            const sm = [...inner.matchAll(/\(([^()]*)\)/g)];
+            for (const sx of sm) texts.push(sx[1]);
+            const fullText = texts.join("");
+            ops.push({ y: tm[5], x: tm[4], type: "TJ", text: fullText, match: m[0], fullLine: t, inner });
+          }
+        }
+
+        // Find footer page numbers (y < 50 and contains only digits/spaces)
+        const candidates = ops.filter((o) => o.y < 50 && /^\s*\d+\s*$/.test(o.text));
+
+        if (candidates.length > 0) {
+          pageNum += 1;
+          const newNum = String(pageNum);
+          let newContent = content;
+
+          // Replace each candidate
+          const sorted = candidates.slice().sort((a, b) => b.x - a.x);
+          for (const cand of sorted) {
+            if (cand.type === "Tj") {
+              // Replace just the (number) Tj part
+              const oldOp = cand.match;
+              // Use function replace to avoid escaping issues
+              newContent = newContent.split(oldOp).join(`(${newNum}) Tj`);
+            } else if (cand.type === "TJ") {
+              const oldOp = cand.match;
+              newContent = newContent.split(oldOp).join(`[(${newNum})] TJ`);
+            }
+          }
+
+          if (newContent !== content) {
+            let newRaw;
+            if (isCompressed) {
+              const compressed = zlib.deflateSync(Buffer.from(newContent, "latin1"));
+              newRaw = compressed;
+            } else {
+              newRaw = Buffer.from(newContent, "latin1");
+            }
+            stream.contents = newRaw;
+          }
+        }
+        // If no footer numbers found, it's likely a cover - leave it unnumbered
+      }
+    }
+  } catch (e) {
+    console.log(`  [WARN] Could not renumber pages in merged PDF: ${e.message}`);
+  }
+
   const outBytes = await merged.save();
   fs.mkdirSync(path.dirname(options.out), { recursive: true });
   fs.writeFileSync(options.out, outBytes);
