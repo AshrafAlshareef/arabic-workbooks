@@ -3,10 +3,10 @@
     workbooks-gui.ps1
     Arabic right-to-left desktop window for the workbook generator.
 
-    Runs `node build.js` (books tab) or `node image_2_cover_style/images-to-book.js`
-    (images tab) as a hidden child process, streams its output into the log, and
-    turns the ##STAGE / ##BOOK / ##OUTPUT / ##DONE markers into progress and
-    "open file" buttons.
+    Runs `node scripts/build.js` (books tab) or
+    `node image_2_cover_style/images-to-book.js` (images tab) as a hidden child
+    process, streams its output into the log, and turns the ##STAGE / ##BOOK /
+    ##OUTPUT / ##DONE markers into progress and "open file" buttons.
 
     This file is pure ASCII on purpose. Every Arabic string lives in gui.xaml
     and is read back with FindResource, so Windows PowerShell 5.1 can never
@@ -489,7 +489,7 @@ try {
         $script:OutDirBox.Text = $outDir
 
         $nodeArgs = @(
-            (Join-Path $script:Root 'build.js'),
+            (Join-Path $script:Root 'scripts\build.js'),
             ('--books=' + ($dirs -join ',')),
             ('--order=' + (Get-OrderName)),
             ('--out=' + $outDir)

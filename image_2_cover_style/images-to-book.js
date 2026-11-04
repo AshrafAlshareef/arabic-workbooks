@@ -51,8 +51,8 @@ function displayPath(target) {
 }
 
 // The converter is the one the repo already ships, so this tool never grows a
-// second copy of the Word COM logic.
-const CONVERTER = path.join(ROOT, "..", "convert-one.ps1");
+// second copy of the Word COM logic. It lives in the shared scripts/ folder.
+const CONVERTER = path.join(ROOT, "..", "scripts", "convert-one.ps1");
 
 // ---------------------------------------------------------------------------
 // Page geometry

@@ -8,7 +8,7 @@
 صورة تملأ الورقة من الحافة إلى الحافة، بلا هوامش ولا إطار ولا تذييل ولا ترقيم.
 
 > **مهم:** هذا المشروع **مستقل** ولا يتصل بسكربتات الجذر في `build-all.bat` —
-> لا يُبنى ضمن الكتب السبعة. لكنه **يستعمل** `convert-one.ps1` من الجذر لتحويل
+> لا يُبنى ضمن الكتب السبعة. لكنه **يستعمل** `scripts\convert-one.ps1` لتحويل
 > DOCX إلى PDF، ويستعمل `node_modules` المشترك في الجذر، فلا يحتاج تثبيتاً منفصلاً.
 
 ## طريقة الاستعمال
@@ -141,8 +141,8 @@ A standalone helper that turns every image in `images/` into one **full-bleed A5
 page** — the same cover style used by the workbooks (image edge to edge, no margins,
 frame, footer, or page numbers) — and writes `images-to-book.docx` / `.pdf`.
 
-> Standalone from `build-all.bat`: it is not one of the seven books, but it does use the
-> root `convert-one.ps1` and the shared root `node_modules`.
+> Standalone from `build-all.bat`: it is not one of the seven books, but it does use
+> `scripts/convert-one.ps1` and the shared root `node_modules`.
 
 ### Usage
 

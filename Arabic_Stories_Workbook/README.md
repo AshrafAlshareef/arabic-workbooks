@@ -11,7 +11,7 @@
 ليتدرّب التلميذ على المفردات نفسها.
 
 > **مهم:** هذا المشروع **مستقل** ولا يتصل بسكربتات الجذر
-> (`build-all.bat` / `docx-to-pdf.ps1` / `merge-pdfs.js`) — تعديلها خارج نطاق العمل.
+> (`build-all.bat` / `scripts\docx-to-pdf.ps1` / `scripts\merge-pdfs.js`) — تعديلها خارج نطاق العمل.
 
 ## عدد الصفحات
 
@@ -337,7 +337,7 @@ three short sentences), built as a right-to-left **DOCX** (A5) and converted to 
 Word. The stories use the same 28 words, in the same order, as the rest of the project.
 
 > This project is **standalone** and is not wired into the root scripts
-> (`build-all.bat` / `docx-to-pdf.ps1` / `merge-pdfs.js`).
+> (`build-all.bat` / `scripts\docx-to-pdf.ps1` / `scripts\merge-pdfs.js`).
 
 ### Output
 

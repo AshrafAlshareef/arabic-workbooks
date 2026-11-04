@@ -2,8 +2,8 @@
 const fs = require("fs");
 const path = require("path");
 
-const { parseBookArgs, USAGE } = require("../build-options.js");
-const { sortByLetter } = require("../letter-order.js");
+const { parseBookArgs, USAGE } = require("../scripts/build-options.js");
+const { sortByLetter } = require("../scripts/letter-order.js");
 
 const CLI = parseBookArgs(process.argv.slice(2));
 if (CLI.help) {

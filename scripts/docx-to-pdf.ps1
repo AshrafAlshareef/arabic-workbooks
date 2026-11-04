@@ -8,20 +8,24 @@
 
     Parameters:
         -Books       convert only these project folders (default: all seven)
-        -OutputRoot  folder holding <Book>\<Book>.docx (default: this folder)
+        -OutputRoot  folder holding <Book>\<Book>.docx (default: project root)
 
     Exit codes:  0 = all ok   2 = some books failed   1 = bad parameters
 #>
 
 param(
     [string[]] $Books = @(),
-    [string] $OutputRoot = $PSScriptRoot
+    [string] $OutputRoot = ''
 )
 
 $ErrorActionPreference = 'Stop'
 
-$root       = $PSScriptRoot
-$converter  = Join-Path $root 'convert-one.ps1'
+# This script lives in scripts/, so the project root - the folder that holds
+# books.json and the book folders - is its parent. convert-one.ps1 sits next
+# to this script.
+$scriptDir  = $PSScriptRoot
+$root       = Split-Path -Parent $scriptDir
+$converter  = Join-Path $scriptDir 'convert-one.ps1'
 $timeoutSec = 300
 $outputRoot = if ($OutputRoot) { [System.IO.Path]::GetFullPath($OutputRoot) } else { $root }
 

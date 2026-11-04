@@ -8,9 +8,9 @@
         3. merge-pdfs.js             (optional)
 
     Usage:
-        node build.js [--books=folder1,folder2] [--order=abjadi|alphabetical]
-                      [--out=<dir>] [--merge] [--merged-name=<file.pdf>]
-                      [--no-pdf]
+        node scripts/build.js [--books=folder1,folder2] [--order=abjadi|alphabetical]
+                              [--out=<dir>] [--merge] [--merged-name=<file.pdf>]
+                              [--no-pdf]
 
         --books        project folders to build (default: all seven)
         --order        letter order, abjadi (default) or alphabetical
@@ -32,12 +32,15 @@ const path = require("path");
 const { spawnSync } = require("child_process");
 const { parseOrder } = require("./letter-order.js");
 
-const ROOT = __dirname;
+// This file lives in scripts/, so the project root - the folder that holds
+// books.json, the seven book folders and node_modules - is its parent.
+const SCRIPT_DIR = __dirname;
+const ROOT = path.resolve(SCRIPT_DIR, "..");
 const BOOKS = JSON.parse(fs.readFileSync(path.join(ROOT, "books.json"), "utf-8")).books;
 const DEFAULT_MERGED = "Arabic_Workbooks_Complete.pdf";
 
 const USAGE = [
-  "Usage: node build.js [options]",
+  "Usage: node scripts/build.js [options]",
   "",
   "  --books=<a,b>        project folders to build (default: all seven)",
   "  --order=<name>       abjadi | alphabetical (default: abjadi)",
@@ -189,7 +192,7 @@ function main() {
   if (options.pdf) {
     emit(`##STAGE 2/${stages} convert`);
     const status = runPowershell([
-      path.join(ROOT, "docx-to-pdf.ps1"),
+      path.join(SCRIPT_DIR, "docx-to-pdf.ps1"),
       "-OutputRoot",
       outRoot,
       "-Books",
@@ -208,7 +211,7 @@ function main() {
     emit(`##STAGE 3/${stages} merge`);
     const mergedPath = path.join(outRoot, options.mergedName);
     const status = runNode(
-      "merge-pdfs.js",
+      path.join(SCRIPT_DIR, "merge-pdfs.js"),
       [
         `--books=${selected.map((book) => book.dir).join(",")}`,
         `--root=${outRoot}`,

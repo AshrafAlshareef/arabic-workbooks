@@ -5,11 +5,11 @@
     Uses pdf-lib (pure JS, no native deps).
 
     Usage:
-        node merge-pdfs.js [--books=folder1,folder2] [--root=<dir>] [--out=<file>]
+        node scripts/merge-pdfs.js [--books=folder1,folder2] [--root=<dir>] [--out=<file>]
 
         --books  project folders to merge (default: all seven)
-        --root   folder holding <Book>\<Book>.pdf (default: this folder)
-        --out    output PDF (default: Arabic_Workbooks_Complete.pdf next to this script)
+        --root   folder holding <Book>\<Book>.pdf (default: project root)
+        --out    output PDF (default: Arabic_Workbooks_Complete.pdf in the project root)
 
     Every selected book must have a freshly converted PDF. There is no fallback
     to an archived copy: a missing or unreadable book fails the merge, so the
@@ -20,28 +20,31 @@ const fs = require("fs");
 const path = require("path");
 const { PDFDocument } = require("pdf-lib");
 
-const SCRIPT_ROOT = __dirname;
+// This file lives in scripts/, so the project root is its parent: that is where
+// books.json, the book folders and the default merged PDF live.
+const SCRIPT_DIR = __dirname;
+const ROOT = path.resolve(SCRIPT_DIR, "..");
 const DEFAULT_OUTPUT = "Arabic_Workbooks_Complete.pdf";
 
 // Merge order is the reading order of the complete book.
 const ALL_BOOKS = JSON.parse(
-  fs.readFileSync(path.join(SCRIPT_ROOT, "books.json"), "utf-8")
+  fs.readFileSync(path.join(ROOT, "books.json"), "utf-8")
 ).books;
 
 const OUT_TITLE = "Arabic Workbooks - Complete Book";
 const OUT_AR_TITLE = "كتاب تمارين العربية الكامل";
 
 const USAGE = [
-  "Usage: node merge-pdfs.js [options]",
+  "Usage: node scripts/merge-pdfs.js [options]",
   "",
   "  --books=<a,b>  project folders to merge (default: all seven)",
-  "  --root=<dir>   folder holding <Book>\\<Book>.pdf (default: this folder)",
+  "  --root=<dir>   folder holding <Book>\\<Book>.pdf (default: project root)",
   "  --out=<file>   output PDF (default: Arabic_Workbooks_Complete.pdf)",
 ].join("\n");
 
 /** Parses `--flag=value` and `--flag value`; rejects anything unknown. */
 function parseArgs(argv) {
-  const options = { books: [], root: SCRIPT_ROOT, out: path.join(SCRIPT_ROOT, DEFAULT_OUTPUT) };
+  const options = { books: [], root: ROOT, out: path.join(ROOT, DEFAULT_OUTPUT) };
 
   for (let i = 0; i < argv.length; i += 1) {
     const arg = String(argv[i]);
@@ -112,7 +115,7 @@ function sourceFor(root, book) {
   for (const book of books) {
     const src = sourceFor(options.root, book);
     if (!fs.existsSync(src)) {
-      missing.push(`${book.name} (${path.relative(SCRIPT_ROOT, src)})`);
+      missing.push(`${book.name} (${path.relative(ROOT, src)})`);
       continue;
     }
     sources.push({ ...book, src });
@@ -134,14 +137,14 @@ function sourceFor(root, book) {
     try {
       srcDoc = await PDFDocument.load(bytes, { ignoreEncryption: true });
     } catch (err) {
-      throw new Error(`Cannot read ${path.relative(SCRIPT_ROOT, book.src)}: ${err.message}`);
+      throw new Error(`Cannot read ${path.relative(ROOT, book.src)}: ${err.message}`);
     }
 
     const indices = srcDoc.getPageIndices();
     const pages = await merged.copyPages(srcDoc, indices);
     pages.forEach((page) => merged.addPage(page));
 
-    const rel = path.relative(SCRIPT_ROOT, book.src).split(path.sep).join("/");
+    const rel = path.relative(ROOT, book.src).split(path.sep).join("/");
     used.push({ name: book.name, file: rel, pages: pages.length });
     console.log(
       `  [OK]   ${book.name.padEnd(30)} ${String(pages.length).padStart(3)} pages  <- ${rel}`

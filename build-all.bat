@@ -17,6 +17,7 @@ rem      build-all.bat /nobuild     skip node build, convert + merge only
 rem ==========================================================================
 
 set "ROOT=%~dp0"
+set "SCRIPTS=%ROOT%scripts\"
 set "OUTPUT=%ROOT%Arabic_Workbooks_Complete.pdf"
 
 set "DO_BUILD=1"
@@ -89,7 +90,7 @@ if "%DO_BUILD%"=="1" (
 echo.
 echo [2/3] Converting .docx to .pdf via Microsoft Word...
 echo.
-powershell -NoProfile -ExecutionPolicy Bypass -File "docx-to-pdf.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPTS%docx-to-pdf.ps1"
 if errorlevel 1 (
     echo.
     echo   [ERROR] PDF conversion failed. Close Microsoft Word and try again.
@@ -100,7 +101,7 @@ if errorlevel 1 (
 echo.
 echo [3/3] Merging PDFs...
 echo.
-node merge-pdfs.js
+node "%SCRIPTS%merge-pdfs.js"
 if errorlevel 1 (
     popd
     goto :fail

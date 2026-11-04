@@ -87,13 +87,13 @@ A5/A4، «DOCX فقط»، ومجلد المخرجات.
 
 > «إيقاف» يقتل شجرة العملية كاملة، فلا يبقى Node أو Word يعمل في الخلفية.
 > الترتيب يُطبَّق **في الذاكرة فقط**؛ ملفات `assets/*.json` لا تُعدَّل أبداً.
-> `build-all.bat` لم يتغيّر ويعمل كما كان تماماً.
+> `build-all.bat` لم تتغيّر سلوكيته ويعمل كما كان تماماً.
 
 ### خيارات سطر الأوامر الجديدة
 
 ```bat
-node build.js --books=Arabic_Alphabet_Workbook,Arabic_Stories_Workbook ^
-              --order=alphabetical --out=D:\out --merge --merged-name=كتابي.pdf
+node scripts\build.js --books=Arabic_Alphabet_Workbook,Arabic_Stories_Workbook ^
+                      --order=alphabetical --out=D:\out --merge --merged-name=كتابي.pdf
 ```
 
 | الأمر | الوظيفة |
@@ -105,8 +105,8 @@ node build.js --books=Arabic_Alphabet_Workbook,Arabic_Stories_Workbook ^
 | `--merged-name=<file>` | اسم الملف المدمج |
 | `--no-pdf` | DOCX فقط، بلا Word |
 
-كل `create-workbook.js` يقبل `--order` و`--out` أيضاً، و`merge-pdfs.js` يقبل
-`--books` و`--root` و`--out`، و`images-to-book.js` يقبل `--images` و`--out`.
+كل `create-workbook.js` يقبل `--order` و`--out` أيضاً، و`scripts\merge-pdfs.js`
+يقبل `--books` و`--root` و`--out`، و`images-to-book.js` يقبل `--images` و`--out`.
 قائمة الكتب وأسماؤها العربية في `books.json` (مصدر واحد لكل الأدوات).
 
 ## المتطلبات
@@ -134,8 +134,8 @@ build-all.bat
 | المرحلة | ماذا تفعل | الأداة |
 |---------|-----------|--------|
 | **1/3** بناء DOCX | يبني الكتب السبعة بالترتيب (الحروف ← الحركات ← تحليل المقاطع ← تحليل الكلمات ← أشكال الحروف ← تجميع الكلمات ← القصص) | `node create-workbook.js` داخل كل مجلد |
-| **2/3** تحويل PDF | يحوّل كل DOCX إلى PDF بجواره عبر Word | `docx-to-pdf.ps1` ← `convert-one.ps1` |
-| **3/3** الدمج | يدمج ملفات PDF السبعة في كتاب واحد | `node merge-pdfs.js` |
+| **2/3** تحويل PDF | يحوّل كل DOCX إلى PDF بجواره عبر Word | `scripts\docx-to-pdf.ps1` ← `scripts\convert-one.ps1` |
+| **3/3** الدمج | يدمج ملفات PDF السبعة في كتاب واحد | `node scripts\merge-pdfs.js` |
 
 > **أغلق Microsoft Word قبل البناء.** وجود Word مفتوح يجعل تصدير PDF غير موثوق،
 > وقد يفشل الملف عند حذف نسخة PDF قديمة يكون قد فتحها برنامج آخر.
@@ -183,7 +183,7 @@ image_2_cover_style\images-to-book.bat
 
 > الافتراضي أن مجلد الإدخال والإخراج **ثابتان**: ضع الصور في
 > `image_2_cover_style\images\` وشغّل. ويمكن تغييرهما بـ `--images` و`--out`
-> (هكذا تستعملهما الواجهة الرسومية). الأداة تستعمل `convert-one.ps1` من الجذر
+> (هكذا تستعملهما الواجهة الرسومية). الأداة تستعمل `scripts\convert-one.ps1`
 > لتحويل PDF، وتختار لكل صورة بين القصّ الكامل (full-bleed) والاحتواء الكامل حسب
 > نسبة القصّ. التفاصيل في `image_2_cover_style\README.md`.
 
@@ -226,19 +226,21 @@ image_2_cover_style\images-to-book.bat
 created-books/
 ├── start-gui.bat                  # الواجهة الرسومية العربية (بدون سيرفر)
 ├── build-all.bat                  # نقطة الدخول الكاملة: docx -> pdf -> دمج
-├── build.js                       # منسّق البناء: كتب مختارة، ترتيب، مجلد، دمج
 ├── books.json                     # قائمة الكتب (المصدر الواحد لكل الأدوات)
-├── letter-order.js                # جدولا الترتيب: أبجدي / أبجدي حديث (المعجم)
-├── build-options.js               # خيارات --order و --out المشتركة بين الكتب
-├── docx-to-pdf.ps1                # يحوّل الكتب المختارة، كل كتاب في عملية منفصلة
-├── convert-one.ps1                # يحوّل ملف DOCX واحد إلى PDF عبر Word COM
-├── merge-pdfs.js                  # يدمج ملفات PDF (pdf-lib)
 ├── package.json                   # الاعتماديات المشتركة (node_modules الجذر)
 ├── README.md                      # هذا الملف
 ├── LICENSE                        # رخصة الكود (MIT)
 ├── LICENSE-CONTENT                # رخصة المحتوى والصور (CC BY 4.0)
 ├── Arabic_Workbooks_Complete.pdf  # ناتج الدمج
 ├── node_modules/                  # اعتماديات مشتركة (مُولَّدة، غير مُتتبَّعة)
+│
+├── scripts/                       # كل كود البناء المشترك
+│   ├── build.js                   # منسّق البناء: كتب مختارة، ترتيب، مجلد، دمج
+│   ├── build-options.js           # خيارات --order و --out المشتركة بين الكتب
+│   ├── letter-order.js            # جدولا الترتيب: أبجدي / أبجدي حديث (المعجم)
+│   ├── merge-pdfs.js              # يدمج ملفات PDF (pdf-lib)
+│   ├── docx-to-pdf.ps1            # يحوّل الكتب المختارة، كل كتاب في عملية منفصلة
+│   └── convert-one.ps1            # يحوّل ملف DOCX واحد إلى PDF عبر Word COM
 │
 ├── ui/                            # نافذة WPF: gui.xaml + workbooks-gui.ps1
 │
@@ -320,7 +322,7 @@ created-books/
 | هل الخطوط مضمَّنة في المستودع؟ | لا؛ ثبّت *Traditional Arabic* و*KFGQPC Alphabet Dotted* على نظامك. |
 | هل يمكنني استخدام الكتب تجارياً؟ | نعم: المحتوى تحت CC BY 4.0 والكود تحت MIT، مع ذكر المصدر. |
 | لماذا لا يوجد `node_modules` داخل مجلدات الكتب؟ | لأن الاعتماديات مشتركة في جذر المشروع، وNode يجدها تلقائياً. |
-| كيف أضيف كتاباً جديداً إلى الدمج؟ | أضف عنصراً إلى `books.json` (المجلد والعنوان وعدد الصفحات)، وأضف مشروعه إلى `build-all.bat`. كل الأدوات (الواجهة، `build.js`، `merge-pdfs.js`، `docx-to-pdf.ps1`) تقرأ القائمة نفسها. |
+| كيف أضيف كتاباً جديداً إلى الدمج؟ | أضف عنصراً إلى `books.json` (المجلد والعنوان وعدد الصفحات)، وأضف مشروعه إلى `build-all.bat`. كل الأدوات (الواجهة، `scripts\build.js`، `scripts\merge-pdfs.js`، `scripts\docx-to-pdf.ps1`) تقرأ القائمة نفسها. |
 | هل أحتاج إلى سيرفر أو تثبيت للواجهة؟ | لا. انقر `start-gui.bat` فقط؛ الواجهة PowerShell + WPF تعمل محلياً. |
 | هل يغيّر اختيار الترتيب ملفات البيانات؟ | لا. الترتيب يُطبَّق في الذاكرة عند البناء فقط. |
 | لماذا يظهر إنذار `EBADENGINE` عند التثبيت؟ | سببه حزمة `nanoid` وتطلب Node أحدث؛ لا يؤثر على البناء. |
@@ -337,7 +339,7 @@ created-books/
 | `npm install failed` | انقطاع شبكة أو إصدار Node قديم جداً | تحقق من Node ثم أعد البناء |
 | نص يظهر بخط مختلف | خط Traditional Arabic غير مثبَّت | ثبّت الخط على النظام |
 
-> نسخة Word `~$*.docx` ملفات قفل مؤقتة ينظّفها `docx-to-pdf.ps1` تلقائياً.
+> نسخة Word `~$*.docx` ملفات قفل مؤقتة ينظّفها `scripts\docx-to-pdf.ps1` تلقائياً.
 > نسخ Word الخلفية **غير المرئية** المتبقّية من تشغيل فاشل يوقفها السكربت
 > تلقائياً، لكنه **لا يمسّ** أي نافذة Word يراها المستخدم.
 
@@ -408,13 +410,14 @@ WPF). Nothing to install, no server, no browser:
 
 The **images book** tab drives `image_2_cover_style` (images folder, A5/A4,
 DOCX-only, output folder). The order is applied **in memory only** — committed
-`assets/*.json` files are never rewritten — and `build-all.bat` is unchanged.
+`assets/*.json` files are never rewritten — and `build-all.bat` behaves exactly
+as before.
 
-The GUI runs `node build.js`, which is also usable by hand:
+The GUI runs `node scripts\build.js`, which is also usable by hand:
 
 ```bat
-node build.js --books=Arabic_Alphabet_Workbook,Arabic_Stories_Workbook ^
-              --order=alphabetical --out=D:\out --merge --merged-name=book.pdf
+node scripts\build.js --books=Arabic_Alphabet_Workbook,Arabic_Stories_Workbook ^
+                      --order=alphabetical --out=D:\out --merge --merged-name=book.pdf
 ```
 
 `--books`, `--order`, `--out`, `--merge`, `--merged-name`, `--no-pdf`; every
