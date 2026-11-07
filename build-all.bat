@@ -88,6 +88,17 @@ if "%DO_BUILD%"=="1" (
 )
 
 echo.
+echo [1/3] Checking Arabic RTL in generated .docx files...
+echo.
+node "%SCRIPTS%check-rtl.js"
+if errorlevel 1 (
+    echo.
+    echo   [ERROR] RTL check failed: a generated DOCX is not Arabic right-to-left.
+    popd
+    goto :fail
+)
+
+echo.
 echo [2/3] Converting .docx to .pdf via Microsoft Word...
 echo.
 powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPTS%docx-to-pdf.ps1"

@@ -1,7 +1,7 @@
 {
   "book": {
-    "title": "كتاب القصص المصورة",
-    "subtitle": "هيا بنا نقرأ القصص",
+    "title": "كِتَابُ الْقِصَصِ الْمُصَوَّرَةِ",
+    "subtitle": "هَيَّا بِنَا نَقْرَأُ الْقِصَصَ",
     "cover": "coverpage.png"
   },
   "stories": [
@@ -9,7 +9,7 @@
       "id": 1,
       "letter": "أ",
       "word": "أَسَد",
-      "title": "أَسَدٌ في الغَابَةِ",
+      "title": "أَسَدٌ فِي الْغَابَةِ",
       "text": "texts/01-asad.txt",
       "image": "images/01-asad.jpg"
     },
@@ -17,7 +17,7 @@
       "id": 2,
       "letter": "ب",
       "word": "باب",
-      "title": "بَابٌ أَزْرَقُ في الحَدِيقَةِ",
+      "title": "بَابٌ أَزْرَقُ فِي الْحَدِيقَةِ",
       "text": "texts/02-bab.txt",
       "image": "images/02-bab.jpg"
     },
@@ -25,7 +25,7 @@
       "id": 3,
       "letter": "ج",
       "word": "جمل",
-      "title": "جَمَلٌ في الصَّحْرَاءِ",
+      "title": "جَمَلٌ فِي الصَّحْرَاءِ",
       "text": "texts/03-jamal.txt",
       "image": "images/03-jamal.jpg"
     },
@@ -33,7 +33,7 @@
       "id": 4,
       "letter": "د",
       "word": "دب",
-      "title": "دُبٌّ صَغِيرٌ في الغَابَةِ",
+      "title": "دُبٌّ صَغِيرٌ فِي الْغَابَةِ",
       "text": "texts/04-dubb.txt",
       "image": "images/04-dubb.jpg"
     },
@@ -41,7 +41,7 @@
       "id": 5,
       "letter": "هـ",
       "word": "هلال",
-      "title": "هِلالٌ مُضِيءٌ في السَّمَاءِ",
+      "title": "هِلَالٌ مُضِيءٌ فِي السَّمَاءِ",
       "text": "texts/05-hilal.txt",
       "image": "images/05-hilal.jpg"
     },
@@ -49,7 +49,7 @@
       "id": 6,
       "letter": "و",
       "word": "وردة",
-      "title": "وَرْدَةٌ حَمْرَاءُ في الحَدِيقَةِ",
+      "title": "وَرْدَةٌ حَمْرَاءُ فِي الْحَدِيقَةِ",
       "text": "texts/06-warda.txt",
       "image": "images/06-warda.jpg"
     },
@@ -57,7 +57,7 @@
       "id": 7,
       "letter": "ز",
       "word": "زرافة",
-      "title": "زَرَافَةٌ طَوِيلَةٌ في الحَدِيقَةِ",
+      "title": "زَرَافَةٌ طَوِيلَةٌ فِي الْحَدِيقَةِ",
       "text": "texts/07-zarafa.txt",
       "image": "images/07-zarafa.jpg"
     },
@@ -65,7 +65,7 @@
       "id": 8,
       "letter": "ح",
       "word": "حصان",
-      "title": "حِصَانٌ جَمِيلٌ في الْحَقْلِ",
+      "title": "حِصَانٌ جَمِيلٌ فِي الْحَقْلِ",
       "text": "texts/08-hisan.txt",
       "image": "images/08-hisan.jpg"
     },
@@ -73,7 +73,7 @@
       "id": 9,
       "letter": "ط",
       "word": "طائر",
-      "title": "طَائِرٌ صَغِيرٌ على الشَّجَرَةِ",
+      "title": "طَائِرٌ صَغِيرٌ عَلَى الشَّجَرَةِ",
       "text": "texts/09-taair.txt",
       "image": "images/09-taair.jpg"
     },
@@ -81,7 +81,7 @@
       "id": 10,
       "letter": "ي",
       "word": "يد",
-      "title": "يَدٌ تَعُونُ صَدِيقَتَهَا",
+      "title": "يَدٌ تُعِينُ صَدِيقَتَهَا",
       "text": "texts/10-yad.txt",
       "image": "images/10-yad.jpg"
     },
@@ -89,7 +89,7 @@
       "id": 11,
       "letter": "ك",
       "word": "كتاب",
-      "title": "كِتَابٌ مُلَوَّنٌ على الطَّاوِلَةِ",
+      "title": "كِتَابٌ مُلَوَّنٌ عَلَى الطَّاوِلَةِ",
       "text": "texts/11-kitab.txt",
       "image": "images/11-kitab.jpg"
     },
@@ -97,7 +97,7 @@
       "id": 12,
       "letter": "ل",
       "word": "ليمون",
-      "title": "لَيْمُونَةٌ صَفْرَاءُ على الشَّجَرَةِ",
+      "title": "لَيْمُونَةٌ صَفْرَاءُ عَلَى الشَّجَرَةِ",
       "text": "texts/12-laymun.txt",
       "image": "images/12-laymun.jpg"
     },
@@ -105,7 +105,7 @@
       "id": 13,
       "letter": "م",
       "word": "ماء",
-      "title": "مَاءٌ بَارِدٌ يُسْعِدُ الصِّغْرَانَ",
+      "title": "مَاءٌ بَارِدٌ يُسْعِدُ الصِّغَارَ",
       "text": "texts/13-maa.txt",
       "image": "images/13-maa.jpg"
     },
@@ -113,7 +113,7 @@
       "id": 14,
       "letter": "ن",
       "word": "نجم",
-      "title": "نَجْمٌ لَامِعٌ في السَّمَاءِ",
+      "title": "نَجْمٌ لَامِعٌ فِي السَّمَاءِ",
       "text": "texts/14-najm.txt",
       "image": "images/14-najm.jpg"
     },
@@ -121,7 +121,7 @@
       "id": 15,
       "letter": "س",
       "word": "سمك",
-      "title": "سَمَكٌ مُلَوَّنٌ في الْبَحْرِ",
+      "title": "سَمَكٌ مُلَوَّنٌ فِي الْبَحْرِ",
       "text": "texts/15-samak.txt",
       "image": "images/15-samak.jpg"
     },
@@ -145,7 +145,7 @@
       "id": 18,
       "letter": "ص",
       "word": "صندوق",
-      "title": "صَنْدُقٌ صَغِيرٌ تَحْتَ الشَّجَرَةِ",
+      "title": "صُنْدُوقٌ صَغِيرٌ تَحْتَ الشَّجَرَةِ",
       "text": "texts/18-sanduq.txt",
       "image": "images/18-sanduq.jpg"
     },
@@ -153,7 +153,7 @@
       "id": 19,
       "letter": "ق",
       "word": "قلب",
-      "title": "قَلْبٌ مَلِءٌ بِالْحَبِّ",
+      "title": "قَلْبٌ مَلِيءٌ بِالْحُبِّ",
       "text": "texts/19-qalb.txt",
       "image": "images/19-qalb.jpg"
     },
@@ -185,7 +185,7 @@
       "id": 23,
       "letter": "ث",
       "word": "ثعلب",
-      "title": "ثَعْلَبٌ صَغِيرٌ قُرْبَ الغَابَةِ",
+      "title": "ثَعْلَبٌ صَغِيرٌ قُرْبَ الْغَابَةِ",
       "text": "texts/23-thaalab.txt",
       "image": "images/23-thaalab.jpg"
     },
@@ -201,7 +201,7 @@
       "id": 25,
       "letter": "ذ",
       "word": "ذئب",
-      "title": "ذِئْبٌ بَعِيدٌ عِنْدَ طَرَفِ الغَابَةِ",
+      "title": "ذِئْبٌ بَعِيدٌ عِنْدَ طَرَفِ الْغَابَةِ",
       "text": "texts/25-dhiib.txt",
       "image": "images/25-dhiib.jpg"
     },
@@ -225,7 +225,7 @@
       "id": 28,
       "letter": "غ",
       "word": "غزال",
-      "title": "غَزَالٌ جَمِيلٌ في الْحَقْلِ",
+      "title": "غَزَالٌ جَمِيلٌ فِي الْحَقْلِ",
       "text": "texts/28-ghazal.txt",
       "image": "images/28-ghazal.jpg"
     }

@@ -10,5 +10,9 @@
     "docx": "^9.7.1",
     "pdf-lib": "^1.17.1",
     "svg2img": "^1.0.0-beta.2"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "check-rtl": "node scripts/check-rtl.js"
   }
 }

@@ -20,6 +20,7 @@ const svg2img = require("svg2img");
 
 const { parseBookArgs, USAGE } = require("../scripts/build-options.js");
 const { sortByLetter } = require("../scripts/letter-order.js");
+const { rtlDocumentDefaults } = require("../scripts/rtl.js");
 
 const CLI = parseBookArgs(process.argv.slice(2));
 if (CLI.help) {
@@ -296,7 +297,7 @@ function createLetterPage(letterData, imageBuffer) {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { after: 400 },
-      direction: "RTL",
+      bidirectional: true,
       children: [
         new TextRun({
           text: content.manifest.pages.letterTitle.replace("{name}", letterData.name),
@@ -312,7 +313,7 @@ function createLetterPage(letterData, imageBuffer) {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { after: 400 },
-      direction: "RTL",
+      bidirectional: true,
       children: [
         new TextRun({
           text: mainForm,
@@ -330,7 +331,7 @@ function createLetterPage(letterData, imageBuffer) {
       new Paragraph({
         alignment: AlignmentType.CENTER,
         spacing: { after: 200 },
-        direction: "RTL",
+        bidirectional: true,
         children: [
           new ImageRun({
             data: imageBuffer,
@@ -346,7 +347,7 @@ function createLetterPage(letterData, imageBuffer) {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { after: 200 },
-      direction: "RTL",
+      bidirectional: true,
       children: [
         new TextRun({
           text: letterData.letter,
@@ -376,7 +377,7 @@ function createShapeCell(text, fontName, isBold, color) {
     children: [
       new Paragraph({
         alignment: AlignmentType.CENTER,
-        direction: "RTL",
+        bidirectional: true,
         children: [
           new TextRun({
             text,
@@ -418,7 +419,7 @@ function createTablePage(letterData) {
             children: [
               new Paragraph({
                 alignment: AlignmentType.CENTER,
-                direction: "RTL",
+                bidirectional: true,
                 children: [
                   new TextRun({
                     text: "",
@@ -441,7 +442,7 @@ function createTablePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: header,
@@ -460,7 +461,7 @@ function createTablePage(letterData) {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { after: 400 },
-      direction: "RTL",
+      bidirectional: true,
       children: [
         new TextRun({
           text: content.manifest.pages.shapesTitle.replace("{name}", letterData.name),
@@ -515,7 +516,7 @@ function createPageFooter() {
     children: [
       new Paragraph({
         alignment: AlignmentType.CENTER,
-        direction: "RTL",
+        bidirectional: true,
         children: [
           new TextRun({
             children: [PageNumber.CURRENT],
@@ -588,12 +589,10 @@ async function createWorkbook() {
 
     styles: {
       default: {
-        document: {
-          run: {
-            font: FONT,
-            size: 28, // 14pt
-          },
-        },
+        document: rtlDocumentDefaults({
+          font: FONT,
+          size: 28, // 14pt
+        }),
       },
     },
 
@@ -618,7 +617,6 @@ async function createWorkbook() {
             left: 0,
           },
         },
-        direction: "RTL",
       },
       children: coverContent,
     });
@@ -656,7 +654,6 @@ async function createWorkbook() {
         borders: PAGE_FRAME,
         ...(startPage ? { pageNumbers: { start: startPage } } : {}),
       },
-      direction: "RTL",
     });
     const footers = SHOW_PAGE_NUMBERS ? { footers: { default: createPageFooter() } } : {};
 

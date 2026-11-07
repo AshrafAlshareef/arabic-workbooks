@@ -4,6 +4,7 @@ const path = require("path");
 
 const { parseBookArgs, USAGE } = require("../scripts/build-options.js");
 const { sortByLetter } = require("../scripts/letter-order.js");
+const { rtlDocumentDefaults } = require("../scripts/rtl.js");
 
 const CLI = parseBookArgs(process.argv.slice(2));
 if (CLI.help) {
@@ -323,7 +324,7 @@ function createDisplayPage(letterData) {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { after: 200 },
-      direction: "RTL",
+      bidirectional: true,
       children: [
         new TextRun({
           text: content.texts.letterTitle.replace("{name}", letterData.name),
@@ -339,7 +340,7 @@ function createDisplayPage(letterData) {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { after: 200 },
-      direction: "RTL",
+      bidirectional: true,
       children: [
         new TextRun({
           text: letter,
@@ -355,7 +356,7 @@ function createDisplayPage(letterData) {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { after: 200 },
-      direction: "RTL",
+      bidirectional: true,
       children: [
         new TextRun({
           text: content.texts.letterSubtitle,
@@ -390,7 +391,7 @@ function createDisplayPage(letterData) {
             children: [
               new Paragraph({
                 alignment: AlignmentType.CENTER,
-                direction: "RTL",
+                bidirectional: true,
                 children: [
                   new TextRun({
                     text: name,
@@ -417,7 +418,7 @@ function createDisplayPage(letterData) {
             children: [
               new Paragraph({
                 alignment: AlignmentType.CENTER,
-                direction: "RTL",
+                bidirectional: true,
                 children: [
                   new TextRun({
                     text: getHarakaBaseLetter(letter, symbol) + symbol,
@@ -446,7 +447,7 @@ function createDisplayPage(letterData) {
           children: [
             new Paragraph({
               alignment: AlignmentType.CENTER,
-              direction: "RTL",
+              bidirectional: true,
               children: [
                 new TextRun({
                   text: content.texts.tableHeaders.letterWithLongVowel,
@@ -467,7 +468,7 @@ function createDisplayPage(letterData) {
           children: [
             new Paragraph({
               alignment: AlignmentType.CENTER,
-              direction: "RTL",
+              bidirectional: true,
               children: [
                 new TextRun({
                   text: content.texts.tableHeaders.longVowel,
@@ -488,7 +489,7 @@ function createDisplayPage(letterData) {
           children: [
             new Paragraph({
               alignment: AlignmentType.CENTER,
-              direction: "RTL",
+              bidirectional: true,
               children: [
                 new TextRun({
                   text: content.texts.tableHeaders.letterWithHaraka,
@@ -509,7 +510,7 @@ function createDisplayPage(letterData) {
           children: [
             new Paragraph({
               alignment: AlignmentType.CENTER,
-              direction: "RTL",
+              bidirectional: true,
               children: [
                 new TextRun({
                   text: content.texts.tableHeaders.haraka,
@@ -544,7 +545,7 @@ function createDisplayPage(letterData) {
             children: [
               new Paragraph({
                 alignment: AlignmentType.CENTER,
-                direction: "RTL",
+                bidirectional: true,
                 children: [
                   new TextRun({
                     text: letterWithLongVowel,
@@ -564,7 +565,7 @@ function createDisplayPage(letterData) {
             children: [
               new Paragraph({
                 alignment: AlignmentType.CENTER,
-                direction: "RTL",
+                bidirectional: true,
                 children: [
                   new TextRun({
                     text: longVowelName,
@@ -584,7 +585,7 @@ function createDisplayPage(letterData) {
             children: [
               new Paragraph({
                 alignment: AlignmentType.CENTER,
-                direction: "RTL",
+                bidirectional: true,
                 children: [
                   new TextRun({
                     text: letterWithHaraka,
@@ -604,7 +605,7 @@ function createDisplayPage(letterData) {
             children: [
               new Paragraph({
                 alignment: AlignmentType.CENTER,
-                direction: "RTL",
+                bidirectional: true,
                 children: [
                   new TextRun({
                     text: haraka.name,
@@ -669,7 +670,7 @@ function createPracticePage(letterData) {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { after: 200 },
-      direction: "RTL",
+      bidirectional: true,
       children: [
         new TextRun({
           text: content.texts.practiceTitle.replace("{name}", letterData.name),
@@ -705,7 +706,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: getHarakaBaseLetter(letter, "\u0652") + "\u0652",
@@ -726,7 +727,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: getHarakaBaseLetter(letter, "\u0650") + "\u0650",
@@ -747,7 +748,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: getHarakaBaseLetter(letter, "\u064F") + "\u064F",
@@ -768,7 +769,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: getHarakaBaseLetter(letter, "\u064E") + "\u064E",
@@ -795,7 +796,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: getHarakaBaseLetter(letter, harakaSymbols[0]) + harakaSymbols[0],
@@ -814,7 +815,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: getHarakaBaseLetter(letter, harakaSymbols[1]) + harakaSymbols[1],
@@ -833,7 +834,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: getHarakaBaseLetter(letter, harakaSymbols[2]) + harakaSymbols[2],
@@ -852,7 +853,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: getHarakaBaseLetter(letter, harakaSymbols[3]) + harakaSymbols[3],
@@ -872,22 +873,22 @@ function createPracticePage(letterData) {
     new TableCell({
       width: { size: 25, type: WidthType.PERCENTAGE },
       verticalAlign: VerticalAlign.CENTER,
-      children: [new Paragraph({ direction: "RTL", children: [] })],
+      children: [new Paragraph({ bidirectional: true, children: [] })],
     }),
     new TableCell({
       width: { size: 25, type: WidthType.PERCENTAGE },
       verticalAlign: VerticalAlign.CENTER,
-      children: [new Paragraph({ direction: "RTL", children: [] })],
+      children: [new Paragraph({ bidirectional: true, children: [] })],
     }),
     new TableCell({
       width: { size: 25, type: WidthType.PERCENTAGE },
       verticalAlign: VerticalAlign.CENTER,
-      children: [new Paragraph({ direction: "RTL", children: [] })],
+      children: [new Paragraph({ bidirectional: true, children: [] })],
     }),
     new TableCell({
       width: { size: 25, type: WidthType.PERCENTAGE },
       verticalAlign: VerticalAlign.CENTER,
-      children: [new Paragraph({ direction: "RTL", children: [] })],
+      children: [new Paragraph({ bidirectional: true, children: [] })],
     }),
   ]);
   }
@@ -906,7 +907,7 @@ function createPracticePage(letterData) {
   children.push(
     new Paragraph({
       spacing: { after: 200 },
-      direction: "RTL",
+      bidirectional: true,
       children: [],
     })
   );
@@ -932,7 +933,7 @@ function createPracticePage(letterData) {
         children: [
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            direction: "RTL",
+            bidirectional: true,
             children: [
               new TextRun({
                 text: hamzaLetter + hamzaHarakaSymbols[0],
@@ -953,7 +954,7 @@ function createPracticePage(letterData) {
         children: [
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            direction: "RTL",
+            bidirectional: true,
             children: [
               new TextRun({
                 text: hamzaLetter + hamzaHarakaSymbols[1],
@@ -974,7 +975,7 @@ function createPracticePage(letterData) {
         children: [
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            direction: "RTL",
+            bidirectional: true,
             children: [
               new TextRun({
                 text: hamzaLetter + hamzaHarakaSymbols[2],
@@ -995,7 +996,7 @@ function createPracticePage(letterData) {
         children: [
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            direction: "RTL",
+            bidirectional: true,
             children: [
               new TextRun({
                 text: hamzaLetter + hamzaHarakaSymbols[3],
@@ -1018,7 +1019,7 @@ function createPracticePage(letterData) {
         children: [
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            direction: "RTL",
+            bidirectional: true,
             children: [
               new TextRun({
                 text: hamzaLetter + hamzaHarakaSymbols[0],
@@ -1036,7 +1037,7 @@ function createPracticePage(letterData) {
         children: [
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            direction: "RTL",
+            bidirectional: true,
             children: [
               new TextRun({
                 text: hamzaLetter + hamzaHarakaSymbols[1],
@@ -1054,7 +1055,7 @@ function createPracticePage(letterData) {
         children: [
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            direction: "RTL",
+            bidirectional: true,
             children: [
               new TextRun({
                 text: hamzaLetter + hamzaHarakaSymbols[2],
@@ -1072,7 +1073,7 @@ function createPracticePage(letterData) {
         children: [
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            direction: "RTL",
+            bidirectional: true,
             children: [
               new TextRun({
                 text: hamzaLetter + hamzaHarakaSymbols[3],
@@ -1092,22 +1093,22 @@ function createPracticePage(letterData) {
       new TableCell({
         width: { size: 25, type: WidthType.PERCENTAGE },
         verticalAlign: VerticalAlign.CENTER,
-        children: [new Paragraph({ direction: "RTL", children: [] })],
+        children: [new Paragraph({ bidirectional: true, children: [] })],
       }),
       new TableCell({
         width: { size: 25, type: WidthType.PERCENTAGE },
         verticalAlign: VerticalAlign.CENTER,
-        children: [new Paragraph({ direction: "RTL", children: [] })],
+        children: [new Paragraph({ bidirectional: true, children: [] })],
       }),
       new TableCell({
         width: { size: 25, type: WidthType.PERCENTAGE },
         verticalAlign: VerticalAlign.CENTER,
-        children: [new Paragraph({ direction: "RTL", children: [] })],
+        children: [new Paragraph({ bidirectional: true, children: [] })],
       }),
       new TableCell({
         width: { size: 25, type: WidthType.PERCENTAGE },
         verticalAlign: VerticalAlign.CENTER,
-        children: [new Paragraph({ direction: "RTL", children: [] })],
+        children: [new Paragraph({ bidirectional: true, children: [] })],
       }),
     ]);
     }
@@ -1122,7 +1123,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: letter + "\u064A",
@@ -1143,7 +1144,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: letter + "\u0648",
@@ -1164,7 +1165,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: letter + "\u0627",
@@ -1191,7 +1192,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: letter + longVowelSymbols[0],
@@ -1210,7 +1211,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: letter + longVowelSymbols[1],
@@ -1229,7 +1230,7 @@ function createPracticePage(letterData) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: letter + longVowelSymbols[2],
@@ -1249,22 +1250,22 @@ function createPracticePage(letterData) {
     new TableCell({
       width: { size: 25, type: WidthType.PERCENTAGE },
       verticalAlign: VerticalAlign.CENTER,
-      children: [new Paragraph({ direction: "RTL", children: [] })],
+      children: [new Paragraph({ bidirectional: true, children: [] })],
     }),
     new TableCell({
       width: { size: 25, type: WidthType.PERCENTAGE },
       verticalAlign: VerticalAlign.CENTER,
-      children: [new Paragraph({ direction: "RTL", children: [] })],
+      children: [new Paragraph({ bidirectional: true, children: [] })],
     }),
     new TableCell({
       width: { size: 25, type: WidthType.PERCENTAGE },
       verticalAlign: VerticalAlign.CENTER,
-      children: [new Paragraph({ direction: "RTL", children: [] })],
+      children: [new Paragraph({ bidirectional: true, children: [] })],
     }),
     new TableCell({
       width: { size: 25, type: WidthType.PERCENTAGE },
       verticalAlign: VerticalAlign.CENTER,
-      children: [new Paragraph({ direction: "RTL", children: [] })],
+      children: [new Paragraph({ bidirectional: true, children: [] })],
     }),
   ]);
   }
@@ -1293,7 +1294,7 @@ function createSyllableExercise(letterData) {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { after: 100 },
-      direction: "RTL",
+      bidirectional: true,
       children: [
         new TextRun({
           text: content.texts.letterTitle.replace("{name}", letterData.name),
@@ -1335,7 +1336,7 @@ function createSyllableExercise(letterData) {
   children.push(
     new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
-      direction: "RTL",
+      visuallyRightToLeft: true,
       borders: noBorders,
       rows: [
         // Row 1: Syllables (no borders)
@@ -1351,7 +1352,7 @@ function createSyllableExercise(letterData) {
               children: [
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
-                  direction: "RTL",
+                  bidirectional: true,
                   children: [
                     new TextRun({
                       text: syllables[0].text,
@@ -1370,7 +1371,7 @@ function createSyllableExercise(letterData) {
               verticalAlign: VerticalAlign.CENTER,
               height: { size: 700, rule: HeightRule.ATLEAST },
               borders: noBorders,
-              children: [new Paragraph({ direction: "RTL", children: [] })],
+              children: [new Paragraph({ bidirectional: true, children: [] })],
             }),
             // بُو (spans 2 columns)
             new TableCell({
@@ -1382,7 +1383,7 @@ function createSyllableExercise(letterData) {
               children: [
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
-                  direction: "RTL",
+                  bidirectional: true,
                   children: [
                     new TextRun({
                       text: syllables[1].text,
@@ -1401,7 +1402,7 @@ function createSyllableExercise(letterData) {
               verticalAlign: VerticalAlign.CENTER,
               height: { size: 700, rule: HeightRule.ATLEAST },
               borders: noBorders,
-              children: [new Paragraph({ direction: "RTL", children: [] })],
+              children: [new Paragraph({ bidirectional: true, children: [] })],
             }),
             // بِي (spans 2 columns)
             new TableCell({
@@ -1413,7 +1414,7 @@ function createSyllableExercise(letterData) {
               children: [
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
-                  direction: "RTL",
+                  bidirectional: true,
                   children: [
                     new TextRun({
                       text: syllables[2].text,
@@ -1437,14 +1438,14 @@ function createSyllableExercise(letterData) {
               verticalAlign: VerticalAlign.CENTER,
               height: { size: 500, rule: HeightRule.ATLEAST },
               borders: tableBorders,
-              children: [new Paragraph({ direction: "RTL", children: [] })],
+              children: [new Paragraph({ bidirectional: true, children: [] })],
             }),
             new TableCell({
               width: { size: 15, type: WidthType.PERCENTAGE },
               verticalAlign: VerticalAlign.CENTER,
               height: { size: 500, rule: HeightRule.ATLEAST },
               borders: tableBorders,
-              children: [new Paragraph({ direction: "RTL", children: [] })],
+              children: [new Paragraph({ bidirectional: true, children: [] })],
             }),
             // Spacer
             new TableCell({
@@ -1452,7 +1453,7 @@ function createSyllableExercise(letterData) {
               verticalAlign: VerticalAlign.CENTER,
               height: { size: 500, rule: HeightRule.ATLEAST },
               borders: noBorders,
-              children: [new Paragraph({ direction: "RTL", children: [] })],
+              children: [new Paragraph({ bidirectional: true, children: [] })],
             }),
             // 2 cells for بُو
             new TableCell({
@@ -1460,14 +1461,14 @@ function createSyllableExercise(letterData) {
               verticalAlign: VerticalAlign.CENTER,
               height: { size: 500, rule: HeightRule.ATLEAST },
               borders: tableBorders,
-              children: [new Paragraph({ direction: "RTL", children: [] })],
+              children: [new Paragraph({ bidirectional: true, children: [] })],
             }),
             new TableCell({
               width: { size: 15, type: WidthType.PERCENTAGE },
               verticalAlign: VerticalAlign.CENTER,
               height: { size: 500, rule: HeightRule.ATLEAST },
               borders: tableBorders,
-              children: [new Paragraph({ direction: "RTL", children: [] })],
+              children: [new Paragraph({ bidirectional: true, children: [] })],
             }),
             // Spacer
             new TableCell({
@@ -1475,7 +1476,7 @@ function createSyllableExercise(letterData) {
               verticalAlign: VerticalAlign.CENTER,
               height: { size: 500, rule: HeightRule.ATLEAST },
               borders: noBorders,
-              children: [new Paragraph({ direction: "RTL", children: [] })],
+              children: [new Paragraph({ bidirectional: true, children: [] })],
             }),
             // 2 cells for بِي
             new TableCell({
@@ -1483,14 +1484,14 @@ function createSyllableExercise(letterData) {
               verticalAlign: VerticalAlign.CENTER,
               height: { size: 500, rule: HeightRule.ATLEAST },
               borders: tableBorders,
-              children: [new Paragraph({ direction: "RTL", children: [] })],
+              children: [new Paragraph({ bidirectional: true, children: [] })],
             }),
             new TableCell({
               width: { size: 15, type: WidthType.PERCENTAGE },
               verticalAlign: VerticalAlign.CENTER,
               height: { size: 500, rule: HeightRule.ATLEAST },
               borders: tableBorders,
-              children: [new Paragraph({ direction: "RTL", children: [] })],
+              children: [new Paragraph({ bidirectional: true, children: [] })],
             }),
           ],
         }),
@@ -1528,7 +1529,6 @@ function pageProperties(
       ...(framed ? { borders: PAGE_FRAME } : {}),
       ...(startPage ? { pageNumbers: { start: startPage } } : {}),
     },
-    direction: "RTL",
   };
 }
 
@@ -1541,7 +1541,7 @@ function createPageFooter() {
     children: [
       new Paragraph({
         alignment: AlignmentType.CENTER,
-        direction: "RTL",
+        bidirectional: true,
         children: [
           new TextRun({
             children: [PageNumber.CURRENT],
@@ -1607,12 +1607,10 @@ async function createWorkbook() {
 
     styles: {
       default: {
-        document: {
-          run: {
-            font: "Traditional Arabic",
-            size: 28,
-          },
-        },
+        document: rtlDocumentDefaults({
+          font: "Traditional Arabic",
+          size: 28,
+        }),
       },
     },
 
@@ -1695,7 +1693,7 @@ async function createWorkbook() {
         new Paragraph({
           alignment: AlignmentType.CENTER,
           spacing: { after: 400 },
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: content.texts.syllableSectionTitle,
@@ -1709,7 +1707,7 @@ async function createWorkbook() {
         new Paragraph({
           alignment: AlignmentType.CENTER,
           spacing: { after: 400 },
-          direction: "RTL",
+          bidirectional: true,
           children: [
             new TextRun({
               text: content.texts.syllableSectionSubtitle,
@@ -1742,7 +1740,7 @@ async function createWorkbook() {
           pageContent.push(
             new Paragraph({
               spacing: { after: 200 },
-              direction: "RTL",
+              bidirectional: true,
               children: [],
             })
           );

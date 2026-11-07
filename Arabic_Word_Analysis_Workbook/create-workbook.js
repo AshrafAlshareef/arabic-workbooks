@@ -5,6 +5,7 @@ const svg2img = require("svg2img");
 
 const { parseBookArgs, USAGE } = require("../scripts/build-options.js");
 const { sortByLetter } = require("../scripts/letter-order.js");
+const { rtlDocumentDefaults } = require("../scripts/rtl.js");
 
 const CLI = parseBookArgs(process.argv.slice(2));
 if (CLI.help) {
@@ -602,7 +603,7 @@ const BOX_BORDERS = {
 function emptyParagraph() {
   return new Paragraph({
     spacing: { before: 0, after: 0 },
-    direction: "RTL",
+    bidirectional: true,
     children: [],
   });
 }
@@ -644,7 +645,7 @@ function createBoxesRow(units, letterTexts) {
               line: LETTER_LINE,
               lineRule: docx.LineRuleType.AT_LEAST,
             },
-            direction: "RTL",
+            bidirectional: true,
             children: runs,
           }),
         ],
@@ -663,7 +664,7 @@ function createBoxesRow(units, letterTexts) {
             new Paragraph({
               alignment: AlignmentType.CENTER,
               spacing: { before: 0, after: 0 },
-              direction: "RTL",
+              bidirectional: true,
             children: letterTexts
               ? [
                     new TextRun({
@@ -735,7 +736,7 @@ function createWriteLine() {
                   line: WRITE_LINE_INNER,
                   lineRule: docx.LineRuleType.EXACT,
                 },
-                direction: "RTL",
+                bidirectional: true,
                 children: [],
               }),
             ],
@@ -758,7 +759,7 @@ function createImageCell(widthPercent, pngBuffer) {
       new Paragraph({
         alignment: AlignmentType.CENTER,
         spacing: { before: 0, after: 0 },
-        direction: "RTL",
+        bidirectional: true,
         children: [
           new ImageRun({
             data: pngBuffer,
@@ -803,7 +804,7 @@ function createWordCell(widthPercent, units) {
         line: WORD_LINE,
         lineRule: docx.LineRuleType.AT_LEAST,
       },
-      direction: "RTL",
+      bidirectional: true,
       children: [
         new TextRun({
           text: units.map((u) => u.letter).join(""),
@@ -880,7 +881,7 @@ function createPageHeader(type) {
     // as the image column of every exercise below it.
     alignment: AlignmentType.RIGHT,
     spacing: { before: 0, after: HEADER_AFTER },
-    direction: "RTL",
+    bidirectional: true,
         children: [
           new TextRun({
             text: type.pageHeader,
@@ -909,7 +910,7 @@ function createExercisePage(entries, type) {
             line: GAP_LINE,
             lineRule: docx.LineRuleType.EXACT,
           },
-          direction: "RTL",
+          bidirectional: true,
           children: [],
         })
       );
@@ -924,7 +925,7 @@ function createSectionTitlePage(type) {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { before: 1600, after: 400 },
-      direction: "RTL",
+      bidirectional: true,
       children: [
         new TextRun({
           text: type.title,
@@ -938,7 +939,7 @@ function createSectionTitlePage(type) {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { before: 0, after: 400 },
-      direction: "RTL",
+      bidirectional: true,
       children: [
         new TextRun({
           text: type.subtitle,
@@ -996,7 +997,7 @@ function createPageFooter() {
     children: [
       new Paragraph({
         alignment: AlignmentType.CENTER,
-        direction: "RTL",
+        bidirectional: true,
         children: [
           new TextRun({
             children: [PageNumber.CURRENT],
@@ -1036,7 +1037,6 @@ function pageProperties(
       ...(framed ? { borders: PAGE_FRAME } : {}),
       ...(startPage ? { pageNumbers: { start: startPage } } : {}),
     },
-    direction: "RTL",
   };
 }
 
@@ -1058,12 +1058,10 @@ async function createWorkbook() {
     description: content.book.description,
     styles: {
       default: {
-        document: {
-          run: {
-            font: FONT,
-            size: 28, // 14pt
-          },
-        },
+        document: rtlDocumentDefaults({
+          font: FONT,
+          size: 28, // 14pt
+        }),
       },
     },
     sections: [],

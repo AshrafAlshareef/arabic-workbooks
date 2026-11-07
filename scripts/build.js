@@ -199,6 +199,18 @@ function main() {
     emit(`##OUTPUT ${path.join(bookOut, `${book.dir}.docx`)}`);
   }
 
+  // Every generated DOCX must be Arabic RTL. Fail now, before the slower
+  // Word conversion, if the document defaults lost <w:rtl/> or <w:bidi/>.
+  emit("##INFO checking Arabic RTL in generated DOCX");
+  const rtlStatus = runNode(
+    path.join(SCRIPT_DIR, "check-rtl.js"),
+    selected.map((book) => path.join(outRoot, book.dir, `${book.dir}.docx`)),
+    ROOT
+  );
+  if (rtlStatus !== 0) {
+    throw new Error("RTL check failed: a generated DOCX is not Arabic right-to-left.");
+  }
+
   // -- 2. PDF ---------------------------------------------------------------
   if (options.pdf) {
     emit(`##STAGE 2/${stages} convert`);

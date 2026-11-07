@@ -30,8 +30,8 @@ const COVER = path.join(ASSETS, "coverpage.png");
 const MANIFEST = path.join(ASSETS, "stories.json");
 
 const BOOK = {
-  title: "كتاب القصص المصورة",
-  subtitle: "هيا بنا نقرأ القصص",
+  title: "كِتَابُ الْقِصَصِ الْمُصَوَّرَةِ",
+  subtitle: "هَيَّا بِنَا نَقْرَأُ الْقِصَصَ",
   cover: "coverpage.png",
 };
 
@@ -54,34 +54,34 @@ const COVER_COLOR = 0x1b4965ff;
  * asserts they still match, so this table cannot silently drift out of order.
  */
 const STORIES = [
-  { slug: "asad",    letter: "أ", word: "أَسَد",   title: "أَسَدٌ في الغَابَةِ" },
-  { slug: "bab",     letter: "ب", word: "باب",    title: "بَابٌ أَزْرَقُ في الحَدِيقَةِ" },
-  { slug: "jamal",   letter: "ج", word: "جمل",    title: "جَمَلٌ في الصَّحْرَاءِ" },
-  { slug: "dubb",    letter: "د", word: "دب",     title: "دُبٌّ صَغِيرٌ في الغَابَةِ" },
-  { slug: "hilal",   letter: "هـ", word: "هلال",  title: "هِلالٌ مُضِيءٌ في السَّمَاءِ" },
-  { slug: "warda",   letter: "و", word: "وردة",   title: "وَرْدَةٌ حَمْرَاءُ في الحَدِيقَةِ" },
-  { slug: "zarafa",  letter: "ز", word: "زرافة",  title: "زَرَافَةٌ طَوِيلَةٌ في الحَدِيقَةِ" },
-  { slug: "hisan",   letter: "ح", word: "حصان",   title: "حِصَانٌ جَمِيلٌ في الْحَقْلِ" },
-  { slug: "taair",   letter: "ط", word: "طائر",   title: "طَائِرٌ صَغِيرٌ على الشَّجَرَةِ" },
-  { slug: "yad",     letter: "ي", word: "يد",     title: "يَدٌ تَعُونُ صَدِيقَتَهَا" },
-  { slug: "kitab",   letter: "ك", word: "كتاب",   title: "كِتَابٌ مُلَوَّنٌ على الطَّاوِلَةِ" },
-  { slug: "laymun",  letter: "ل", word: "ليمون",  title: "لَيْمُونَةٌ صَفْرَاءُ على الشَّجَرَةِ" },
-  { slug: "maa",     letter: "م", word: "ماء",    title: "مَاءٌ بَارِدٌ يُسْعِدُ الصِّغْرَانَ" },
-  { slug: "najm",    letter: "ن", word: "نجم",    title: "نَجْمٌ لَامِعٌ في السَّمَاءِ" },
-  { slug: "samak",   letter: "س", word: "سمك",    title: "سَمَكٌ مُلَوَّنٌ في الْبَحْرِ" },
+  { slug: "asad",    letter: "أ", word: "أَسَد",   title: "أَسَدٌ فِي الْغَابَةِ" },
+  { slug: "bab",     letter: "ب", word: "باب",    title: "بَابٌ أَزْرَقُ فِي الْحَدِيقَةِ" },
+  { slug: "jamal",   letter: "ج", word: "جمل",    title: "جَمَلٌ فِي الصَّحْرَاءِ" },
+  { slug: "dubb",    letter: "د", word: "دب",     title: "دُبٌّ صَغِيرٌ فِي الْغَابَةِ" },
+  { slug: "hilal",   letter: "هـ", word: "هلال",  title: "هِلَالٌ مُضِيءٌ فِي السَّمَاءِ" },
+  { slug: "warda",   letter: "و", word: "وردة",   title: "وَرْدَةٌ حَمْرَاءُ فِي الْحَدِيقَةِ" },
+  { slug: "zarafa",  letter: "ز", word: "زرافة",  title: "زَرَافَةٌ طَوِيلَةٌ فِي الْحَدِيقَةِ" },
+  { slug: "hisan",   letter: "ح", word: "حصان",   title: "حِصَانٌ جَمِيلٌ فِي الْحَقْلِ" },
+  { slug: "taair",   letter: "ط", word: "طائر",   title: "طَائِرٌ صَغِيرٌ عَلَى الشَّجَرَةِ" },
+  { slug: "yad",     letter: "ي", word: "يد",     title: "يَدٌ تُعِينُ صَدِيقَتَهَا" },
+  { slug: "kitab",   letter: "ك", word: "كتاب",   title: "كِتَابٌ مُلَوَّنٌ عَلَى الطَّاوِلَةِ" },
+  { slug: "laymun",  letter: "ل", word: "ليمون",  title: "لَيْمُونَةٌ صَفْرَاءُ عَلَى الشَّجَرَةِ" },
+  { slug: "maa",     letter: "م", word: "ماء",    title: "مَاءٌ بَارِدٌ يُسْعِدُ الصِّغَارَ" },
+  { slug: "najm",    letter: "ن", word: "نجم",    title: "نَجْمٌ لَامِعٌ فِي السَّمَاءِ" },
+  { slug: "samak",   letter: "س", word: "سمك",    title: "سَمَكٌ مُلَوَّنٌ فِي الْبَحْرِ" },
   { slug: "ain",     letter: "ع", word: "عين",    title: "عَيْنٌ تَرَى جَمَالَ الْعَالَمِ" },
   { slug: "fil",     letter: "ف", word: "فيل",    title: "فِيلٌ ضَخْمٌ عِنْدَ النَّهْرِ" },
-  { slug: "sanduq",  letter: "ص", word: "صندوق",  title: "صَنْدُقٌ صَغِيرٌ تَحْتَ الشَّجَرَةِ" },
-  { slug: "qalb",    letter: "ق", word: "قلب",    title: "قَلْبٌ مَلِءٌ بِالْحَبِّ" },
+  { slug: "sanduq",  letter: "ص", word: "صندوق",  title: "صُنْدُوقٌ صَغِيرٌ تَحْتَ الشَّجَرَةِ" },
+  { slug: "qalb",    letter: "ق", word: "قلب",    title: "قَلْبٌ مَلِيءٌ بِالْحُبِّ" },
   { slug: "rajul",   letter: "ر", word: "رجل",    title: "رَجُلٌ يَحْمِلُ أَكْيَاسًا" },
   { slug: "shams",   letter: "ش", word: "شمس",    title: "شَمْسٌ مُشْرِقَةٌ مِنَ النَّافِذَةِ" },
   { slug: "tuffah",  letter: "ت", word: "تفاح",   title: "تُفَّاحَةٌ حَمْرَاءُ مِنَ الشَّجَرَةِ" },
-  { slug: "thaalab", letter: "ث", word: "ثعلب",   title: "ثَعْلَبٌ صَغِيرٌ قُرْبَ الغَابَةِ" },
+  { slug: "thaalab", letter: "ث", word: "ثعلب",   title: "ثَعْلَبٌ صَغِيرٌ قُرْبَ الْغَابَةِ" },
   { slug: "khubz",   letter: "خ", word: "خبز",    title: "خُبْزٌ طَازِجٌ عَلَى الْمَائِدَةِ" },
-  { slug: "dhiib",   letter: "ذ", word: "ذئب",    title: "ذِئْبٌ بَعِيدٌ عِنْدَ طَرَفِ الغَابَةِ" },
+  { slug: "dhiib",   letter: "ذ", word: "ذئب",    title: "ذِئْبٌ بَعِيدٌ عِنْدَ طَرَفِ الْغَابَةِ" },
   { slug: "dafdaa",  letter: "ض", word: "ضفدع",   title: "ضِفْدَعٌ أَخْضَرُ قُرْبَ الْبُرْكَةِ" },
   { slug: "zarf",    letter: "ظ", word: "ظرف",    title: "ظَرْفٌ جَمِيلٌ فَوْقَ الطَّاوِلَةِ" },
-  { slug: "ghazal",  letter: "غ", word: "غزال",   title: "غَزَالٌ جَمِيلٌ في الْحَقْلِ" },
+  { slug: "ghazal",  letter: "غ", word: "غزال",   title: "غَزَالٌ جَمِيلٌ فِي الْحَقْلِ" },
 ];
 
 const EXPECTED_SENTENCES = 3;
@@ -246,6 +246,45 @@ function formatBytes(bytes) {
     : `${(bytes / 1024).toFixed(0)} KB`;
 }
 
+// Ordinary harakat plus the Quranic marks. Used only to compare a hand-edited
+// text file with the undiacritized sentences in source.docx.
+const HARAKAT_RE = /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g;
+
+function stripHarakat(value) {
+  return value.replace(HARAKAT_RE, "");
+}
+
+/**
+ * Keep an existing text file when its sentences still match source.docx. The
+ * shipped texts are fully vocalized by hand; re-running the extractor for the
+ * images must not throw that away. If the source sentences changed, the
+ * comparison fails and the file is regenerated from source.docx.
+ */
+function writeStoryText(textPath, title, sentences) {
+  if (fs.existsSync(textPath)) {
+    const existing = fs
+      .readFileSync(textPath, "utf-8")
+      .replace(/^\uFEFF/, "")
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    const existingSentences = existing.slice(1);
+    const sameSentences =
+      existingSentences.length === sentences.length &&
+      existingSentences.every(
+        (sentence, index) => stripHarakat(sentence) === stripHarakat(sentences[index])
+      );
+
+    if (sameSentences) {
+      console.log(`text: keeping existing ${path.basename(textPath)} (diacritized)`);
+      return;
+    }
+  }
+
+  fs.writeFileSync(textPath, [title, ...sentences].join("\n") + "\n", "utf8");
+}
+
 async function main() {
   assert(fs.existsSync(SOURCE_DOCX), `Missing source file: ${SOURCE_DOCX}`);
 
@@ -273,8 +312,7 @@ async function main() {
     // JSZip paths are always POSIX, never path.join()'d on Windows.
     const mediaPath = `word/${images[i]}`;
 
-    const body = [meta.title, ...stories[i].sentences].join("\n") + "\n";
-    fs.writeFileSync(textPath, body, "utf8");
+    writeStoryText(textPath, meta.title, stories[i].sentences);
 
     const sourceBuffer = await zip.file(mediaPath).async("nodebuffer");
     totalSourceBytes += sourceBuffer.length;

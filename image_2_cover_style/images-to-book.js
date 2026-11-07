@@ -20,6 +20,7 @@ const docx = require("docx");
 const fs = require("fs");
 const path = require("path");
 const { spawnSync } = require("child_process");
+const { rtlDocumentDefaults } = require("../scripts/rtl.js");
 
 const {
   Document,
@@ -300,7 +301,6 @@ function createImagePage(page, fit, buffer, type) {
         },
         margin: { top: 0, right: 0, bottom: 0, left: 0 },
       },
-      direction: "RTL",
     },
     children: [
       new Paragraph({
@@ -407,9 +407,7 @@ async function buildBook(options) {
     description: "كتاب مُولَّد من مجلد images بأسلوب صفحات الأغلفة",
     styles: {
       default: {
-        document: {
-          run: { font: "Traditional Arabic", size: 28 },
-        },
+        document: rtlDocumentDefaults({ font: "Traditional Arabic", size: 28 }),
       },
     },
     sections: [],

@@ -18,6 +18,7 @@ const path = require("path");
 
 const { parseBookArgs, USAGE } = require("../scripts/build-options.js");
 const { sortByLetter } = require("../scripts/letter-order.js");
+const { rtlDocumentDefaults } = require("../scripts/rtl.js");
 
 const CLI = parseBookArgs(process.argv.slice(2));
 if (CLI.help) {
@@ -247,6 +248,7 @@ function createPageFooter() {
           new TextRun({
             children: [PageNumber.CURRENT],
             font: FONT,
+            rightToLeft: true,
             size: 18,
             color: COLOR_BORDER,
           }),
@@ -331,6 +333,7 @@ function createTitlePage(book) {
         new TextRun({
           text: book.title,
           font: FONT,
+          rightToLeft: true,
           size: TITLE_PAGE_SIZE,
           color: COLOR_MAIN,
         }),
@@ -344,6 +347,7 @@ function createTitlePage(book) {
         new TextRun({
           text: book.subtitle,
           font: FONT,
+          rightToLeft: true,
           size: 48,
           color: COLOR_TITLE,
         }),
@@ -406,6 +410,7 @@ function createStoryPage(story) {
         new TextRun({
           text: story.title,
           font: FONT,
+          rightToLeft: true,
           size: TITLE_SIZE,
           color: COLOR_MAIN,
         }),
@@ -428,6 +433,7 @@ function createStoryPage(story) {
             new TextRun({
               text: sentence,
               font: FONT,
+              rightToLeft: true,
               size: SENTENCE_SIZE,
               color: COLOR_MAIN,
             }),
@@ -460,9 +466,7 @@ async function createWorkbook() {
     description: manifest.book.subtitle,
     styles: {
       default: {
-        document: {
-          run: { font: FONT, size: 28 },
-        },
+        document: rtlDocumentDefaults({ font: FONT, size: 28 }),
       },
     },
     sections: [],

@@ -243,6 +243,8 @@ created-books/
 │   ├── build-options.js           # خيارات --order و --out المشتركة بين الكتب
 │   ├── letter-order.js            # جدولا الترتيب: أبجدي / أبجدي حديث (المعجم)
 │   ├── merge-pdfs.js              # يدمج ملفات PDF (pdf-lib)
+│   ├── rtl.js                     # افتراضيات RTL المشتركة لكل الكتب
+│   ├── check-rtl.js               # يتحقق أن كل DOCX عربي من اليمين لليسار
 │   ├── docx-to-pdf.ps1            # يحوّل الكتب المختارة، كل كتاب في عملية منفصلة
 │   └── convert-one.ps1            # يحوّل ملف DOCX واحد إلى PDF عبر Word COM
 │
@@ -316,6 +318,25 @@ created-books/
 وإذا فشل **مسار** صورة يوقف البناء، أما إذا فشل **قراءة** الصورة أو تحويلها فيُبنى
 التمرين بدونها مع رسالة تحذير. وكذلك **غياب صورة الغلاف** لا يوقف البناء: تُطبع
 تحذير وتُتخطى صفحة الغلاف.
+
+### اتجاه النص من اليمين إلى اليسار (RTL)
+
+كل كتاب في المشروع عربي **من اليمين إلى اليسار**، بما في ذلك علامات الترقيم في نهاية
+الجُمَل. الاتجاه لا يُضبط بخيار `direction: "RTL"` لأنه **غير موجود** في مكتبة `docx`
+ويُهمَل بصمت؛ الصحيح هو:
+
+- للفقرة: `bidirectional: true` ← `<w:bidi/>`
+- لمقطع النص: `rightToLeft: true` ← `<w:rtl/>`
+
+ولضمان أن كل صفحة — حتى التي تُضاف مستقبلاً — ترث الاتجاه تلقائياً، تستدعي كل
+مولّدات الكتب الدالة `rtlDocumentDefaults()` من `scripts/rtl.js` داخل
+`styles.default.document`. وبعد بناء DOCX يفحص `scripts/check-rtl.js` الملفات
+ويتأكد من وجود `<w:rtl/>` و`<w:bidi/>` في افتراضيات المستند، ويفشل البناء إن غابا.
+يمكن تشغيل الفحص يدوياً:
+
+```bat
+node scripts\check-rtl.js
+```
 
 ## أسئلة شائعة
 
@@ -453,6 +474,15 @@ The rule: **content lives in `assets/*.json`, layout/labels live in `create-work
   `image_2_cover_style/images/` into one full-bleed A5/A4 page and produces
   `images-to-book.docx` / `.pdf` (`--images` / `--out` point it elsewhere).
 - Reusable covers and photos are collected in `covers-and-photos/` (CC BY 4.0).
+
+### Right-to-left (RTL) guarantee
+
+Every generated document is Arabic RTL. `direction: "RTL"` is **not** a docx option
+and is silently ignored; RTL is set with paragraph `bidirectional: true` (`<w:bidi/>`)
+and run `rightToLeft: true` (`<w:rtl/>`). All generators call `rtlDocumentDefaults()`
+from `scripts/rtl.js` in `styles.default.document`, so every paragraph and run
+inherits RTL — including pages added later. `node scripts/check-rtl.js` verifies the
+generated DOCX files and the build stops if either default is missing.
 
 ### Authors & Mission
 
