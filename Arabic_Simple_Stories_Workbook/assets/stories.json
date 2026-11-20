@@ -1,0 +1,233 @@
+{
+  "book": {
+    "title": "كِتَابُ الْقِصَصِ الْبَسِيطَةِ",
+    "subtitle": "قِصَصٌ سَهْلَةٌ بِجُمَلٍ قَصِيرَةٍ مُشَكَّلَةٍ",
+    "cover": "coverpage.png"
+  },
+  "stories": [
+    {
+      "id": 1,
+      "letter": "أ",
+      "word": "الْأَسَدُ",
+      "title": "الْأَسَدُ",
+      "text": "texts/01-asad.txt",
+      "image": "images/01-asad.svg"
+    },
+    {
+      "id": 2,
+      "letter": "ب",
+      "word": "الْبَابُ",
+      "title": "الْبَابُ",
+      "text": "texts/02-bab.txt",
+      "image": "images/02-bab.svg"
+    },
+    {
+      "id": 3,
+      "letter": "ج",
+      "word": "الْجَمَلُ",
+      "title": "الْجَمَلُ",
+      "text": "texts/03-jamal.txt",
+      "image": "images/03-jamal.svg"
+    },
+    {
+      "id": 4,
+      "letter": "د",
+      "word": "الدُّبُّ",
+      "title": "الدُّبُّ",
+      "text": "texts/04-dubb.txt",
+      "image": "images/04-dubb.svg"
+    },
+    {
+      "id": 5,
+      "letter": "هـ",
+      "word": "الْهِلَالُ",
+      "title": "الْهِلَالُ",
+      "text": "texts/05-hilal.txt",
+      "image": "images/05-hilal.svg"
+    },
+    {
+      "id": 6,
+      "letter": "و",
+      "word": "الْوَرْدَةُ",
+      "title": "الْوَرْدَةُ",
+      "text": "texts/06-warda.txt",
+      "image": "images/06-warda.svg"
+    },
+    {
+      "id": 7,
+      "letter": "ز",
+      "word": "الزَّرَافَةُ",
+      "title": "الزَّرَافَةُ",
+      "text": "texts/07-zarafa.txt",
+      "image": "images/07-zarafa.svg"
+    },
+    {
+      "id": 8,
+      "letter": "ح",
+      "word": "الْحِصَانُ",
+      "title": "الْحِصَانُ",
+      "text": "texts/08-hisan.txt",
+      "image": "images/08-hisan.svg"
+    },
+    {
+      "id": 9,
+      "letter": "ط",
+      "word": "الطَّائِرُ",
+      "title": "الطَّائِرُ",
+      "text": "texts/09-taair.txt",
+      "image": "images/09-taair.svg"
+    },
+    {
+      "id": 10,
+      "letter": "ي",
+      "word": "الْيَدُ",
+      "title": "الْيَدُ",
+      "text": "texts/10-yad.txt",
+      "image": "images/10-yad.svg"
+    },
+    {
+      "id": 11,
+      "letter": "ك",
+      "word": "الْكِتَابُ",
+      "title": "الْكِتَابُ",
+      "text": "texts/11-kitab.txt",
+      "image": "images/11-kitab.svg"
+    },
+    {
+      "id": 12,
+      "letter": "ل",
+      "word": "اللَّيْمُونُ",
+      "title": "اللَّيْمُونُ",
+      "text": "texts/12-laymun.txt",
+      "image": "images/12-laymun.svg"
+    },
+    {
+      "id": 13,
+      "letter": "م",
+      "word": "الْمَاءُ",
+      "title": "الْمَاءُ",
+      "text": "texts/13-maa.txt",
+      "image": "images/13-maa.svg"
+    },
+    {
+      "id": 14,
+      "letter": "ن",
+      "word": "النَّجْمُ",
+      "title": "النَّجْمُ",
+      "text": "texts/14-najm.txt",
+      "image": "images/14-najm.svg"
+    },
+    {
+      "id": 15,
+      "letter": "س",
+      "word": "السَّمَكُ",
+      "title": "السَّمَكُ",
+      "text": "texts/15-samak.txt",
+      "image": "images/15-samak.svg"
+    },
+    {
+      "id": 16,
+      "letter": "ع",
+      "word": "الْعَيْنُ",
+      "title": "الْعَيْنُ",
+      "text": "texts/16-ain.txt",
+      "image": "images/16-ain.svg"
+    },
+    {
+      "id": 17,
+      "letter": "ف",
+      "word": "الْفِيلُ",
+      "title": "الْفِيلُ",
+      "text": "texts/17-fil.txt",
+      "image": "images/17-fil.svg"
+    },
+    {
+      "id": 18,
+      "letter": "ص",
+      "word": "الصُّنْدُوقُ",
+      "title": "الصُّنْدُوقُ",
+      "text": "texts/18-sanduq.txt",
+      "image": "images/18-sanduq.svg"
+    },
+    {
+      "id": 19,
+      "letter": "ق",
+      "word": "الْقَلْبُ",
+      "title": "الْقَلْبُ",
+      "text": "texts/19-qalb.txt",
+      "image": "images/19-qalb.svg"
+    },
+    {
+      "id": 20,
+      "letter": "ر",
+      "word": "الرَّجُلُ",
+      "title": "الرَّجُلُ",
+      "text": "texts/20-rajul.txt",
+      "image": "images/20-rajul.svg"
+    },
+    {
+      "id": 21,
+      "letter": "ش",
+      "word": "الشَّمْسُ",
+      "title": "الشَّمْسُ",
+      "text": "texts/21-shams.txt",
+      "image": "images/21-shams.svg"
+    },
+    {
+      "id": 22,
+      "letter": "ت",
+      "word": "التُّفَّاحُ",
+      "title": "التُّفَّاحُ",
+      "text": "texts/22-tuffah.txt",
+      "image": "images/22-tuffah.svg"
+    },
+    {
+      "id": 23,
+      "letter": "ث",
+      "word": "الثَّعْلَبُ",
+      "title": "الثَّعْلَبُ",
+      "text": "texts/23-thaalab.txt",
+      "image": "images/23-thaalab.svg"
+    },
+    {
+      "id": 24,
+      "letter": "خ",
+      "word": "الْخُبْزُ",
+      "title": "الْخُبْزُ",
+      "text": "texts/24-khubz.txt",
+      "image": "images/24-khubz.svg"
+    },
+    {
+      "id": 25,
+      "letter": "ذ",
+      "word": "الذِّئْبُ",
+      "title": "الذِّئْبُ",
+      "text": "texts/25-dhiib.txt",
+      "image": "images/25-dhiib.svg"
+    },
+    {
+      "id": 26,
+      "letter": "ض",
+      "word": "الضِّفْدَعُ",
+      "title": "الضِّفْدَعُ",
+      "text": "texts/26-dafdaa.txt",
+      "image": "images/26-dafdaa.svg"
+    },
+    {
+      "id": 27,
+      "letter": "ظ",
+      "word": "الظَّرْفُ",
+      "title": "الظَّرْفُ",
+      "text": "texts/27-zarf.txt",
+      "image": "images/27-zarf.svg"
+    },
+    {
+      "id": 28,
+      "letter": "غ",
+      "word": "الْغَزَالُ",
+      "title": "الْغَزَالُ",
+      "text": "texts/28-ghazal.txt",
+      "image": "images/28-ghazal.svg"
+    }
+  ]
+}

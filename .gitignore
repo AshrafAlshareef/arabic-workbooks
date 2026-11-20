@@ -5,6 +5,10 @@ node_modules/
 # Old release snapshots
 /releases/
 
+# Local Word source for the simple-stories book (186 MB) and build outputs
+/temp/
+/results/
+
 # Playwright MCP browser-test artifacts
 .playwright-mcp/
 

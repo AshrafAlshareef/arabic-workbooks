@@ -1,0 +1,33 @@
+{
+  "name": "arabic-simple-stories-workbook",
+  "version": "1.0.0",
+  "description": "كتاب القصص البسيطة - Arabic Simple Stories Workbook",
+  "main": "create-workbook.js",
+  "scripts": {
+    "build": "node create-workbook.js",
+    "extract": "node extract-from-source.js",
+    "start": "node create-workbook.js"
+  },
+  "keywords": [
+    "arabic",
+    "stories",
+    "simple",
+    "workbook",
+    "education",
+    "reading",
+    "children",
+    "قصص",
+    "قصص بسيطة",
+    "قراءة"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "docx": "^9.7.1",
+    "jszip": "^3.10.2",
+    "svg2img": "^1.0.0-beta.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

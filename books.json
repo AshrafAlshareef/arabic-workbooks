@@ -41,6 +41,12 @@
       "name": "Arabic Stories Workbook",
       "title": "كتاب القصص",
       "pages": 30
+    },
+    {
+      "dir": "Arabic_Simple_Stories_Workbook",
+      "name": "Arabic Simple Stories Workbook",
+      "title": "كتاب القصص البسيطة",
+      "pages": 30
     }
   ]
 }

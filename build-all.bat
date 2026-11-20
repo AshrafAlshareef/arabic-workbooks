@@ -4,8 +4,8 @@ chcp 65001 >nul 2>&1
 
 rem ==========================================================================
 rem  build-all.bat
-rem  The one entry point: builds all seven workbooks, converts each .docx to
-rem  .pdf via Microsoft Word, then merges the seven PDFs into one file next to
+rem  The one entry point: builds all eight workbooks, converts each .docx to
+rem  .pdf via Microsoft Word, then merges the eight PDFs into one file next to
 rem  this script:
 rem      Arabic_Workbooks_Complete.pdf
 rem
@@ -43,7 +43,7 @@ if errorlevel 1 (
     goto :fail
 )
 
-rem The seven projects share the root node_modules, so one install covers them.
+rem The eight projects share the root node_modules, so one install covers them.
 if not exist "%ROOT%node_modules\docx" goto :install_root
 if not exist "%ROOT%node_modules\pdf-lib" goto :install_root
 if not exist "%ROOT%node_modules\svg2img" goto :install_root
@@ -82,6 +82,8 @@ if "%DO_BUILD%"=="1" (
     call :build "Arabic_Word_Composition_Workbook" docx svg2img
     if errorlevel 1 (popd & goto :fail)
     call :build "Arabic_Stories_Workbook" docx
+    if errorlevel 1 (popd & goto :fail)
+    call :build "Arabic_Simple_Stories_Workbook" docx svg2img
     if errorlevel 1 (popd & goto :fail)
 ) else (
     echo [1/3] Skipping node build ^(/nobuild^).

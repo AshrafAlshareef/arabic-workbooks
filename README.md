@@ -2,7 +2,7 @@
 
 # مكتبة تمارين العربية
 
-سبعة **كتب تمارين عربية** للطلاب المبتدئين، تُبنى برمجياً من الصفر بصيغة **DOCX**
+ثمانية **كتب تمارين عربية** للطلاب المبتدئين، تُبنى برمجياً من الصفر بصيغة **DOCX**
 بخط عربي واتجاه من اليمين لليسار، ثم تُحوَّل إلى **PDF** عبر Microsoft Word وتُدمج
 في كتاب واحد مرتَّب حسب ترتيب القراءة.
 
@@ -15,7 +15,8 @@
 | 5 | كتاب أشكال الحروف في الكلمة | `Arabic_Letter_Shapes_Workbook` | 8 |
 | 6 | كتاب تجميع الحروف لتكوين كلمة | `Arabic_Word_Composition_Workbook` | 8 |
 | 7 | كتاب القصص | `Arabic_Stories_Workbook` | 30 |
-| | **الكتاب المدمج الكامل** | `Arabic_Workbooks_Complete.pdf` | **177** |
+| 8 | كتاب القصص البسيطة | `Arabic_Simple_Stories_Workbook` | 30 |
+| | **الكتاب المدمج الكامل** | `Arabic_Workbooks_Complete.pdf` | **207** |
 
 ## التحميل / Download
 
@@ -30,7 +31,8 @@
 | أشكال الحروف | [`Arabic_Letter_Shapes_Workbook.pdf`](Arabic_Letter_Shapes_Workbook/Arabic_Letter_Shapes_Workbook.pdf) | [`docx`](Arabic_Letter_Shapes_Workbook/Arabic_Letter_Shapes_Workbook.docx) |
 | تجميع الكلمات | [`Arabic_Word_Composition_Workbook.pdf`](Arabic_Word_Composition_Workbook/Arabic_Word_Composition_Workbook.pdf) | [`docx`](Arabic_Word_Composition_Workbook/Arabic_Word_Composition_Workbook.docx) |
 | القصص | [`Arabic_Stories_Workbook.pdf`](Arabic_Stories_Workbook/Arabic_Stories_Workbook.pdf) | [`docx`](Arabic_Stories_Workbook/Arabic_Stories_Workbook.docx) |
-| **المدمج (177 صفحة)** | [`Arabic_Workbooks_Complete.pdf`](Arabic_Workbooks_Complete.pdf) | — |
+| القصص البسيطة | [`Arabic_Simple_Stories_Workbook.pdf`](Arabic_Simple_Stories_Workbook/Arabic_Simple_Stories_Workbook.pdf) | [`docx`](Arabic_Simple_Stories_Workbook/Arabic_Simple_Stories_Workbook.docx) |
+| **المدمج (207 صفحة)** | [`Arabic_Workbooks_Complete.pdf`](Arabic_Workbooks_Complete.pdf) | — |
 
 > **تحميل كتاب واحد:** اضغط على رابط الـPDF في صفِّه. **تحميل الكتاب الكامل:**
 > اضغط `Arabic_Workbooks_Complete.pdf`.
@@ -45,9 +47,9 @@
 > كل قسم في مشروع مستقل. `create-workbook.js` **متطابق بايت ببايت في المشروعين**،
 > والقسم المطبوع يحدده الحقل `sections` في `assets/letters.json` داخل كل مشروع.
 > أُضيف للكتابين غلافٌ لم يكن في الكتاب الأصلي، ولذلك صار مجموع الصفحات 177
-> بدل 175 مع بقاء المحتوى على حاله.
+> بدل 175 مع بقاء المحتوى على حاله. ومع كتاب القصص البسيطة صار المجموع 207.
 
-> كل كتاب من الكتب السبعة **مستقل** بملفاته وصوره ومخرجاته، وتفاصيل كل واحد
+> كل كتاب من الكتب الثمانية **مستقل** بملفاته وصوره ومخرجاته، وتفاصيل كل واحد
 > (بنية الصفحات، المقاسات، الخطوط، الصور) موثّقة في `README.md` داخل مجلده.
 > هذا الملف يشرح **المكتبة ككل** وطريقة بنائها.
 
@@ -61,7 +63,7 @@ cd arabic-workbooks
 build-all.bat
 ```
 
-سيثبّت `build-all.bat` ما ينقص من الاعتماديات، ثم يبني الكتب السبعة، ويحوّلها إلى
+سيثبّت `build-all.bat` ما ينقص من الاعتماديات، ثم يبني الكتب الثمانية، ويحوّلها إلى
 PDF، ويدمجها في `Arabic_Workbooks_Complete.pdf`. لا حاجة إلى `npm install` يدوي.
 
 > إن أردت كتاباً واحداً فقط، ادخل مجلده وشغّل `node create-workbook.js`.
@@ -100,7 +102,7 @@ node scripts\build.js --books=Arabic_Alphabet_Workbook,Arabic_Stories_Workbook ^
 
 | الأمر | الوظيفة |
 |-------|---------|
-| `--books=a,b` | الكتب المطلوبة (الافتراضي: السبعة) |
+| `--books=a,b` | الكتب المطلوبة (الافتراضي: الثمانية) |
 | `--order=abjadi\|alphabetical` | ترتيب الحروف (الافتراضي: `abjadi`) |
 | `--out=<dir>` | مجلد المخرجات: `<out>\<Book>\<Book>.docx\|pdf` |
 | `--merge` | دمج المختارات في PDF واحد داخل `<out>` |
@@ -137,9 +139,9 @@ build-all.bat
 
 | المرحلة | ماذا تفعل | الأداة |
 |---------|-----------|--------|
-| **1/3** بناء DOCX | يبني الكتب السبعة بالترتيب (الحروف ← الحركات ← تحليل المقاطع ← تحليل الكلمات ← أشكال الحروف ← تجميع الكلمات ← القصص) | `node create-workbook.js` داخل كل مجلد |
+| **1/3** بناء DOCX | يبني الكتب الثمانية بالترتيب (الحروف ← الحركات ← تحليل المقاطع ← تحليل الكلمات ← أشكال الحروف ← تجميع الكلمات ← القصص ← القصص البسيطة) | `node create-workbook.js` داخل كل مجلد |
 | **2/3** تحويل PDF | يحوّل كل DOCX إلى PDF بجواره عبر Word | `scripts\docx-to-pdf.ps1` ← `scripts\convert-one.ps1` |
-| **3/3** الدمج | يدمج ملفات PDF السبعة في كتاب واحد | `node scripts\merge-pdfs.js` |
+| **3/3** الدمج | يدمج ملفات PDF الثمانية في كتاب واحد | `node scripts\merge-pdfs.js` |
 
 > **أغلق Microsoft Word قبل البناء.** وجود Word مفتوح يجعل تصدير PDF غير موثوق،
 > وقد يفشل الملف عند حذف نسخة PDF قديمة يكون قد فتحها برنامج آخر.
@@ -160,13 +162,13 @@ build-all.bat
 ### تثبيت الاعتماديات
 
 الاعتماديات الثلاث (`docx` و`pdf-lib` و`svg2img`) **مشتركة** في `node_modules`
-الجذر، فتشمل كتب الحروف والحركات وكتب الكلمات الثلاثة والقصص معاً. يثبّت
+الجذر، فتشمل كتب الحروف والحركات وكتب الكلمات الثلاثة والقصص والقصص البسيطة معاً. يثبّت
 `build-all.bat` ما ينقص منها تلقائياً عند أول تشغيل، و**لا يحتاج** إلى `npm install`
 يدوي.
 
 > **مجلد `node_modules` واحد في الجذر فقط:** لا يمتلك أي مشروع كتابٍ مجلدَ
 > `node_modules` خاصاً به، لأن Node يرتقي تلقائياً في شجرة المجلدات حتى يجد
-> الاعتماديات في الجذر. فـ**تثبيت واحد يكفي** للكتب السبعة ولأداة الصور جميعاً.
+> الاعتماديات في الجذر. فـ**تثبيت واحد يكفي** للكتب الثمانية ولأداة الصور جميعاً.
 
 ## أداة الصور (`image_2_cover_style`)
 
@@ -213,7 +215,8 @@ image_2_cover_style\images-to-book.bat
 | `Arabic_Letter_Shapes_Workbook\Arabic_Letter_Shapes_Workbook.docx` / `.pdf` | المرحلة 1 و2 |
 | `Arabic_Word_Composition_Workbook\Arabic_Word_Composition_Workbook.docx` / `.pdf` | المرحلة 1 و2 |
 | `Arabic_Stories_Workbook\Arabic_Stories_Workbook.docx` / `.pdf` | المرحلة 1 و2 |
-| `Arabic_Workbooks_Complete.pdf` | المرحلة 3 (177 صفحة) |
+| `Arabic_Simple_Stories_Workbook\Arabic_Simple_Stories_Workbook.docx` / `.pdf` | المرحلة 1 و2 |
+| `Arabic_Workbooks_Complete.pdf` | المرحلة 3 (207 صفحة) |
 
 - كل **DOCX** يُكتب **داخل مجلد مشروعه** (`__dirname`) افتراضياً، فلا يختلف مساره
   مهما كان المجلد الذي شغّلت منه الأمر. واسم الملف **مشتق من اسم مجلد المشروع**،
@@ -257,6 +260,7 @@ created-books/
 ├── Arabic_Letter_Shapes_Workbook/ # كتاب أشكال الحروف     (8 صفحات)
 ├── Arabic_Word_Composition_Workbook/ # كتاب تجميع الكلمات (8 صفحات)
 ├── Arabic_Stories_Workbook/       # كتاب القصص            (30 صفحة)
+├── Arabic_Simple_Stories_Workbook/ # كتاب القصص البسيطة   (30 صفحة)
 │
 ├── image_2_cover_style/           # أداة مستقلة: صور مجلد images -> كتاب بأسلوب الأغلفة
 │
@@ -305,7 +309,7 @@ created-books/
 
 ## الفحوصات قبل البناء
 
-كل مشروع من مشاريع الكتب السبعة يفحص بياناته **قبل** بناء أي صفحة، ويتوقف
+كل مشروع من مشاريع الكتب الثمانية يفحص بياناته **قبل** بناء أي صفحة، ويتوقف
 برسالة خطأ دقيقة إذا:
 
 - ملف بيانات مفقود أو ليس JSON صالحاً
@@ -357,9 +361,9 @@ node scripts\check-rtl.js
 | الرسالة / العَرَض | السبب | الحل |
 |-------------------|-------|------|
 | `[ERROR] Node.js not found in PATH` | Node غير مثبَّت | ثبّت Node.js 16+ |
-| `Converted 3/7 workbooks. Failed: ...` | Word مفتوح، أو الملف مفتوح في برنامج آخر | أغلق Microsoft Word وكل ملفات الـPDF، ثم أعد البناء |
+| `Converted 3/8 workbooks. Failed: ...` | Word مفتوح، أو الملف مفتوح في برنامج آخر | أغلق Microsoft Word وكل ملفات الـPDF، ثم أعد البناء |
 | `The process cannot access the file because it is being used by another process` | PDF قديم مفتوح | أغلق عارض PDF ثم أعد البناء |
-| `Missing PDF for 1 of 7 books` | كتاب لم يُحوَّل | شغّل `build-all.bat` كاملاً (المرحلة 2 لم تكتمل) |
+| `Missing PDF for 1 of 8 books` | كتاب لم يُحوَّل | شغّل `build-all.bat` كاملاً (المرحلة 2 لم تكتمل) |
 | `Word reported exit code …` مع نجاح الملف | Word أبلغ عن خطأ لكن الـPDF كُتب | تجاهله إن كانت كل صفحاته صحيحة |
 | `npm install failed` | انقطاع شبكة أو إصدار Node قديم جداً | تحقق من Node ثم أعد البناء |
 | نص يظهر بخط مختلف | خط Traditional Arabic غير مثبَّت | ثبّت الخط على النظام |
@@ -368,9 +372,11 @@ node scripts\check-rtl.js
 > نسخ Word الخلفية **غير المرئية** المتبقّية من تشغيل فاشل يوقفها السكربت
 > تلقائياً، لكنه **لا يمسّ** أي نافذة Word يراها المستخدم.
 
+**1.3.0** — أُضيف كتاب القصص البسيطة (28 قصة بجمل قصيرة مشكولة، وصور من كتاب
+الحروف)، فصار الكتاب المدمج **207** صفحة.
 **1.2.0** — فصل كتاب الحركات إلى كتابين مستقلين (كتاب الحركات، تحليل المقاطع
 الصوتية) بغلاف لكل كتاب، وكتاب مدمج من **177** صفحة.
-سبعة كتب. آخر تحديث: **2026-09-29**
+ثمانية كتب. آخر تحديث: **2026-11-19**
 
 ---
 
@@ -389,13 +395,13 @@ node scripts\check-rtl.js
 
 ## English
 
-Seven Arabic workbooks for young beginners. Each book is generated from JSON data by a
+Eight Arabic workbooks for young beginners. Each book is generated from JSON data by a
 Node.js script into a right-to-left **DOCX** (script font *Traditional Arabic*), converted
-to **PDF** with Microsoft Word, and the seven PDFs are merged into one complete book.
+to **PDF** with Microsoft Word, and the eight PDFs are merged into one complete book.
 
 ### Download
 
-- **Combined book (177 pages):** [`Arabic_Workbooks_Complete.pdf`](Arabic_Workbooks_Complete.pdf)
+- **Combined book (207 pages):** [`Arabic_Workbooks_Complete.pdf`](Arabic_Workbooks_Complete.pdf)
 - **Individual books:** the `.pdf` (and editable `.docx`) inside each `Arabic_*_Workbook/` folder — see the table at the top.
 
 ### Requirements
@@ -417,16 +423,16 @@ build-all.bat
 
 Three stages, stopping at the first error:
 
-1. build the seven `.docx` files,
+1. build the eight `.docx` files,
 2. convert each to `.pdf` with Word,
-3. merge the seven PDFs into `Arabic_Workbooks_Complete.pdf`.
+3. merge the eight PDFs into `Arabic_Workbooks_Complete.pdf`.
 
 ### Desktop GUI (no server)
 
 Double-click **`start-gui.bat`** for a right-to-left Arabic window (PowerShell +
 WPF). Nothing to install, no server, no browser:
 
-- pick any subset of the seven books,
+- pick any subset of the eight books,
 - choose the letter order: **abjadi** (traditional, default) or **alphabetical**
   (modern dictionary order) — the full 28-letter sequence is previewed,
 - choose the output folder (native folder picker, default = repo root),
@@ -457,7 +463,7 @@ and `--no-page-numbers`. The book list and its Arabic titles live in
 The shared dependencies (`docx`, `pdf-lib`, `svg2img`) live in the **single root
 `node_modules/`**. A book has no `node_modules` of its own — Node resolves each
 book's imports by walking up the folder tree to the root, so one install covers all
-seven books and the image tool. `build-all.bat` installs anything missing on first
+eight books and the image tool. `build-all.bat` installs anything missing on first
 run; no manual `npm install` is required.
 
 ### Make your own book

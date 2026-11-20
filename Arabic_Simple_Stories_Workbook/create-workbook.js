@@ -1,0 +1,483 @@
+#!/usr/bin/env node
+/**
+ * create-workbook.js
+ *
+ * Builds `Arabic_Simple_Stories_Workbook.docx` from the assets in `assets/`
+ * only -- it never reads the Word source, and no story text is hard-coded.
+ *
+ *   assets/stories.json    ordered story index
+ *   assets/texts/*.txt     line 1 = title, remaining lines = the sentences
+ *   assets/images/*.svg    one picture per story, rendered to PNG at build time
+ *   assets/coverpage.png   full-bleed cover
+ *
+ * Usage: node create-workbook.js [--order=abjadi|alphabetical] [--out=<dir>]
+ */
+
+const fs = require("fs");
+const path = require("path");
+const svg2img = require("svg2img");
+
+const { parseBookArgs, USAGE } = require("../scripts/build-options.js");
+const { sortByLetter } = require("../scripts/letter-order.js");
+const { rtlDocumentDefaults } = require("../scripts/rtl.js");
+
+const CLI = parseBookArgs(process.argv.slice(2));
+if (CLI.help) {
+  console.log(USAGE);
+  process.exit(0);
+}
+
+const {
+  AlignmentType,
+  BorderStyle,
+  Document,
+  Footer,
+  ImageRun,
+  LineRuleType,
+  Packer,
+  PageNumber,
+  PageOrientation,
+  Paragraph,
+  TextRun,
+  convertInchesToTwip,
+} = require("docx");
+
+// Page numbers are on by default; --no-page-numbers hides the footer.
+const SHOW_PAGE_NUMBERS = CLI.pageNumbers;
+
+// A5 dimensions in twips (14.8cm x 21cm)
+const A5_WIDTH = convertInchesToTwip(5.83);
+const A5_HEIGHT = convertInchesToTwip(8.27);
+
+const MARGIN_TOP = convertInchesToTwip(0.35);
+const MARGIN_BOTTOM = convertInchesToTwip(0.35);
+const MARGIN_SIDE = convertInchesToTwip(0.5);
+// Distance from the page edge to the page-number footer. It has to stay inside
+// the bottom margin so the footer never pushes the body text up.
+const PAGE_NUMBER_BOTTOM = convertInchesToTwip(0.5);
+const FOOTER_DISTANCE = convertInchesToTwip(0.33);
+
+const CONTENT_WIDTH = A5_WIDTH - MARGIN_SIDE * 2; // 6955 twips (~122.6 mm)
+
+const ROOT = __dirname;
+const ASSETS = path.join(ROOT, "assets");
+const MANIFEST = path.join(ASSETS, "stories.json");
+const OUT_DIR = CLI.out || ROOT;
+const OUTPUT = path.join(OUT_DIR, "Arabic_Simple_Stories_Workbook.docx");
+
+const FONT = "Traditional Arabic";
+
+const COLOR_TITLE = "2E86AB";
+const COLOR_MAIN = "1B4965";
+const COLOR_BORDER = "34495E";
+const COLOR_MUTED = "7F8C8D";
+
+// docx font sizes are in HALF-POINTS, so 56 = 28pt, not 56pt.
+const TITLE_SIZE = 56; // 28pt - titles run 3-5 words
+const SENTENCE_SIZE = 48; // 24pt
+const SENTENCE_LINE = 560; // twips, AT_LEAST (28pt)
+const SENTENCE_AFTER = 120; // twips
+const TITLE_AFTER = 200; // twips
+
+// Story picture: contained inside a 3:2 box, 112 mm wide.
+const MM_TO_PX = 96 / 25.4;
+const TWIPS_PER_PX = 15; // 1px at 96dpi = 1/96 inch = 15 twips
+const IMAGE_BOX_PX = Math.round(112 * MM_TO_PX);
+const IMAGE_BOX_RATIO = 3 / 2;
+
+const TITLE_PAGE_SIZE = 112; // 56pt
+
+// ---------------------------------------------------------------------------
+// Image dimensions
+// ---------------------------------------------------------------------------
+
+/** Read width/height from a PNG buffer (IHDR at bytes 16-23). */
+function getPngDimensions(buffer) {
+  if (buffer.length < 24 || buffer.slice(1, 4).toString() !== "PNG") {
+    throw new Error("Not a PNG buffer");
+  }
+  return { width: buffer.readUInt32BE(16), height: buffer.readUInt32BE(20) };
+}
+
+/** Read width/height from the root element of an SVG. */
+function getSvgDimensions(buffer) {
+  const root = buffer.slice(0, 4096).toString("utf-8");
+  const width = /\bwidth\s*=\s*["']([\d.]+)/.exec(root);
+  const height = /\bheight\s*=\s*["']([\d.]+)/.exec(root);
+  assert(width && height, "SVG has no width/height attributes");
+  return { width: Number(width[1]), height: Number(height[1]) };
+}
+
+/** Render an SVG asset to the PNG bytes that docx embeds. */
+function svgToPng(svgContent, width) {
+  return new Promise((resolve, reject) => {
+    svg2img(
+      svgContent,
+      { resvg: { fitTo: { mode: "width", value: width } } },
+      (error, buffer) => (error ? reject(error) : resolve(buffer))
+    );
+  });
+}
+
+/** Scale to fit inside a box, preserving aspect ratio. Never upscales. */
+function fitImage(dims, maxWidth, maxHeight) {
+  const scale = Math.min(maxWidth / dims.width, maxHeight / dims.height, 1);
+  return {
+    width: Math.max(1, Math.round(dims.width * scale)),
+    height: Math.max(1, Math.round(dims.height * scale)),
+  };
+}
+
+function formatBytes(bytes) {
+  return bytes >= 1024 * 1024
+    ? `${(bytes / 1024 / 1024).toFixed(2)} MB`
+    : `${(bytes / 1024).toFixed(0)} KB`;
+}
+
+// ---------------------------------------------------------------------------
+// Asset loading
+// ---------------------------------------------------------------------------
+
+function assert(condition, message) {
+  if (!condition) throw new Error(message);
+}
+
+/**
+ * Read a story text file: line 1 is the title, the rest are the sentences.
+ * A leading BOM would otherwise corrupt the title, so strip it defensively.
+ */
+function readStoryText(relativePath) {
+  const absolute = path.join(ASSETS, relativePath);
+  assert(fs.existsSync(absolute), `Missing text asset: assets/${relativePath}`);
+
+  const lines = fs
+    .readFileSync(absolute, "utf-8")
+    .replace(/^\uFEFF/, "")
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+
+  assert(lines.length >= 2, `assets/${relativePath} has no sentences`);
+  return { title: lines[0], sentences: lines.slice(1) };
+}
+
+function loadManifest() {
+  assert(fs.existsSync(MANIFEST), "Missing assets/stories.json - run: npm run extract");
+
+  const manifest = JSON.parse(fs.readFileSync(MANIFEST, "utf-8").replace(/^\uFEFF/, ""));
+  assert(manifest.stories.length > 0, "assets/stories.json lists no stories");
+
+  // The page order is the array order. `letter` names the letter a story is
+  // built around; a manifest that only carries the word falls back to it.
+  manifest.stories = sortByLetter(manifest.stories, CLI.order, {
+    key: (story) => story.letter || story.word,
+    label: "stories.json stories",
+  });
+
+  return manifest;
+}
+
+async function loadStories(manifest) {
+  const stories = [];
+  for (const [index, story] of manifest.stories.entries()) {
+    const text = readStoryText(story.text);
+    const imagePath = path.join(ASSETS, story.image);
+    assert(fs.existsSync(imagePath), `Missing image asset: assets/${story.image}`);
+
+    const svg = fs.readFileSync(imagePath);
+    const dims = getSvgDimensions(svg);
+    const image = await svgToPng(svg, Math.min(dims.width, IMAGE_BOX_PX));
+
+    stories.push({
+      id: story.id || index + 1,
+      word: story.word,
+      title: text.title,
+      sentences: text.sentences,
+      image,
+      imageBytes: svg.length,
+    });
+  }
+  return stories;
+}
+
+/** assets/coverpage.png first, then the shared cover in covers-and-photos/ as a fallback. */
+function loadCover() {
+  const candidates = [
+    path.join(ASSETS, "coverpage.png"),
+    path.join(ROOT, "..", "covers-and-photos", "cover-arabic.png"),
+  ];
+  const coverPath = candidates.find((candidate) => fs.existsSync(candidate));
+  assert(coverPath, "No cover found - expected assets/coverpage.png");
+
+  const buffer = fs.readFileSync(coverPath);
+  return {
+    buffer,
+    // This project always ships the real cover copied from Arabic_Stories_Workbook.
+    isPlaceholder: false,
+    path: path.relative(ROOT, coverPath),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Page builders
+// ---------------------------------------------------------------------------
+
+function createPageFooter() {
+  if (!SHOW_PAGE_NUMBERS) {
+    return null;
+  }
+  return new Footer({
+    children: [
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        bidirectional: true,
+        children: [
+          new TextRun({
+            children: [PageNumber.CURRENT],
+            font: FONT,
+            rightToLeft: true,
+            size: 18,
+            color: COLOR_BORDER,
+          }),
+        ],
+      }),
+    ],
+  });
+}
+
+function a5SectionProperties(margins, startPage = null) {
+  // NB: docx 9.7.x has no section-level `direction` option, so section RTL is
+  // set per paragraph with `bidirectional: true` (which emits <w:bidi/>).
+  return {
+    page: {
+      size: {
+        width: A5_WIDTH,
+        height: A5_HEIGHT,
+        orientation: PageOrientation.PORTRAIT,
+      },
+      margin: {
+        ...margins,
+        // Reserve room for the footer so the number sits between the page frame
+        // and the body text instead of pushing the content up.
+        ...(SHOW_PAGE_NUMBERS && margins.bottom > 0
+          ? { bottom: PAGE_NUMBER_BOTTOM, footer: FOOTER_DISTANCE }
+          : {}),
+      },
+      ...(startPage ? { pageNumbers: { start: startPage } } : {}),
+    },
+  };
+}
+
+const PAGE_MARGINS = {
+  top: MARGIN_TOP,
+  right: MARGIN_SIDE,
+  bottom: MARGIN_BOTTOM,
+  left: MARGIN_SIDE,
+};
+
+const FULL_BLEED_MARGINS = { top: 0, right: 0, bottom: 0, left: 0 };
+
+/** Full A5 page, cover-scaled so the picture overspills all four edges. */
+function createCoverPage(cover) {
+  const dims = getPngDimensions(cover.buffer);
+
+  // Full A5 page in pixels at 96dpi (no margins for full-bleed cover)
+  const pageWidthPx = A5_WIDTH / TWIPS_PER_PX;
+  const pageHeightPx = A5_HEIGHT / TWIPS_PER_PX;
+
+  const scale = Math.max(pageWidthPx / dims.width, pageHeightPx / dims.height);
+  const widthPx = Math.round(dims.width * scale);
+  const heightPx = Math.round(dims.height * scale);
+
+  return [
+    new Paragraph({
+      alignment: AlignmentType.CENTER,
+      spacing: { before: 0, after: 0 },
+      children: [
+        new ImageRun({
+          data: cover.buffer,
+          transformation: { width: widthPx, height: heightPx },
+          type: "png",
+        }),
+      ],
+    }),
+  ];
+}
+
+function createTitlePage(book) {
+  const rule = {
+    bottom: { style: BorderStyle.SINGLE, size: 12, color: COLOR_BORDER, space: 8 },
+  };
+
+  return [
+    new Paragraph({ spacing: { before: 2400, after: 0 }, children: [] }),
+    new Paragraph({
+      alignment: AlignmentType.CENTER,
+      bidirectional: true,
+      spacing: { before: 0, after: 160 },
+      border: rule,
+      children: [
+        new TextRun({
+          text: book.title,
+          font: FONT,
+          rightToLeft: true,
+          size: TITLE_PAGE_SIZE,
+          color: COLOR_MAIN,
+        }),
+      ],
+    }),
+    new Paragraph({
+      alignment: AlignmentType.CENTER,
+      bidirectional: true,
+      spacing: { before: 320, after: 0 },
+      children: [
+        new TextRun({
+          text: book.subtitle,
+          font: FONT,
+          rightToLeft: true,
+          size: 56,
+          color: COLOR_TITLE,
+        }),
+      ],
+    }),
+  ];
+}
+
+/** Story picture, centered in a 3:2 box with no frame. */
+function createStoryImage(png) {
+  const size = fitImage(getPngDimensions(png), IMAGE_BOX_PX, Math.round(IMAGE_BOX_PX / IMAGE_BOX_RATIO));
+  return new Paragraph({
+    alignment: AlignmentType.CENTER,
+    spacing: { before: 0, after: 0 },
+    children: [
+      new ImageRun({
+        data: png,
+        transformation: { width: size.width, height: size.height },
+        type: "png",
+      }),
+    ],
+  });
+}
+
+/**
+ * One story per page: title, then the picture, then the sentences.
+ * Nothing here is bold.
+ */
+function createStoryPage(story) {
+  return [
+    new Paragraph({
+      alignment: AlignmentType.CENTER,
+      bidirectional: true,
+      spacing: { before: 0, after: TITLE_AFTER, line: 520, lineRule: LineRuleType.AT_LEAST },
+      children: [
+        new TextRun({
+          text: story.title,
+          font: FONT,
+          rightToLeft: true,
+          size: TITLE_SIZE,
+          color: COLOR_MAIN,
+        }),
+      ],
+    }),
+    createStoryImage(story.image),
+    new Paragraph({ spacing: { before: 0, after: 0 }, children: [] }),
+    ...story.sentences.map(
+      (sentence) =>
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          bidirectional: true,
+          spacing: {
+            before: 0,
+            after: SENTENCE_AFTER,
+            line: SENTENCE_LINE,
+            lineRule: LineRuleType.AT_LEAST,
+          },
+          children: [
+            new TextRun({
+              text: sentence,
+              font: FONT,
+              rightToLeft: true,
+              size: SENTENCE_SIZE,
+              color: COLOR_MAIN,
+            }),
+          ],
+        })
+    ),
+  ];
+}
+
+// ---------------------------------------------------------------------------
+// Build
+// ---------------------------------------------------------------------------
+
+async function createWorkbook() {
+  console.log("جاري إنشاء كتاب القصص المصورة...");
+
+  const manifest = loadManifest();
+  const stories = await loadStories(manifest);
+  const cover = loadCover();
+
+  if (cover.isPlaceholder) {
+    console.log(`Warning: using placeholder cover (${cover.path}) - replace it with the real cover.`);
+  }
+  console.log(`cover : ${cover.path} (${formatBytes(cover.buffer.length)})`);
+  console.log(`stories: ${stories.length}`);
+
+  const doc = new Document({
+    creator: "Arabic Learning Workbook",
+    title: manifest.book.title,
+    description: manifest.book.subtitle,
+    styles: {
+      default: {
+        document: rtlDocumentDefaults({ font: FONT, size: 28 }),
+      },
+    },
+    sections: [],
+  });
+
+  // Cover: full-bleed, no footer or page number.
+  doc.addSection({
+    properties: a5SectionProperties(FULL_BLEED_MARGINS),
+    children: createCoverPage(cover),
+  });
+
+  doc.addSection({
+    properties: a5SectionProperties(PAGE_MARGINS, SHOW_PAGE_NUMBERS ? 1 : null),
+    ...(SHOW_PAGE_NUMBERS ? { footers: { default: createPageFooter() } } : {}),
+    children: createTitlePage(manifest.book),
+  });
+
+  const footers = SHOW_PAGE_NUMBERS ? { footers: { default: createPageFooter() } } : {};
+
+  for (const story of stories) {
+    console.log(`جاري إنشاء صفحة: ${story.title}`);
+    doc.addSection({
+      properties: a5SectionProperties(PAGE_MARGINS),
+      ...footers,
+      children: createStoryPage(story),
+    });
+  }
+
+  console.log("جاري حفظ الملف...");
+
+  const buffer = await Packer.toBuffer(doc);
+  fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
+  fs.writeFileSync(OUTPUT, buffer);
+
+  const imageBytes = stories.reduce((total, story) => total + story.imageBytes, 0);
+
+  console.log("تم إنشاء الملف بنجاح!");
+  console.log(`الملف: ${OUTPUT}`);
+  console.log(`الترتيب: ${CLI.order}`);
+  console.log(`عدد الصفحات: ${stories.length + 2} صفحة`);
+  console.log(`عدد القصص: ${stories.length}`);
+  console.log(`حجم الصور: ${formatBytes(imageBytes)}`);
+  console.log(`حجم الملف: ${formatBytes(buffer.length)}`);
+  console.log("حجم الصفحة: A5");
+  console.log(`أرقام الصفحات: ${SHOW_PAGE_NUMBERS ? "معروضة" : "مخفية"}`);
+}
+
+createWorkbook().catch((error) => {
+  console.error(`create-workbook failed: ${error.message}`);
+  process.exit(1);
+});

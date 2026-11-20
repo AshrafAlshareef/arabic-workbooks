@@ -7,7 +7,7 @@
     hard timeout, so a Word deadlock can never block the whole build.
 
     Parameters:
-        -Books       convert only these project folders (default: all seven)
+        -Books       convert only these project folders (default: all books)
         -OutputRoot  folder holding <Book>\<Book>.docx (default: project root)
 
     Exit codes:  0 = all ok   2 = some books failed   1 = bad parameters

@@ -37,12 +37,7 @@ const {
   PageNumber,
   PageOrientation,
   Paragraph,
-  Table,
-  TableCell,
-  TableRow,
   TextRun,
-  VerticalAlign,
-  WidthType,
   convertInchesToTwip,
 } = require("docx");
 
@@ -76,10 +71,10 @@ const COLOR_MAIN = "1B4965";
 const COLOR_BORDER = "34495E";
 const COLOR_MUTED = "7F8C8D";
 
-// docx font sizes are in HALF-POINTS, so 48 = 24pt, not 48pt.
-const TITLE_SIZE = 48; // 24pt - titles run 3-5 words
-const SENTENCE_SIZE = 40; // 20pt
-const SENTENCE_LINE = 480; // twips, AT_LEAST (24pt)
+// docx font sizes are in HALF-POINTS, so 56 = 28pt, not 56pt.
+const TITLE_SIZE = 56; // 28pt - titles run 3-5 words
+const SENTENCE_SIZE = 48; // 24pt
+const SENTENCE_LINE = 560; // twips, AT_LEAST (28pt)
 const SENTENCE_AFTER = 120; // twips
 const TITLE_AFTER = 200; // twips
 
@@ -88,10 +83,8 @@ const MM_TO_PX = 96 / 25.4;
 const TWIPS_PER_PX = 15; // 1px at 96dpi = 1/96 inch = 15 twips
 const IMAGE_BOX_PX = Math.round(112 * MM_TO_PX);
 const IMAGE_BOX_RATIO = 3 / 2;
-const IMAGE_FRAME_PADDING_PX = 10;
-const BORDER_SIZE = 8;
 
-const TITLE_PAGE_SIZE = 96; // 48pt
+const TITLE_PAGE_SIZE = 112; // 56pt
 
 // ---------------------------------------------------------------------------
 // Image dimensions
@@ -348,7 +341,7 @@ function createTitlePage(book) {
           text: book.subtitle,
           font: FONT,
           rightToLeft: true,
-          size: 48,
+          size: 56,
           color: COLOR_TITLE,
         }),
       ],
@@ -356,48 +349,24 @@ function createTitlePage(book) {
   ];
 }
 
-/** Story picture, contained in a 3:2 box inside a thin ruled frame. */
-function createImageFrame(jpeg) {
+/** Story picture, centered in a 3:2 box with no frame. */
+function createStoryImage(jpeg) {
   const size = fitImage(jpeg, IMAGE_BOX_PX, Math.round(IMAGE_BOX_PX / IMAGE_BOX_RATIO));
-  const cellWidth = (size.width + IMAGE_FRAME_PADDING_PX * 2) * TWIPS_PER_PX;
-
-  const border = { style: BorderStyle.SINGLE, size: BORDER_SIZE, color: COLOR_BORDER };
-
-  return new Table({
-    width: { size: cellWidth, type: WidthType.DXA },
-    columnWidths: [cellWidth],
+  return new Paragraph({
     alignment: AlignmentType.CENTER,
-    borders: { top: border, bottom: border, left: border, right: border },
-    rows: [
-      new TableRow({
-        children: [
-          new TableCell({
-            width: { size: cellWidth, type: WidthType.DXA },
-            verticalAlign: VerticalAlign.CENTER,
-            margins: { top: 60, bottom: 60, left: 60, right: 60 },
-            children: [
-              new Paragraph({
-                alignment: AlignmentType.CENTER,
-                spacing: { before: 0, after: 0 },
-                bidirectional: true,
-                children: [
-                  new ImageRun({
-                    data: jpeg,
-                    transformation: { width: size.width, height: size.height },
-                    type: "jpg",
-                  }),
-                ],
-              }),
-            ],
-          }),
-        ],
+    spacing: { before: 0, after: 0 },
+    children: [
+      new ImageRun({
+        data: jpeg,
+        transformation: { width: size.width, height: size.height },
+        type: "jpg",
       }),
     ],
   });
 }
 
 /**
- * One story per page: title, then the framed picture, then the sentences.
+ * One story per page: title, then the picture, then the sentences.
  * Nothing here is bold.
  */
 function createStoryPage(story) {
@@ -416,7 +385,7 @@ function createStoryPage(story) {
         }),
       ],
     }),
-    createImageFrame(story.image),
+    createStoryImage(story.image),
     new Paragraph({ spacing: { before: 0, after: 0 }, children: [] }),
     ...story.sentences.map(
       (sentence) =>
