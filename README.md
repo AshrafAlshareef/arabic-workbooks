@@ -68,9 +68,15 @@ build-all.bat
 ```
 
 سيثبّت `build-all.bat` ما ينقص من الاعتماديات، ثم يبني الكتب الثمانية، ويحوّلها إلى
-PDF، ويدمجها في `Arabic_Workbooks_Complete.pdf`. لا حاجة إلى `npm install` يدوي.
+PDF، ويحدّث صور `preview.png`، وأخيراً يدمجها في `Arabic_Workbooks_Complete.pdf`.
+لا حاجة إلى `npm install` يدوي.
 
 > إن أردت كتاباً واحداً فقط، ادخل مجلده وشغّل `node create-workbook.js`.
+
+> لتحديث الصور النموذجية وحدها بعد تغيير PDF، شغّل من الجذر:
+> `node scripts\generate-previews.js` (أو `npm run previews`). تقبل أيضاً
+> `--page=4` و`--scale=2` و`--book=Arabic_Stories_Workbook` لتحديث كتاب واحد.
+> التصيير يتم داخل Node عبر pdf.js و`@napi-rs/canvas`، بلا ImageMagick أو Python.
 
 ## الواجهة الرسومية (بدون سيرفر)
 
@@ -95,7 +101,7 @@ A5/A4، «DOCX فقط»، ومجلد المخرجات.
 
 > «إيقاف» يقتل شجرة العملية كاملة، فلا يبقى Node أو Word يعمل في الخلفية.
 > الترتيب يُطبَّق **في الذاكرة فقط**؛ ملفات `assets/*.json` لا تُعدَّل أبداً.
-> `build-all.bat` لم تتغيّر سلوكيته ويعمل كما كان تماماً.
+> `build-all.bat` يؤدي نفس البناء المعتاد، ويضيف فقط خطوة تحديث صور `preview.png`.
 
 ### خيارات سطر الأوامر الجديدة
 

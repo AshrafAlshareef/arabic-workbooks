@@ -5,15 +5,15 @@ chcp 65001 >nul 2>&1
 rem ==========================================================================
 rem  build-all.bat
 rem  The one entry point: builds all eight workbooks, converts each .docx to
-rem  .pdf via Microsoft Word, then merges the eight PDFs into one file next to
-rem  this script:
+rem  .pdf via Microsoft Word, refreshes the sample-page preview.png in every
+rem  project, then merges the eight PDFs into one file next to this script:
 rem      Arabic_Workbooks_Complete.pdf
 rem
 rem  Any failing step stops the build. Nothing is merged from an archived copy.
 rem
 rem  Usage:
-rem      build-all.bat              full build (docx -> pdf -> merge)
-rem      build-all.bat /nobuild     skip node build, convert + merge only
+rem      build-all.bat              full build (docx -> pdf -> previews -> merge)
+rem      build-all.bat /nobuild     skip node build, convert + previews + merge
 rem ==========================================================================
 
 set "ROOT=%~dp0"
@@ -47,10 +47,12 @@ rem The eight projects share the root node_modules, so one install covers them.
 if not exist "%ROOT%node_modules\docx" goto :install_root
 if not exist "%ROOT%node_modules\pdf-lib" goto :install_root
 if not exist "%ROOT%node_modules\svg2img" goto :install_root
+if not exist "%ROOT%node_modules\pdfjs-dist" goto :install_root
+if not exist "%ROOT%node_modules\@napi-rs\canvas" goto :install_root
 goto :after_root_install
 
 :install_root
-echo   [INFO] Installing shared dependencies (docx, pdf-lib, svg2img) ...
+echo   [INFO] Installing shared dependencies (docx, pdf-lib, svg2img, pdfjs-dist, @napi-rs/canvas) ...
 pushd "%ROOT%"
 call npm install --no-audit --no-fund
 rem "if errorlevel" reads the live errorlevel, unlike %ERRORLEVEL% in a block
@@ -67,7 +69,7 @@ echo.
 pushd "%ROOT%"
 
 if "%DO_BUILD%"=="1" (
-    echo [1/3] Building workbooks ^(.docx^)...
+    echo [1/5] Building workbooks ^(.docx^)...
     echo.
     call :build "Arabic_Alphabet_Workbook" docx svg2img
     if errorlevel 1 (popd & goto :fail)
@@ -86,11 +88,11 @@ if "%DO_BUILD%"=="1" (
     call :build "Arabic_Simple_Stories_Workbook" docx svg2img
     if errorlevel 1 (popd & goto :fail)
 ) else (
-    echo [1/3] Skipping node build ^(/nobuild^).
+    echo [1/5] Skipping node build ^(/nobuild^).
 )
 
 echo.
-echo [1/3] Checking Arabic RTL in generated .docx files...
+echo [2/5] Checking Arabic RTL in generated .docx files...
 echo.
 node "%SCRIPTS%check-rtl.js"
 if errorlevel 1 (
@@ -101,7 +103,7 @@ if errorlevel 1 (
 )
 
 echo.
-echo [2/3] Converting .docx to .pdf via Microsoft Word...
+echo [3/5] Converting .docx to .pdf via Microsoft Word...
 echo.
 powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPTS%docx-to-pdf.ps1"
 if errorlevel 1 (
@@ -112,7 +114,18 @@ if errorlevel 1 (
 )
 
 echo.
-echo [3/3] Merging PDFs...
+echo [4/5] Generating sample-page previews ^(preview.png^)...
+echo.
+node "%SCRIPTS%generate-previews.js"
+if errorlevel 1 (
+    echo.
+    echo   [ERROR] Preview generation failed.
+    popd
+    goto :fail
+)
+
+echo.
+echo [5/5] Merging PDFs...
 echo.
 node "%SCRIPTS%merge-pdfs.js"
 if errorlevel 1 (
