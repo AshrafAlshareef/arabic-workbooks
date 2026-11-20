@@ -6,17 +6,21 @@
 بخط عربي واتجاه من اليمين لليسار، ثم تُحوَّل إلى **PDF** عبر Microsoft Word وتُدمج
 في كتاب واحد مرتَّب حسب ترتيب القراءة.
 
-| # | الكتاب | مجلد المشروع | الصفحات |
-|---|--------|--------------|---------|
-| 1 | كتاب الحروف العربية | `Arabic_Alphabet_Workbook` | 57 |
-| 2 | كتاب الحركات | `Arabic_Harakat_Workbook` | 57 |
-| 3 | كتاب تحليل المقاطع الصوتية | `Arabic_Syllable_Analysis_Workbook` | 9 |
-| 4 | كتاب تحليل الكلمات إلى أحرف | `Arabic_Word_Analysis_Workbook` | 8 |
-| 5 | كتاب أشكال الحروف في الكلمة | `Arabic_Letter_Shapes_Workbook` | 8 |
-| 6 | كتاب تجميع الحروف لتكوين كلمة | `Arabic_Word_Composition_Workbook` | 8 |
-| 7 | كتاب القصص | `Arabic_Stories_Workbook` | 30 |
-| 8 | كتاب القصص البسيطة | `Arabic_Simple_Stories_Workbook` | 30 |
-| | **الكتاب المدمج الكامل** | `Arabic_Workbooks_Complete.pdf` | **207** |
+| # | الكتاب | مجلد المشروع | الصفحات | صفحة نموذجية |
+|---|--------|--------------|---------|--------------|
+| 1 | كتاب الحروف العربية | `Arabic_Alphabet_Workbook` | 57 | <img src="Arabic_Alphabet_Workbook/preview.png" alt="صفحة من كتاب الحروف" width="100"> |
+| 2 | كتاب الحركات | `Arabic_Harakat_Workbook` | 57 | <img src="Arabic_Harakat_Workbook/preview.png" alt="صفحة من كتاب الحركات" width="100"> |
+| 3 | كتاب تحليل المقاطع الصوتية | `Arabic_Syllable_Analysis_Workbook` | 9 | <img src="Arabic_Syllable_Analysis_Workbook/preview.png" alt="صفحة من تحليل المقاطع" width="100"> |
+| 4 | كتاب تحليل الكلمات إلى أحرف | `Arabic_Word_Analysis_Workbook` | 8 | <img src="Arabic_Word_Analysis_Workbook/preview.png" alt="صفحة من تحليل الكلمات" width="100"> |
+| 5 | كتاب أشكال الحروف في الكلمة | `Arabic_Letter_Shapes_Workbook` | 8 | <img src="Arabic_Letter_Shapes_Workbook/preview.png" alt="صفحة من أشكال الحروف" width="100"> |
+| 6 | كتاب تجميع الحروف لتكوين كلمة | `Arabic_Word_Composition_Workbook` | 8 | <img src="Arabic_Word_Composition_Workbook/preview.png" alt="صفحة من تجميع الكلمات" width="100"> |
+| 7 | كتاب القصص | `Arabic_Stories_Workbook` | 30 | <img src="Arabic_Stories_Workbook/preview.png" alt="صفحة من كتاب القصص" width="100"> |
+| 8 | كتاب القصص البسيطة | `Arabic_Simple_Stories_Workbook` | 30 | <img src="Arabic_Simple_Stories_Workbook/preview.png" alt="صفحة من القصص البسيطة" width="100"> |
+| | **الكتاب المدمج الكامل** | `Arabic_Workbooks_Complete.pdf` | **207** | — |
+
+> **الصور النموذجية:** كل صورة في العمود الأخير هي لقطة ثابتة للصفحة الثالثة من
+> الـPDF الخاص بالكتاب (بعد الغلاف وصفحة العنوان)، محفوظة بصيغة PNG داخل مجلد
+> المشروع باسم `preview.png`، لتظهر مباشرة هنا لزائر المستودع على GitHub.
 
 ## التحميل / Download
 
